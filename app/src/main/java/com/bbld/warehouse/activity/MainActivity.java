@@ -27,26 +27,35 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initViewsAndEvents() {
         //测试网络请求，扫码功能的代码 ，正式写的时候删除↓
-        Call<VersionAndroid> call=RetrofitService.getInstance().getVersionAndroid();
-        call.enqueue(new Callback<VersionAndroid>() {
+//        Call<VersionAndroid> call=RetrofitService.getInstance().getVersionAndroid();
+//        call.enqueue(new Callback<VersionAndroid>() {
+//            @Override
+//            public void onResponse(Response<VersionAndroid> response, Retrofit retrofit) {
+//                if (response.body().getStatus()==0){
+//                    tvHello.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            tvHello.setText(10010+"");
+//                            Intent intent = new Intent(MainActivity.this,
+//                                    CaptureActivity.class);
+//                            startActivityForResult(intent, REQUEST_CODE_SCAN);
+//                        }
+//                    });
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//
+//            }
+//        });
+        tvHello.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Response<VersionAndroid> response, Retrofit retrofit) {
-                if (response.body().getStatus()==0){
-                    tvHello.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            tvHello.setText(10010+"");
-                            Intent intent = new Intent(MainActivity.this,
-                                    CaptureActivity.class);
-                            startActivityForResult(intent, REQUEST_CODE_SCAN);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-
+            public void onClick(View view) {
+                tvHello.setText(10010+"");
+                Intent intent = new Intent(MainActivity.this,
+                        CaptureActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_SCAN);
             }
         });
         //测试网络请求，扫码功能的代码 ，正式写的时候删除↑

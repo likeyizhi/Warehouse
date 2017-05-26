@@ -7,9 +7,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.bbld.warehouse.activity.CaptureFinishActivity;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
 import butterknife.ButterKnife;
@@ -29,6 +31,7 @@ public abstract class BaseActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentView());
+        ActivityManagerUtil.getInstance().pushOneActivity(this);
         unbinder = ButterKnife.bind(this);
         mActivity = this;
         activityManagerUtil = ActivityManagerUtil.getInstance();
@@ -164,6 +167,14 @@ public abstract class BaseActivity extends AppCompatActivity{
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+            ActivityManagerUtil.getInstance().finishActivity(this);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

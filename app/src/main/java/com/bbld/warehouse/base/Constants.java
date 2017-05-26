@@ -8,7 +8,7 @@ import android.os.Environment;
 
 public class Constants {
 //    public final static String BASE_URL = "http://182.92.183.143:8040";//测试地址
-    public final static String BASE_URL = "http://182.92.183.143:8050";//测试
+    public final static String BASE_URL = "http://182.92.183.143:8061/Api/";//测试
 
     public final static int STATUS_0 = 0;
     public final static int STATUS_1 = 1;

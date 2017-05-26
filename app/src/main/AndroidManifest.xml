@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <application
         android:name=".app.WHApplication"
         android:allowBackup="true"
@@ -13,14 +15,50 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        <!--主页-->
+        <activity android:name=".activity.MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--扫码-->
+        <activity android:name=".zxing.android.CaptureActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--登录-->
+        <activity android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".zxing.android.CaptureActivity"
+        <!--菜单-->
+        <activity android:name=".activity.MenuActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--待发货、已出库、待收货-->
+        <activity android:name=".activity.BackOrderActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--待发货、已出库、待收货的订单详情-->
+        <activity android:name=".activity.BackOrderInfoActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--待出库到出库-->
+        <activity android:name=".activity.OrderDeliveryActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--待出库到出库到明细-->
+        <activity android:name=".activity.CaptureFinishActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--物流查询-->
+        <activity android:name=".activity.LogisticsTrackingActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--物流添加-->
+        <activity android:name=".activity.LogisticsNumberActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
     </application>

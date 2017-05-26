@@ -3,6 +3,7 @@ package com.bbld.warehouse.bean;
 import java.util.List;
 
 /**
+ * 订单列表接口
  * Created by likey on 2017/5/23.
  */
 

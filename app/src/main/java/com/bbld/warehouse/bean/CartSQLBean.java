@@ -7,6 +7,7 @@ package com.bbld.warehouse.bean;
 public class CartSQLBean {
     private String productId;
     private String productCode;
+    private String productType;
     private int proCount;
 
     public String getProductId() {
@@ -23,6 +24,14 @@ public class CartSQLBean {
 
     public void setProductCode(String productCode) {
         this.productCode = productCode;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
     }
 
     public int getProCount() {

@@ -30,6 +30,7 @@ public class UserDataBaseOperate {
 		ContentValues values = new ContentValues();
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_ID, cart.getProductId());
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_CODE, cart.getProductCode());
+		values.put(UserSQLiteOpenHelper.COL_PRODUCT_TYPE, cart.getProductType());
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_COUNT, cart.getProCount());
 		return mDB.insert(UserSQLiteOpenHelper.DATABASE_TABLE_USER, null,
 				values);
@@ -39,6 +40,7 @@ public class UserDataBaseOperate {
 		ContentValues values = new ContentValues();
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_ID, cart.getProductId());
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_CODE, cart.getProductCode());
+		values.put(UserSQLiteOpenHelper.COL_PRODUCT_TYPE, cart.getProductType());
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_COUNT, cart.getProCount());
 		return mDB.update(UserSQLiteOpenHelper.DATABASE_TABLE_USER, values,
 				"productid=?", new String[] { ""+cart.getProductId() });
@@ -88,6 +90,8 @@ public class UserDataBaseOperate {
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_ID)));
 				cart.setProductCode(cursor.getString(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_CODE)));
+				cart.setProductType(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_TYPE)));
 				cart.setProCount(cursor.getInt(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_COUNT)));
 				cartList.add(cart);
@@ -108,6 +112,8 @@ public class UserDataBaseOperate {
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_ID)));
 				cart.setProductCode(cursor.getString(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_CODE)));
+				cart.setProductType(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_TYPE)));
 				cart.setProCount(cursor.getInt(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_COUNT)));
 			}
@@ -116,7 +122,7 @@ public class UserDataBaseOperate {
 		return cart;
 	}
 
-	public List<CartSQLBean> findUserByName(String productId) {
+	public List<CartSQLBean> findUserByName(String code) {
 
 		List<CartSQLBean> cartList = new ArrayList<CartSQLBean>();
 		//模糊查询			
@@ -126,8 +132,8 @@ public class UserDataBaseOperate {
 //				+ " asc");
 		
 		Cursor cursor = mDB.query(UserSQLiteOpenHelper.DATABASE_TABLE_USER,
-			null, UserSQLiteOpenHelper.COL_PRODUCT_ID + " =?",
-			new String[] {productId}, null, null, UserSQLiteOpenHelper.COL_ID
+			null, UserSQLiteOpenHelper.COL_PRODUCT_CODE + " =?",
+			new String[] {code}, null, null, UserSQLiteOpenHelper.COL_ID
 			+ " asc");
 		
 		//多个条件查询
@@ -142,6 +148,44 @@ public class UserDataBaseOperate {
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_ID)));
 				cart.setProductCode(cursor.getString(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_CODE)));
+				cart.setProductType(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_TYPE)));
+				cart.setProCount(cursor.getInt(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_COUNT)));
+				cartList.add(cart);
+			}
+			cursor.close();
+		}
+		return cartList;
+	}
+	public List<CartSQLBean> findUserById(String productId) {
+
+		List<CartSQLBean> cartList = new ArrayList<CartSQLBean>();
+		//模糊查询
+//		Cursor cursor = mDB.query(UserSQLiteOpenHelper.DATABASE_TABLE_USER,
+//				null, UserSQLiteOpenHelper.COL_PRODUCT_ID + " like?",
+//				new String[] {"%"+productId+"%"}, null, null, UserSQLiteOpenHelper.COL_ID
+//				+ " asc");
+
+		Cursor cursor = mDB.query(UserSQLiteOpenHelper.DATABASE_TABLE_USER,
+			null, UserSQLiteOpenHelper.COL_PRODUCT_ID + " =?",
+			new String[] {productId}, null, null, UserSQLiteOpenHelper.COL_ID
+			+ " asc");
+
+		//多个条件查询
+//		Cursor cursor = mDB.query(UserSQLiteOpenHelper.DATABASE_TABLE_USER,
+//				null, UserSQLiteOpenHelper.COL_NAME + " like?"+" and "+UserSQLiteOpenHelper.COL_ID+" >?",
+//				new String[] {"%"+name+"%",2+""}, null, null, UserSQLiteOpenHelper.COL_ID
+//				+ " desc");
+		if (null != cursor) {
+			while (cursor.moveToNext()) {
+				CartSQLBean cart = new CartSQLBean();
+				cart.setProductId(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_ID)));
+				cart.setProductCode(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_CODE)));
+				cart.setProductType(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_TYPE)));
 				cart.setProCount(cursor.getInt(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_COUNT)));
 				cartList.add(cart);

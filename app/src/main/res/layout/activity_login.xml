@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="#333333"
+    android:layout_height="match_parent">
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="修正进销存系统"
+        android:textSize="32sp"
+        android:textColor="#ffffff"
+        android:layout_marginTop="80dp"
+        android:layout_gravity="center"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="仓储端"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"/>
+
+
+    <EditText
+        android:id="@+id/et_acc"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="仓库管理员帐号"
+        android:layout_marginTop="120dp"
+        android:textColorHint="#999999"
+        android:gravity="center"
+        android:layout_gravity="center"/>
+    <EditText
+        android:id="@+id/et_pwd"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="登录密码"
+        android:layout_marginTop="20dp"
+        android:textColorHint="#999999"
+        android:gravity="center"
+        android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="登录密码"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:layout_gravity="center"/>
+</LinearLayout>

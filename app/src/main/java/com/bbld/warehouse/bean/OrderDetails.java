@@ -3,6 +3,7 @@ package com.bbld.warehouse.bean;
 import java.util.List;
 
 /**
+ * 订单详情接口
  * Created by likey on 2017/5/23.
  */
 
@@ -53,19 +54,19 @@ public class OrderDetails {
          "Status": "已出库",
          "ProductList": []*/
         private String OrderID;
-         private String OrderNumber;
-         private String InvoiceCode;
-         private String ChannelName;
-         private String DealerName;
-         private String Date;
-         private String DateTime;
-         private String ProductCount;
-         private String Remark;
-         private String DeliveryName;
-         private String DeliveryPhone;
-         private String DeliveryAddress;
-         private String Status;
-         private List<OrderDetailsProductList> ProductList;
+        private String OrderNumber;
+        private String InvoiceCode;
+        private String ChannelName;
+        private String DealerName;
+        private String Date;
+        private String DateTime;
+        private String ProductCount;
+        private String Remark;
+        private String DeliveryName;
+        private String DeliveryPhone;
+        private String DeliveryAddress;
+        private String Status;
+        private List<OrderDetailsProductList> ProductList;
 
         public String getOrderID() {
             return OrderID;
@@ -180,7 +181,66 @@ public class OrderDetails {
         }
 
         public static class OrderDetailsProductList{
+            /**"ProductID": "11",
+             "ProductName": "商品名称",
+             "ProductImg": "/UploadFile/758deb95deb74b00a5d8b693400c16af.png",
+             "ProductSpec": "规格",
+             "ProductCount": "20",
+             "Unit": "箱"*/
+            private String ProductID;
+            private String ProductName;
+            private String ProductImg;
+            private String ProductSpec;
+            private String ProductCount;
+            private String Unit;
 
+            public String getProductID() {
+                return ProductID;
+            }
+
+            public void setProductID(String productID) {
+                ProductID = productID;
+            }
+
+            public String getProductName() {
+                return ProductName;
+            }
+
+            public void setProductName(String productName) {
+                ProductName = productName;
+            }
+
+            public String getProductImg() {
+                return ProductImg;
+            }
+
+            public void setProductImg(String productImg) {
+                ProductImg = productImg;
+            }
+
+            public String getProductSpec() {
+                return ProductSpec;
+            }
+
+            public void setProductSpec(String productSpec) {
+                ProductSpec = productSpec;
+            }
+
+            public String getProductCount() {
+                return ProductCount;
+            }
+
+            public void setProductCount(String productCount) {
+                ProductCount = productCount;
+            }
+
+            public String getUnit() {
+                return Unit;
+            }
+
+            public void setUnit(String unit) {
+                Unit = unit;
+            }
         }
     }
 

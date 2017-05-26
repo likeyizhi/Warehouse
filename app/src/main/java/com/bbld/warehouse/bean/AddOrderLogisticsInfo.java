@@ -1,19 +1,15 @@
 package com.bbld.warehouse.bean;
 
 /**
- * 登录接口
+ *  增加物流信息接口
  * Created by likey on 2017/5/23.
  */
 
-public class Login {
-    /**{
-     "status": 0,
-     "mes": "成功",
-     "token":"97ef896b5f4d4519b52379a65b272d21"
-     }*/
+public class AddOrderLogisticsInfo {
+    /**"status": 0,
+     "mes": "成功"*/
     private int status;
     private String mes;
-    private String token;
 
     public int getStatus() {
         return status;
@@ -29,13 +25,5 @@ public class Login {
 
     public void setMes(String mes) {
         this.mes = mes;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 }

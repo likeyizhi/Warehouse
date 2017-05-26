@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="5dp"
+    android:background="#ffffff"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="10dp"
+        android:background="#66ccff"
+        android:paddingLeft="5dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:id="@+id/tv_item_orderid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:textColor="#ffffff"
+            android:text="订单号2312312321"
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_item_order_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="{待付款等状态}"
+            android:layout_marginRight="10dp"
+            android:textSize="14sp"
+            android:textColor="#ffffff"/>
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/tv_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:padding="8dp"
+        android:text="时间"
+        android:visibility="gone"
+        />
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#efefef"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:padding="5dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="爱和佳儿 "
+            android:textColor="#000000"
+            android:layout_alignTop="@+id/tv_product"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:id="@+id/tv_channelName" />
+        <TextView
+            android:id="@+id/tv_dealerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="爱和佳儿-吉林一部 "
+            android:textColor="#000000"
+            android:layout_alignBottom="@+id/tv_product"
+            android:layout_alignStart="@+id/tv_channelName" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40sp"
+            android:textColor="#e14258"
+            android:text="9"
+            android:id="@+id/tv_product"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/tv_productCount" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="类XX盒 "
+            android:textColor="#000000"
+            android:paddingBottom="5dp"
+            android:layout_marginEnd="12dp"
+            android:id="@+id/tv_productCount"
+            android:layout_alignBottom="@+id/tv_product"
+            android:layout_toStartOf="@+id/iv_open" />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/ic_launcher"
+            android:textColor="#000000"
+            android:layout_alignTop="@+id/tv_product"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/tv_productCount"
+            android:id="@+id/iv_open" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_item_order"
+        android:layout_width="match_parent"
+        android:background="#fafafa"
+        android:dividerHeight="1dp"
+        android:divider="#eeeeee"
+        android:scrollbars="none"
+        android:visibility="gone"
+        android:headerDividersEnabled="false"
+        android:layout_height="50dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="#eeeeee"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#000000"
+            android:layout_marginLeft="10dp"
+            android:text="2017年6月1日"/>
+        <Button
+            android:id="@+id/btn_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:visibility="gone"
+            android:text="详情"
+            />
+        <Button
+            android:id="@+id/btn_goOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="出库"
+            />
+        <Button
+            android:id="@+id/btn_track"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:visibility="gone"
+            android:text="物流跟踪"
+            />
+        <Button
+            android:id="@+id/btn_writTrack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="录入物流信息"
+            />
+    </LinearLayout>
+</LinearLayout>

@@ -1,49 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-   >
+    >
 
     <!-- 整体透明画布 -->
     <SurfaceView
         android:id="@+id/preview_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
-    <RelativeLayout
-        android:id="@+id/showSpace"
-        android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="bottom"
-        android:background="#99000000">
 
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="#ffffffff"
-            android:textSize="20sp"
-            android:text=""/>
-
-    </RelativeLayout>
     <!-- 扫描取景框 -->
     <com.bbld.warehouse.zxing.view.ViewfinderView
         android:id="@+id/viewfinder_view"
         android:layout_above="@+id/showSpace"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
-    
-    <RelativeLayout 
+
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_gravity="top"
         android:background="#99000000">
-        
+
         <ImageButton
             android:id="@+id/capture_imageview_back"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:layout_centerVertical="true"
             android:background="@drawable/selector_capture_back"/>
-        
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,5 +37,77 @@
             android:text="扫一扫"/>
 
     </RelativeLayout>
-
+    <RelativeLayout
+        android:id="@+id/showSpace"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_gravity="bottom"
+        >
+        <TextView
+            android:id="@+id/tv_productName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="10dp"
+            android:text="商品名"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:layout_below="@+id/tv_productName"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="应发数量："/>
+                    <TextView
+                        android:id="@+id/tv_needCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1000（盒）"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="扫码数量："/>
+                    <TextView
+                        android:id="@+id/tv_scanCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#66ccff"
+                        android:text="1000（盒）"/>
+                    <Button
+                        android:id="@+id/btn_complete"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="完成"/>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#eeeeee"/>
+                <ListView
+                    android:id="@+id/lv_scan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp">
+                </ListView>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </merge>

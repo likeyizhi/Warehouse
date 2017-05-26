@@ -3,30 +3,51 @@ package com.bbld.warehouse.zxing.android;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bbld.warehouse.R;
+import com.bbld.warehouse.activity.OrderDeliveryActivity;
+import com.bbld.warehouse.bean.CartSQLBean;
+import com.bbld.warehouse.bean.ScanCode;
+import com.bbld.warehouse.db.UserDataBaseOperate;
+import com.bbld.warehouse.db.UserSQLiteOpenHelper;
+import com.bbld.warehouse.network.RetrofitService;
+import com.bbld.warehouse.utils.MyToken;
 import com.bbld.warehouse.zxing.camera.CameraManager;
 import com.bbld.warehouse.zxing.view.ViewfinderView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
+import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 /**
  * 这个activity打开相机，在后台线程做常规的扫描；它绘制了一个结果view来帮助正确地显示条形码，在扫描的时候显示反馈信息，
@@ -53,6 +74,17 @@ public final class CaptureActivity extends Activity implements
 
     private ImageButton imageButton_back;
     private TextView text;
+    private String productId;
+    private String productName;
+    private ListView lvScan;
+    private String invoiceid;
+    private UserSQLiteOpenHelper mUserSQLiteOpenHelper;
+    private UserDataBaseOperate mUserDataBaseOperate;
+    private Button btnComplete;
+    private TextView tv_needCount;
+    private TextView tv_scanCount;
+    private String needCount;
+    private int scanCount;
 
     public ViewfinderView getViewfinderView() {
         return viewfinderView;
@@ -80,7 +112,7 @@ public final class CaptureActivity extends Activity implements
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.capture);
-        text=(TextView)findViewById(R.id.text);
+//        text=(TextView)findViewById(R.id.text);
         hasSurface = false;
 
         inactivityTimer = new InactivityTimer(this);
@@ -94,6 +126,36 @@ public final class CaptureActivity extends Activity implements
                 finish();
             }
         });
+
+        mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(CaptureActivity.this);
+        mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
+
+        Intent intent=getIntent();
+        productId=intent.getExtras().getString("productId");
+        productName=intent.getExtras().getString("productName");
+        invoiceid=intent.getExtras().getString("orderId");
+        needCount=intent.getExtras().getString("needCount");
+        TextView tvProductName = (TextView) findViewById(R.id.tv_productName);
+        tvProductName.setText(productName+"");
+        lvScan=(ListView)findViewById(R.id.lv_scan);
+        List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
+        Collections.reverse(products);
+        lvScan.setAdapter(new ScanAdapter(products));
+        btnComplete=(Button)findViewById(R.id.btn_complete);
+        btnComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        tv_needCount=(TextView)findViewById(R.id.tv_needCount);
+        tv_needCount.setText(needCount+"(盒)");
+        tv_scanCount=(TextView)findViewById(R.id.tv_scanCount);
+        scanCount=0;
+        for (int i=0;i<products.size();i++){
+            scanCount=scanCount+products.get(i).getProCount();
+        }
+        tv_scanCount.setText(scanCount+"(盒)");
     }
 
     @Override
@@ -186,17 +248,190 @@ public final class CaptureActivity extends Activity implements
         if (fromLiveScan) {
             beepManager.playBeepSoundAndVibrate();
 
-            Toast.makeText(this, "扫描成功", Toast.LENGTH_SHORT).show();
-            text.setText(rawResult.getText()+""+barcode);
+//            Toast.makeText(this, "扫描成功", Toast.LENGTH_SHORT).show();
+//            text.setText(rawResult.getText()+""+barcode);
 //            Intent intent = getIntent();
 //            intent.putExtra("codedContent", rawResult.getText());
 //            intent.putExtra("codedBitmap", barcode);
 //            setResult(RESULT_OK, intent);
 //            finish();
             //连续扫码
-            //continuePreview();
+//            continuePreview();
+
+            getScanCode(rawResult.getText());
+//            Toast.makeText(CaptureActivity.this,""+rawResult.getText(),Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void getScanCode(final String code) {
+//        Toast.makeText(CaptureActivity.this,""+code,Toast.LENGTH_SHORT).show();
+        Call<ScanCode> call= RetrofitService.getInstance().scanCode(new MyToken(CaptureActivity.this).getToken()+"",
+                Integer.parseInt(invoiceid),Integer.parseInt(productId),code);
+        call.enqueue(new Callback<ScanCode>() {
+            @Override
+            public void onResponse(Response<ScanCode> response, Retrofit retrofit) {
+                if (response.body()==null){
+                    Toast.makeText(CaptureActivity.this,"服务器错误",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (response.body().getStatus()==0){
+                    if (response.body().getInfo().getIsRight()==1){
+                        //IsRight--条码是否正确，优先进行判断，如果是 0，则代表条码不存在，
+                        //如果是 1，则代表条码存在
+                        //成功，添加到数据库（productId,code,type,count）type=1=箱码;type=2=盒码
+                        List<CartSQLBean> sqlCode =mUserDataBaseOperate.findUserByName(code+"");
+                        if (sqlCode.isEmpty()){
+                            CartSQLBean sqlBean=new CartSQLBean();
+                            sqlBean.setProductId(productId+"");
+                            sqlBean.setProductCode(code+"");
+                            sqlBean.setProductType(response.body().getInfo().getType()+"");
+                            sqlBean.setProCount(response.body().getInfo().getCount());
+                            mUserDataBaseOperate.insertToUser(sqlBean);
+                            List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
+                            Collections.reverse(products);
+                            lvScan.setAdapter(new ScanAdapter(products));
+                            scanCount=0;
+                            for (int i=0;i<products.size();i++){
+                                scanCount=scanCount+products.get(i).getProCount();
+                            }
+                            tv_scanCount.setText(scanCount+"(盒)");
+                            try {
+                                Thread.sleep(1000);
+                                continuePreview();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+//                            showScanDialog();
+                        }else{
+//                            Toast.makeText(CaptureActivity.this,"该商品码已经扫过",Toast.LENGTH_SHORT).show();
+                            showFailDialog("该商品码已经扫过");
+                            try {
+                                Thread.sleep(1000);
+                                continuePreview();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }else{
+                        //失败
+//                        Toast.makeText(CaptureActivity.this,"不存在该商品,请重试",Toast.LENGTH_SHORT).show();
+                        showFailDialog("不存在该商品,请重试");
+                        try {
+                            Thread.sleep(1000);
+                            continuePreview();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                Toast.makeText(CaptureActivity.this,""+throwable,Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showFailDialog(String failMessage) {
+        AlertDialog.Builder builder=new AlertDialog.Builder(CaptureActivity.this);
+        builder.setMessage(failMessage+"");
+//        builder.setPositiveButton("完成", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                finish();
+//            }
+//        });
+        builder.setNegativeButton("继续", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //连续扫码
+                continuePreview();
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+    private void showScanDialog() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(CaptureActivity.this);
+        builder.setMessage("扫描成功");
+        builder.setPositiveButton("完成", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("继续", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //连续扫码
+                continuePreview();
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+
+    /**
+     * 扫码下部分的listview的adapter
+     */
+    class ScanAdapter extends BaseAdapter{
+        private List<CartSQLBean> products;
+        public ScanAdapter(List<CartSQLBean> products){
+            super();
+            this.products=products;
+        }
+        @Override
+        public int getCount() {
+            return products.size();
+        }
+
+        @Override
+        public CartSQLBean getItem(int i) {
+            return products.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return Long.parseLong(products.get(i).getProductId());
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            ScanHolder holder=null;
+            if (view==null){
+                view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_lv_capture,null);
+                holder=new ScanHolder();
+                holder.tv_code=(TextView)view.findViewById(R.id.tv_code);
+                holder.tv_type=(TextView)view.findViewById(R.id.tv_type);
+                holder.tv_count=(TextView)view.findViewById(R.id.tv_count);
+                view.setTag(holder);
+            }
+            holder= (ScanHolder) view.getTag();
+            CartSQLBean product = getItem(i);
+            holder.tv_code.setText(product.getProductCode()+"");
+            holder.tv_type.setText(getType(product.getProductType())+"");
+            holder.tv_count.setText(product.getProCount()+"(盒)");
+            return view;
+        }
+
+        private String getType(String productType) {
+            //type=1=箱码;type=2=盒码
+            if (productType.equals("1")){
+                return "箱码";
+            }else{
+                return "盒码";
+            }
+        }
+
+        class ScanHolder{
+            TextView tv_code;
+            TextView tv_type;
+            TextView tv_count;
+        }
     }
     /**
      * 使Zxing能够继续扫描

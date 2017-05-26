@@ -1,6 +1,7 @@
 package com.bbld.warehouse.bean;
 
 /**
+ * 首页接口
  * Created by likey on 2017/5/23.
  */
 
