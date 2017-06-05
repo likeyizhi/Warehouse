@@ -38,11 +38,31 @@ public class MyToken {
         editor.commit();
     }
     /**
+     * 删除保存的帐号密码
+     * */
+    public void delAP(){
+        SharedPreferences shared=mContext.getSharedPreferences("WearhouseAP",mContext.MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
+        editor.remove("WHACC");
+        editor.remove("WHPWD");
+        editor.commit();
+    }
+    /**
      * 删除SharedPreferences文件
      * */
     public void delSPFile(){
         File file=new File(DATA_URL + mContext.getPackageName().toString()
                 + "/shared_prefs", "MyToken.xml");
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+    /**
+     * 删除SharedPreferences文件
+     * */
+    public void delAPFile(){
+        File file=new File(DATA_URL + mContext.getPackageName().toString()
+                + "/shared_prefs", "WearhouseAP.xml");
         if (file.exists()) {
             file.delete();
         }

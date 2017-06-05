@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -19,11 +20,13 @@ import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bbld.warehouse.R;
+import com.bbld.warehouse.activity.BackOrderActivity;
 import com.bbld.warehouse.activity.OrderDeliveryActivity;
 import com.bbld.warehouse.bean.CartSQLBean;
 import com.bbld.warehouse.bean.ScanCode;
@@ -117,18 +120,28 @@ public final class CaptureActivity extends Activity implements
 
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
+        //数据库
+        mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(CaptureActivity.this);
+        mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
 
         imageButton_back = (ImageButton) findViewById(R.id.capture_imageview_back);
         imageButton_back.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                finish();
+                List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
+                scanCount=0;
+                for (int i=0;i<products.size();i++){
+                    scanCount=scanCount+products.get(i).getProCount();
+                }
+                if (Integer.parseInt(needCount+"")<Integer.parseInt(scanCount+"")){
+                    showBiggerDialog("扫码数量 大于 应发数量，确定完成并退出？");
+                }else{
+                    finish();
+                }
             }
         });
 
-        mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(CaptureActivity.this);
-        mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
 
         Intent intent=getIntent();
         productId=intent.getExtras().getString("productId");
@@ -145,7 +158,16 @@ public final class CaptureActivity extends Activity implements
         btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
+                scanCount=0;
+                for (int i=0;i<products.size();i++){
+                    scanCount=scanCount+products.get(i).getProCount();
+                }
+                if (Integer.parseInt(needCount+"")<Integer.parseInt(scanCount+"")){
+                    showBiggerDialog("扫码数量 大于 应发数量，确定完成并退出？");
+                }else {
+                    finish();
+                }
             }
         });
         tv_needCount=(TextView)findViewById(R.id.tv_needCount);
@@ -156,6 +178,23 @@ public final class CaptureActivity extends Activity implements
             scanCount=scanCount+products.get(i).getProCount();
         }
         tv_scanCount.setText(scanCount+"(盒)");
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+            List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
+            scanCount=0;
+            for (int i=0;i<products.size();i++){
+                scanCount=scanCount+products.get(i).getProCount();
+            }
+            if (Integer.parseInt(needCount+"")<Integer.parseInt(scanCount+"")){
+                showBiggerDialog("扫码数量 大于 应发数量，确定完成并退出？");
+            }else {
+                finish();
+            }
+        }
+        return false;
     }
 
     @Override
@@ -257,8 +296,17 @@ public final class CaptureActivity extends Activity implements
 //            finish();
             //连续扫码
 //            continuePreview();
-
-            getScanCode(rawResult.getText());
+            scanCount=0;
+            List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
+            for (int a=0;a<products.size();a++){
+                scanCount=scanCount+products.get(a).getProCount();
+            }
+            if (Integer.parseInt(needCount+"")<=Integer.parseInt(scanCount+"")){
+//                Toast.makeText(CaptureActivity.this,"商品已扫完",Toast.LENGTH_SHORT).show();
+                showOKDialog();
+            }else{
+                getScanCode(rawResult.getText());
+            }
 //            Toast.makeText(CaptureActivity.this,""+rawResult.getText(),Toast.LENGTH_SHORT).show();
         }
 
@@ -302,7 +350,6 @@ public final class CaptureActivity extends Activity implements
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-//                            showScanDialog();
                         }else{
 //                            Toast.makeText(CaptureActivity.this,"该商品码已经扫过",Toast.LENGTH_SHORT).show();
                             showFailDialog("该商品码已经扫过");
@@ -353,17 +400,16 @@ public final class CaptureActivity extends Activity implements
         });
         builder.create().show();
     }
-
-    private void showScanDialog() {
+    private void showBiggerDialog(String biggerMessage) {
         AlertDialog.Builder builder=new AlertDialog.Builder(CaptureActivity.this);
-        builder.setMessage("扫描成功");
-        builder.setPositiveButton("完成", new DialogInterface.OnClickListener() {
+        builder.setMessage(biggerMessage+"");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 finish();
             }
         });
-        builder.setNegativeButton("继续", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //连续扫码
@@ -371,6 +417,53 @@ public final class CaptureActivity extends Activity implements
                 dialogInterface.dismiss();
             }
         });
+        builder.create().show();
+    }
+
+    private void showDelDialog(final String code) {
+        AlertDialog.Builder builder=new AlertDialog.Builder(CaptureActivity.this);
+        builder.setMessage("删除("+code+")?");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //连续扫码
+                continuePreview();
+                mUserDataBaseOperate.deleteUserByCode(code);
+                List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
+                Collections.reverse(products);
+                lvScan.setAdapter(new ScanAdapter(products));
+                scanCount=0;
+                for (int a=0;a<products.size();a++){
+                    scanCount=scanCount+products.get(a).getProCount();
+                }
+                tv_scanCount.setText(scanCount+"(盒)");
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //连续扫码
+                continuePreview();
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+    private void showOKDialog() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(CaptureActivity.this);
+        builder.setMessage("商品扫描完成");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+//        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//            }
+//        });
         builder.create().show();
     }
 
@@ -408,13 +501,20 @@ public final class CaptureActivity extends Activity implements
                 holder.tv_code=(TextView)view.findViewById(R.id.tv_code);
                 holder.tv_type=(TextView)view.findViewById(R.id.tv_type);
                 holder.tv_count=(TextView)view.findViewById(R.id.tv_count);
+                holder.iv_del=(ImageView) view.findViewById(R.id.iv_del);
                 view.setTag(holder);
             }
             holder= (ScanHolder) view.getTag();
-            CartSQLBean product = getItem(i);
+            final CartSQLBean product = getItem(i);
             holder.tv_code.setText(product.getProductCode()+"");
             holder.tv_type.setText(getType(product.getProductType())+"");
             holder.tv_count.setText(product.getProCount()+"(盒)");
+            holder.iv_del.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showDelDialog(product.getProductCode()+"");
+                }
+            });
             return view;
         }
 
@@ -431,6 +531,7 @@ public final class CaptureActivity extends Activity implements
             TextView tv_code;
             TextView tv_type;
             TextView tv_count;
+            ImageView iv_del;
         }
     }
     /**

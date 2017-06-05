@@ -1,7 +1,9 @@
 package com.bbld.warehouse.base;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -12,7 +14,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.bbld.warehouse.activity.CaptureFinishActivity;
+import com.bbld.warehouse.activity.MenuActivity;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
+import com.wuxiaolong.androidutils.library.NetConnectUtil;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -41,8 +45,13 @@ public abstract class BaseActivity extends AppCompatActivity{
         if (null != extras) {
             getBundleExtras(extras);
         }
-
         initViewsAndEvents();
+//        boolean isNetConnected = NetConnectUtil.isNetConnected(getApplicationContext());
+//        if (isNetConnected){
+//
+//        }else{
+//            showNetDialog();
+//        }
     }
     /**
      * init all views and add events
@@ -174,7 +183,23 @@ public abstract class BaseActivity extends AppCompatActivity{
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
             ActivityManagerUtil.getInstance().finishActivity(this);
         }
-        return super.onKeyDown(keyCode, event);
+        return false;
     }
-
+    private void showNetDialog() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setMessage("请确认网络是否正常连接");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+//        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                dialogInterface.dismiss();
+//            }
+//        });
+        builder.create().show();
+    }
 }

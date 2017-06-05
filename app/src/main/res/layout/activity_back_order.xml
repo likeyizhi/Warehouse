@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:background="#f9f9f9"
     android:layout_height="match_parent">
     <RelativeLayout
         android:id="@+id/rl_head"
@@ -13,14 +14,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:src="@drawable/home_back_icon_pink"
-            />
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/back"
+            android:layout_alignTop="@+id/tv_title"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:text=""
             android:id="@+id/tv_title" />
         <TextView
@@ -46,6 +49,8 @@
         <ListView
             android:id="@+id/lv_backOrder"
             android:layout_width="match_parent"
+            android:dividerHeight="0dp"
+            android:divider="@null"
             android:layout_height="wrap_content"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

@@ -5,7 +5,8 @@
 
 <TextView
     android:id="@+id/tv_info"
-    android:textColor="#333333"
+    android:textColor="#999999"
+    android:textSize="15sp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="大智物流"/>

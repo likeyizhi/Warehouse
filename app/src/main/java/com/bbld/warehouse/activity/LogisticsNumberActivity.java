@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -15,11 +17,12 @@ import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
 import com.bbld.warehouse.bean.GetLogisticsList;
-import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
+import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -53,6 +56,12 @@ public class LogisticsNumberActivity extends BaseActivity {
     Button btnAdd;
     @BindView(R.id.sp_logistics)
     Spinner spLogistics;
+    @BindView(R.id.tv_yincangid)
+    TextView tvYincangID;
+    @BindView(R.id.tv_yincangname)
+    TextView tvYincangName;
+    @BindView(R.id.ib_back)
+    ImageButton ibBack;
     private  int  invoiceid;
     private int logisticsId;
     private String number;
@@ -75,6 +84,34 @@ public class LogisticsNumberActivity extends BaseActivity {
         tvProductCount.setText(ProductCount);
         tvOrderCount.setText(Count);
         loadData();
+
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                setData();
+            }
+        });
+        spLogistics.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {//选择item的选择点击监听事件
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                tvYincangName.setText(getLogisticsList.get(i).getLogisticsName() + "");
+                tvYincangID.setText(getLogisticsList.get(i).getLogisticsID() + "");
+                logisticsId=Integer.parseInt(tvYincangID.getText().toString());
+
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+            }
+        });
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityManagerUtil.getInstance().finishActivity(LogisticsNumberActivity.this);
+            }
+        });
     }
 
     @Override
@@ -103,6 +140,7 @@ public class LogisticsNumberActivity extends BaseActivity {
                 }
                 if (response.body().getStatus() == 0) {
                     logisticsInfoList=response.body().getList();
+                    Collections.reverse(logisticsInfoList);
                     setAdapter2();
                 }
 
@@ -115,7 +153,7 @@ public class LogisticsNumberActivity extends BaseActivity {
   /*
     获取物流公司字典接口
    */
-        Call<GetLogisticsList> call2 = RetrofitService.getInstance().getLogisticsList();
+        Call<GetLogisticsList> call2 = RetrofitService.getInstance().getLogisticsList(new MyToken(LogisticsNumberActivity.this).getToken()+"");
         call2.enqueue(new Callback<GetLogisticsList>() {
             @Override
             public void onResponse(Response<GetLogisticsList> response, Retrofit retrofit) {
@@ -138,33 +176,45 @@ public class LogisticsNumberActivity extends BaseActivity {
 
 
     }
-private void setData(){
+    private void setData(){
      /*
      * 增加物流信息接口
      */
-    Call<AddOrderLogisticsInfo> call3 = RetrofitService.getInstance().addOrderLogisticsInfo(new MyToken(LogisticsNumberActivity.this).getToken() + "",invoiceid,logisticsId,number);
-    call3.enqueue(new Callback<AddOrderLogisticsInfo>() {
-        @Override
-        public void onResponse(Response<AddOrderLogisticsInfo> response, Retrofit retrofit) {
-            if (response.body() == null) {
-                showToast("服务器出错");
-                return;
-            }
-            if (response.body().getStatus() == 0) {
-                showToast(response.body().getMes()+"");
 
+        number=edLogisticsID.getText().toString();
+        if(number==null||number.trim().equals("")){
+            showToast("请添加物流编号");
+        }else{
+            Call<AddOrderLogisticsInfo> call3 = RetrofitService.getInstance().addOrderLogisticsInfo(new MyToken(LogisticsNumberActivity.this).getToken() + "",invoiceid,logisticsId,number);
+            showToast("货号"+invoiceid+"物流id"+logisticsId+"物流单号："+number+"");
 
-            }
+            call3.enqueue(new Callback<AddOrderLogisticsInfo>() {
+                @Override
+                public void onResponse(Response<AddOrderLogisticsInfo> response, Retrofit retrofit) {
+                    if (response.body() == null) {
+                        showToast("服务器出错");
+                        return;
+                    }
+                    if (response.body().getStatus() == 0) {
+                        showToast(response.body().getMes()+"");
+                        loadData();
+
+                    }else{
+                        showToast(response.body().getMes()+"");
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Throwable throwable) {
+                }
+            });
 
         }
 
-        @Override
-        public void onFailure(Throwable throwable) {
-        }
-    });
-}
+    }
     private void setAdapter1() {
-        getLogisticsListAdapter = new LogisticsNumberActivity.GetLogisticsListAdapter();
+        getLogisticsListAdapter = new GetLogisticsListAdapter();
         spLogistics.setAdapter(getLogisticsListAdapter);
 
     }
@@ -173,8 +223,7 @@ private void setData(){
         lvAddLogistics.setAdapter(getOrderLogisticsInfoAdapter);
     }
     class GetLogisticsListAdapter extends BaseAdapter {
-       GetLogisticsListHolder holder = null;
-
+        GetLogisticsListHolder holder = null;
         @Override
         public int getCount() {
             return getLogisticsList.size();

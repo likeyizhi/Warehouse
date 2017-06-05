@@ -1,10 +1,15 @@
 package com.bbld.warehouse.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Html;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,12 +43,24 @@ public class MenuActivity extends BaseActivity{
     LinearLayout llToOutOrder;
     @BindView(R.id.ll_toGetOrder)
     LinearLayout llToGetOrder;
+    @BindView(R.id.ll_toInBound)
+    LinearLayout llToInBound;
+    @BindView(R.id.ll_toOutBound)
+    LinearLayout llToOutBound;
+    @BindView(R.id.ll_toOrderUpdate)
+    LinearLayout llToOrderUpdate;
     @BindView(R.id.tv_type)
     TextView tvType;
     @BindView(R.id.srl_menu)
     SwipeRefreshLayout srlMenu;
     @BindView(R.id.iv_head)
     ImageView ivHead;
+    @BindView(R.id.tv_dck)
+    TextView tvDck;
+    @BindView(R.id.tv_yck)
+    TextView tvYck;
+    @BindView(R.id.tv_dsh)
+    TextView tvDsh;
 
     private Handler mHandler=new Handler(){
         @Override
@@ -65,9 +82,16 @@ public class MenuActivity extends BaseActivity{
         tvSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                new MyToken(MenuActivity.this).delToken();
-                new MyToken(MenuActivity.this).delSPFile();
-                ActivityManagerUtil.getInstance().appExit();
+                new MyToken(MenuActivity.this).delToken();
+//                new MyToken(MenuActivity.this).delSPFile();
+                SharedPreferences sharedAP=getSharedPreferences("WearhouseAP",MODE_PRIVATE);
+                SharedPreferences.Editor editorAP = sharedAP.edit();
+                editorAP.putString("WHACC","");
+                editorAP.putString("WHPWD","");
+                editorAP.commit();
+                ActivityManagerUtil.getInstance().finishActivity(MenuActivity.this);
+                readyGo(LoginActivity.class);
+//                ActivityManagerUtil.getInstance().appExit();
             }
         });
         llToBackOrder.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +118,28 @@ public class MenuActivity extends BaseActivity{
                 readyGo(BackOrderActivity.class, bundle);
             }
         });
+        llToInBound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle=new Bundle();
+                bundle.putString("title","产品出库");
+                readyGo(OutBoundOrderActivity.class, bundle);
+            }
+        });
+        llToOutBound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle=new Bundle();
+                bundle.putString("title","产品入库");
+                readyGo(OutBoundOrderActivity.class, bundle);
+            }
+        });
+        llToOrderUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showToast("产品调拨");
+            }
+        });
         srlMenu.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -111,12 +157,6 @@ public class MenuActivity extends BaseActivity{
                 }).start();
             }
         });
-        ivHead.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                readyGo(CaptureActivity.class);
-            }
-        });
     }
 
     private void loadData() {
@@ -129,7 +169,29 @@ public class MenuActivity extends BaseActivity{
                     return;
                 }
                 if (response.body().getStatus()==0){
-                    tvType.setText(response.body().getTypeinfo());
+                    if(response.body().getType()==1){
+                        tvType.setText("总部");
+                    }else{
+                        tvType.setText("经销商");
+                    }
+                    if (response.body().getDck()!=0){
+//                        tvDck.setText("待出库  "+response.body().getDck());
+                        tvDck.setText(Html.fromHtml("待出库  "+"<font color=\"#00A3D9\">"+response.body().getDck()+"</font>"));//#00A3D9
+                    }else{
+                        tvDck.setText("待出库");
+                    }
+                    if (response.body().getYck()!=0){
+//                        tvYck.setText("已出库  "+response.body().getYck());
+                        tvYck.setText(Html.fromHtml("已出库  "+"<font color=\"#00A3D9\">"+response.body().getYck()+"</font>"));//#00A3D9
+                    }else{
+                        tvYck.setText("已出库");
+                    }
+                    if (response.body().getDsh()!=0){
+//                        tvDsh.setText("待收货  "+response.body().getDsh());
+                        tvDsh.setText(Html.fromHtml("待收货  "+"<font color=\"#00A3D9\">"+response.body().getDsh()+"</font>"));//#00A3D9
+                    }else{
+                        tvDsh.setText("待收货");
+                    }
                 }
             }
 
@@ -148,5 +210,37 @@ public class MenuActivity extends BaseActivity{
     @Override
     public int getContentView() {
         return R.layout.activity_menu;
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        loadData();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+            showAppExitDialog();
+        }
+        return false;
+    }
+
+    private void showAppExitDialog() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(MenuActivity.this);
+        builder.setMessage("确定退出?");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ActivityManagerUtil.getInstance().appExit();
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
     }
 }

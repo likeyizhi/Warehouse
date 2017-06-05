@@ -8,7 +8,7 @@
     android:layout_gravity="center"
     android:layout_marginTop="40dp"
     android:textColor="#333333"
-    android:textSize="24sp"
+    android:textSize="22sp"
     android:text="商品名字"/>
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,29 +20,38 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="15sp"
             android:text="应发数量："/>
         <TextView
             android:id="@+id/tv_needCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="15sp"
             android:text="1000（盒）"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:textSize="15sp"
             android:text="扫码数量："/>
         <TextView
             android:id="@+id/tv_scanCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#66ccff"
+            android:textColor="#00a3d9"
+            android:textSize="15sp"
             android:text="1000（盒）"/>
 
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="#eeeeee"/>
     <ListView
         android:id="@+id/lv_scan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="20dp">
     </ListView>
 </LinearLayout>

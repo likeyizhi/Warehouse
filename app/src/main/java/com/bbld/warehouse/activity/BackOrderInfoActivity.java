@@ -1,11 +1,13 @@
 package com.bbld.warehouse.activity;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ import com.bbld.warehouse.bean.OrderDetails;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
 import com.bumptech.glide.Glide;
+import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
 import java.util.List;
 
@@ -55,6 +58,8 @@ public class BackOrderInfoActivity extends BaseActivity{
     TextView tvInvoiceCode;
     @BindView(R.id.btn_out)
     Button btnOut;
+    @BindView(R.id.ib_back)
+    ImageButton ibBack;
 
     private String invoiceid;
     private String orderCount;
@@ -62,6 +67,12 @@ public class BackOrderInfoActivity extends BaseActivity{
     @Override
     protected void initViewsAndEvents() {
         loadData();
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityManagerUtil.getInstance().finishActivity(BackOrderInfoActivity.this);
+            }
+        });
     }
 
     private void loadData() {

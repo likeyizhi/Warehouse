@@ -51,9 +51,9 @@ public class UserDataBaseOperate {
 		return mDB.delete(UserSQLiteOpenHelper.DATABASE_TABLE_USER, null, null);
 	}
 
-	public long deleteUserByname(String productId){
+	public long deleteUserByCode(String productcode){
 		
-		return mDB.delete("warehouse_info", "productId=?", new String[]{productId});
+		return mDB.delete("warehouse_info", "productcode=?", new String[]{productcode});
 	}
 
 	public long getCount(String conditions, String[] args) {

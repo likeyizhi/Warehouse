@@ -1,10 +1,16 @@
 package com.bbld.warehouse.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +24,7 @@ import android.widget.TextView;
 
 import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
+import com.bbld.warehouse.base.Constants;
 import com.bbld.warehouse.bean.CartSQLBean;
 import com.bbld.warehouse.bean.CodeJson;
 import com.bbld.warehouse.bean.OrderDetails;
@@ -26,6 +33,7 @@ import com.bbld.warehouse.db.UserSQLiteOpenHelper;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
 import com.bbld.warehouse.utils.UploadUserInformationByPostService;
+import com.bbld.warehouse.utils.UploadUtil;
 import com.bbld.warehouse.zxing.android.CaptureActivity;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -35,9 +43,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import butterknife.BindView;
 import retrofit.Call;
@@ -75,19 +87,24 @@ public class OrderDeliveryActivity extends BaseActivity{
     private String orderId;
     private UserSQLiteOpenHelper mUserSQLiteOpenHelper;
     private UserDataBaseOperate mUserDataBaseOperate;
-    private boolean request;
+    private String request;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
                 case 111:
-                    showToast("出库成功");
-
-                    finish();
+                    showToast(""+request);
+                    //出库成功清空数据库，释放当前acticity
+                    mUserDataBaseOperate.deleteAll();
+                    ActivityManagerUtil.getInstance().finishActivity(OrderDeliveryActivity.this);
+                    BackOrderActivity.boActivity.finish();
+                    Bundle bundle=new Bundle();
+                    bundle.putInt("status", 2);
+                    readyGo(BackOrderActivity.class, bundle);
                     break;
                 case 222:
-                    showToast("出库失败");
+                    showToast(""+request);
                     break;
             }
         }
@@ -176,14 +193,15 @@ public class OrderDeliveryActivity extends BaseActivity{
                 List<CodeJson.CodeJsonList> A = new ArrayList<CodeJson.CodeJsonList>();
                 CodeJson B=new CodeJson();
                 for (int j=0;j<sqlProducts.size();j++){
-                    if (!(A.toString().contains(sqlProducts.get(j).getProductId()))){
+                    Gson gson=new Gson();
+                    String AString=gson.toJson(A);
+                    if (!(AString.contains(sqlProducts.get(j).getProductId()))){
                         CodeJson.CodeJsonList a = new CodeJson.CodeJsonList();
                         a.setProductID(Integer.parseInt(sqlProducts.get(j).getProductId()));
                         a.setCodeList(new LinkedList<CodeJson.CodeJsonList.CodeJsonCodeList>());
                         A.add(a);
                     }
                 }
-
                 for(int q=0;q<sqlProducts.size();q++){
                     for (int k=0;k<A.size();k++){
                         if (sqlProducts.get(q).getProductId().toString().equals(A.get(k).getProductID()+"")){
@@ -196,7 +214,7 @@ public class OrderDeliveryActivity extends BaseActivity{
                 }
                 Gson gson=new Gson();
                 String jsonString=gson.toJson(B);
-                showToast(jsonString);
+//                showToast(jsonString);
                 //需要参数：token,invoiceid(orderId),codejson
                 final String codejson = jsonString;
                 new Thread(new Runnable() {
@@ -208,7 +226,7 @@ public class OrderDeliveryActivity extends BaseActivity{
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        if (request) { // 请求成功
+                        if (request.contains("成功")) { // 请求成功
                             Message message=new Message();
                             message.what=111;
                             handler.sendMessage(message);
@@ -280,12 +298,31 @@ public class OrderDeliveryActivity extends BaseActivity{
             holder.btn_scan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle=new Bundle();
-                    bundle.putString("productId", product.getProductID()+"");
-                    bundle.putString("productName",product.getProductName()+"");
-                    bundle.putString("orderId", orderId);
-                    bundle.putString("needCount", product.getProductCount()+"");
-                    readyGo(CaptureActivity.class, bundle);
+                    toScan(product.getProductID(),product.getProductName(),orderId,product.getProductCount());
+                }
+
+                private void toScan(String productID, String productName, String orderId, String productCount) {
+                    if (Build.VERSION.SDK_INT >= 23){
+                        int cameraPermission= ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA);
+                        if (cameraPermission != PackageManager.PERMISSION_GRANTED){
+                            ActivityCompat.requestPermissions(OrderDeliveryActivity.this, new String[]{Manifest.permission.CAMERA}, 123);
+                            return;
+                        }else{
+                            Bundle bundle=new Bundle();
+                            bundle.putString("productId", productID);
+                            bundle.putString("productName",productName);
+                            bundle.putString("orderId", orderId);
+                            bundle.putString("needCount", productCount);
+                            readyGo(CaptureActivity.class, bundle);
+                        }
+                    }else{
+                        Bundle bundle=new Bundle();
+                        bundle.putString("productId", productID);
+                        bundle.putString("productName",productName);
+                        bundle.putString("orderId", orderId);
+                        bundle.putString("needCount", productCount);
+                        readyGo(CaptureActivity.class, bundle);
+                    }
                 }
             });
             return view;
@@ -310,6 +347,7 @@ public class OrderDeliveryActivity extends BaseActivity{
             Button btn_scan;
         }
     }
+
     @Override
     protected void getBundleExtras(Bundle extras) {
         invoiceid=extras.getString("OrderID");

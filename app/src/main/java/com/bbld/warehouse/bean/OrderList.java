@@ -55,7 +55,25 @@ public class OrderList {
         private String DealerName;
         private String Date;
         private String ProductCount;
+        private String ProductTypeCount;
+        private String LogisticsCount;
         private List<OrderListProductList> ProductList;
+
+        public String getProductTypeCount() {
+            return ProductTypeCount;
+        }
+
+        public void setProductTypeCount(String productTypeCount) {
+            ProductTypeCount = productTypeCount;
+        }
+
+        public String getLogisticsCount() {
+            return LogisticsCount;
+        }
+
+        public void setLogisticsCount(String logisticsCount) {
+            LogisticsCount = logisticsCount;
+        }
 
         public String getOrderID() {
             return OrderID;

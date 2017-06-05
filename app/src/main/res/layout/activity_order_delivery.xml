@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:background="#f6f6f6"
     android:layout_height="match_parent">
 
     <RelativeLayout
@@ -14,7 +15,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:src="@drawable/home_back_icon_pink" />
+            android:src="@mipmap/back"
+            android:layout_marginLeft="15dp"
+            android:layout_alignTop="@+id/textView2"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:id="@+id/textView2"
@@ -22,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="订单发货"
-            android:textSize="16sp" />
+            android:textSize="17sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,19 +52,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             android:orientation="vertical">
             <TextView
                 android:id="@+id/tv_orderNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:text="订单号：9998819238921389123"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
-                android:textColor="#66ccff"/>
+                android:textColor="#00A3D9"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ffffff"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/bg_btn_write5"
                 android:orientation="vertical">
                 <com.bbld.warehouse.widget.ZListview
                     android:id="@+id/lv_fahuo"
@@ -71,8 +79,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ffffff"
-                android:layout_margin="10dp"
+                android:background="@drawable/bg_btn_write5"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:padding="5dp"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -91,6 +102,7 @@
                         android:id="@+id/tvChannelName"
                         android:layout_marginLeft="10dp"
                         android:text="和爱佳儿"
+                        android:textSize="14sp"
                         android:textColor="#999999"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -117,6 +129,7 @@
                         android:layout_marginLeft="10dp"
                         android:text="和爱佳儿-吉林一部"
                         android:textColor="#999999"
+                        android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         />
@@ -142,8 +155,10 @@
                         android:id="@+id/tv_name_phone"
                         android:layout_marginLeft="10dp"
                         android:text="和爱佳儿"
-                        android:textColor="#e14258"
-                        android:drawableLeft="@mipmap/cha"
+                        android:textColor="#ff4d4d"
+                        android:textSize="14sp"
+                        android:drawablePadding="5dp"
+                        android:drawableLeft="@mipmap/dianhua"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         />
@@ -169,7 +184,7 @@
                         android:id="@+id/tv_address"
                         android:layout_marginLeft="10dp"
                         android:text="中央绿地广场B10B1627室"
-                        android:textColor="#e14258"
+                        android:textColor="#ff4d4d"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         />
@@ -178,26 +193,29 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ffffff"
                 android:layout_margin="10dp"
+                android:background="@drawable/bg_btn_write5"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#333333"
-                    android:textSize="20sp"
                     android:layout_marginLeft="10dp"
-                    android:text="订单备注："/>
+                    android:layout_marginTop="10dp"
+                    android:text="订单备注："
+                    android:textColor="#333333"
+                    android:textSize="14sp" />
+
                 <TextView
                     android:id="@+id/tv_remark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#666666"
-                    android:textSize="16sp"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="备注"/>
+                    android:text="订单备注"
+                    android:textColor="#666666"
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -206,6 +224,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="发货出库"
-        android:background="#66ccff"
+        android:textSize="18sp"
+        android:background="#00A3D9"
         android:textColor="#ffffff"/>
 </LinearLayout>

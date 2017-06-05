@@ -21,6 +21,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
@@ -221,14 +222,19 @@ public final class CameraManager {
 //					MIN_FRAME_WIDTH, MAX_FRAME_WIDTH);
 //			int height = findDesiredDimensionInRange(screenResolution.y,
 //					MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT);
-			
-			int width = findDesiredDimensionInRange(screenResolution.x,
-					MIN_FRAME_WIDTH, MAX_FRAME_WIDTH)*4/5;
-			int height = findDesiredDimensionInRange(screenResolution.y,
-					MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT)*4/5;
+			//原代码
+//			int width = findDesiredDimensionInRange(screenResolution.x,
+//					MIN_FRAME_WIDTH, MAX_FRAME_WIDTH)*4/5;
+//			int height = findDesiredDimensionInRange(screenResolution.y,
+//					MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT)*4/5;
+
+			//后改代码，扫码框适配不同机型
+			DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+			int width = (int) (metrics.widthPixels * 0.6);
+			int height = (int) (width * 0.9);
 
 			int leftOffset = (screenResolution.x - width) / 2;//扫码框左右位置
-			int topOffset = (screenResolution.y - height) / 4;//扫码框上下位置
+			int topOffset = (screenResolution.y - height) / 5;//扫码框上下位置
 			framingRect = new Rect(leftOffset, topOffset, leftOffset + width,
 					topOffset + height);
 			Log.d(TAG, "Calculated framing rect: " + framingRect);

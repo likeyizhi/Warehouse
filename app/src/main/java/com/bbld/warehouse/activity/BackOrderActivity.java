@@ -1,17 +1,25 @@
 package com.bbld.warehouse.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,6 +30,7 @@ import com.bbld.warehouse.bean.OrderList;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
 import com.bumptech.glide.Glide;
+import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +53,14 @@ public class BackOrderActivity extends BaseActivity{
     TextView tvTitle;
     @BindView(R.id.srl_order)
     SwipeRefreshLayout srlOrder;
+    @BindView(R.id.ib_back)
+    ImageButton ibBack;
+
     private List<OrderList.OrderListList> orderlist;
     private BackOrderAdapter backOrderAdapter;
     private int status;
     private int page=1;
+    public static BackOrderActivity boActivity=null;
     private Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -63,6 +76,7 @@ public class BackOrderActivity extends BaseActivity{
     };
     @Override
     protected void initViewsAndEvents() {
+        boActivity=this;
         if (status==1){
             tvTitle.setText("待出库订单");
         }else if (status==2){
@@ -79,6 +93,7 @@ public class BackOrderActivity extends BaseActivity{
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        page=1;
                         loadData(false);
                         try {
                             Thread.sleep(1000);
@@ -117,6 +132,13 @@ public class BackOrderActivity extends BaseActivity{
                 }
             }
         });
+
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityManagerUtil.getInstance().finishActivity(BackOrderActivity.this);
+            }
+        });
     }
 
     private void loadData(final boolean loadMore) {
@@ -152,11 +174,22 @@ public class BackOrderActivity extends BaseActivity{
     private void setAdapter() {
         backOrderAdapter=new BackOrderAdapter();
         lvBackOrder.setAdapter(backOrderAdapter);
+        setOnItemClickSetInfo(new OnItemClickSetInfo() {
+            @Override
+            public void OnItemClickSetInfo(RecyclerView rv_item_order, String tag) {
+                showToast(tag);
+                if (rv_item_order.getVisibility()==View.VISIBLE){
+                    rv_item_order.setVisibility(View.GONE);
+                }else{
+                    rv_item_order.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-         status = extras.getInt("status", 0);
+        status = extras.getInt("status", 0);
     }
 
     @Override
@@ -182,7 +215,7 @@ public class BackOrderActivity extends BaseActivity{
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, ViewGroup viewGroup) {
             if (view==null){
                 view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_lv_backorder,null);
                 holder=new BackOrderHolder();
@@ -207,7 +240,7 @@ public class BackOrderActivity extends BaseActivity{
             holder.tv_item_order_state.setText("待发货");
             holder.tv_channelName.setText(order.getChannelName()+"");
             holder.tv_dealerName.setText(order.getDealerName()+"");
-            holder.tv_product.setText(getCount()+"");
+            holder.tv_product.setText(order.getProductTypeCount()+"");
             holder.tv_productCount.setText("类"+order.getProductCount()+"盒");
             holder.tv_date.setText(order.getDate()+"");
             if (status==1){
@@ -216,7 +249,6 @@ public class BackOrderActivity extends BaseActivity{
                 holder.btn_info.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                    showToast("详情");
                         Bundle bundle=new Bundle();
                         bundle.putString("OrderID",order.getOrderID()+"");
                         bundle.putString("OrderCount",getCount()+"");
@@ -234,12 +266,26 @@ public class BackOrderActivity extends BaseActivity{
                     }
                 });
             }else if(status==2){
-                holder.btn_track.setVisibility(View.VISIBLE);
+                holder.btn_info.setVisibility(View.VISIBLE);
+                if (Integer.parseInt(order.getLogisticsCount())>0){
+                    holder.btn_track.setVisibility(View.VISIBLE);
+                }else{
+                    holder.btn_track.setVisibility(View.GONE);
+                }
                 holder.btn_writTrack.setVisibility(View.VISIBLE);
+                holder.btn_info.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle=new Bundle();
+                        bundle.putString("OrderID",order.getOrderID()+"");
+                        bundle.putString("OrderCount",getCount()+"");
+                        readyGo(BackOrderInfoActivity.class,bundle);
+                    }
+                });
                 holder.btn_track.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showToast("物流跟踪");
+//                        showToast("物流跟踪");
                         Bundle bundle=new Bundle();
                         bundle.putString("OrderID()",order.getOrderID()+"");
                         readyGo(LogisticsTrackingActivity.class,bundle);
@@ -249,7 +295,7 @@ public class BackOrderActivity extends BaseActivity{
                 holder.btn_writTrack.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showToast("录入物流信息");
+//                        showToast("录入物流信息");
                         Bundle bundle=new Bundle();
                         bundle.putString("OrderID()",order.getOrderID()+"");
                         bundle.putString("ChannelName()",order.getChannelName()+"");
@@ -275,16 +321,27 @@ public class BackOrderActivity extends BaseActivity{
                     }
                 });
             }
-            holder.iv_open.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (holder.rv_item_order.getVisibility()==View.VISIBLE){
-                        holder.rv_item_order.setVisibility(View.GONE);
-                    }else{
-                        holder.rv_item_order.setVisibility(View.VISIBLE);
+            holder.iv_open.setTag(""+i);
+            if (order!=null){
+                holder.iv_open.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (onItemClickSetInfo != null) {
+                            onItemClickSetInfo.OnItemClickSetInfo(holder.rv_item_order, holder+""+i);
+                        }
                     }
-                }
-            });
+                });
+            }
+//            holder.iv_open.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (holder.rv_item_order.getVisibility()==View.VISIBLE){
+//                        holder.rv_item_order.setVisibility(View.GONE);
+//                    }else{
+//                        holder.rv_item_order.setVisibility(View.VISIBLE);
+//                    }
+//                }
+//            });
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
             holder.rv_item_order.setLayoutManager(mLayoutManager);
             mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -309,8 +366,16 @@ public class BackOrderActivity extends BaseActivity{
             Button btn_writTrack;
             ImageView iv_open;
         }
-    }
 
+    }
+    public interface OnItemClickSetInfo{
+        void OnItemClickSetInfo(RecyclerView rv_item_order, String tag);
+    }
+    private OnItemClickSetInfo onItemClickSetInfo;
+
+    public void setOnItemClickSetInfo(OnItemClickSetInfo onItemClickSetInfo){
+        this.onItemClickSetInfo=onItemClickSetInfo;
+    }
     private class BackOrderRecAdapter extends RecyclerView.Adapter<BackOrderRecAdapter.RecHolder> {
         private List<OrderList.OrderListList.OrderListProductList> productList;
 
@@ -341,7 +406,7 @@ public class BackOrderActivity extends BaseActivity{
         public int getItemCount() {
             return productList.size();
         }
-       class RecHolder extends RecyclerView.ViewHolder {
+        class RecHolder extends RecyclerView.ViewHolder {
             public ImageView img;
             public RecHolder(View view){
                 super(view);

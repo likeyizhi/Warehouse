@@ -89,8 +89,8 @@ public class RetrofitService {
     /**
      * 获取物流公司字典接口
      */
-    public Call<GetLogisticsList> getLogisticsList(){
-        return retrofitInterface.getLogisticsList();
+    public Call<GetLogisticsList> getLogisticsList(String token){
+        return retrofitInterface.getLogisticsList(token);
     }
     /**
      * 增加物流信息接口

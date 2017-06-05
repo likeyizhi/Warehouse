@@ -84,7 +84,7 @@ public interface RetrofitInterface {
 //    @POST("Order/GetLogisticsList")
 //    Call<GetLogisticsList> getLogisticsList();
     @GET("Order/GetLogisticsList")
-    Call<GetLogisticsList> getLogisticsList();
+    Call<GetLogisticsList> getLogisticsList(@Query("token") String token);
     /**
      * 增加物流信息接口
      */

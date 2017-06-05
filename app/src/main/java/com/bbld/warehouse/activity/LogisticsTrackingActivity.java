@@ -36,6 +36,8 @@ import static android.R.id.list;
 public class LogisticsTrackingActivity extends BaseActivity {
     @BindView(R.id.tv_name)
     TextView tvName;
+    @BindView(R.id.tv_yincang)
+    TextView tvYincang;
     @BindView(R.id.tv_number)
     TextView tvNumber;
     @BindView(R.id.sp_logistics)
@@ -44,9 +46,7 @@ public class LogisticsTrackingActivity extends BaseActivity {
     ListView lvLogistics;
     private List<GetLogisticsTrackInfo.GetLogisticsTrackInfoList> logisticsTrackInfoList;
     private List<GetOrderLogisticsInfo.GetOrderLogisticsInfoList> logisticsInfoList;
-    private List<GetLogisticsList.GetLogisticsListList> getLogisticsList;
-
-    private GetLogisticsListAdapter getLogisticsListAdapter;
+    private GetOrderLogisticsInfoAdapter getOrderLogisticsInfoAdapter;
     private GetLogisticsTrackInfoListAdapter getLogisticsTrackInfoAdapter;
     int logisticsId;
     String number;
@@ -54,20 +54,21 @@ public class LogisticsTrackingActivity extends BaseActivity {
 
     @Override
     protected void initViewsAndEvents() {
-        loadData1();
+        loadData();
+
         spLogistics.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {//选择item的选择点击监听事件
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                tvName.setText("物流公司：" + getLogisticsList.get(i).getLogisticsName() + "");
-                tvNumber.setText("物流单号：" + getLogisticsList.get(i).getLogisticsID() + "");
-//                logisticsId=logisticsInfoList.get(i).getLogisticsID();
-//                number=getLogisticsList.get(i).getLogisticsID()+"";
+                tvName.setText(logisticsInfoList.get(i).getLogisticsName() + "");
+                tvNumber.setText(logisticsInfoList.get(i).getLogisticsNumber() + "");
+                tvYincang.setText(logisticsInfoList.get(i).getLogisticsID()+"");
+        number=tvNumber.getText().toString();
+        logisticsId=Integer.parseInt(tvYincang.getText().toString());
+                loadData1();
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
-                tvName.setText("");
-                tvNumber.setText("");
-                loadData2();
+
             }
         });
 
@@ -78,74 +79,52 @@ public class LogisticsTrackingActivity extends BaseActivity {
         invoiceid = Integer.parseInt(extras.getString("OrderID()"));
 
     }
-private void loadData2(){
+    private void loadData1(){
     /*
   物流跟踪查询接口
- */
-    Call<GetLogisticsTrackInfo> call = RetrofitService.getInstance().getLogisticsTrackInfo(new MyToken(LogisticsTrackingActivity.this).getToken() + "", logisticsId, number);
+     */
 
-    call.enqueue(new Callback<GetLogisticsTrackInfo>() {
-        @Override
-        public void onResponse(Response<GetLogisticsTrackInfo> response, Retrofit retrofit) {
-            if (response.body() == null) {
-                showToast("服务器错误");
-                return;
+//        number=tvNumber.getText().toString();
+//        logisticsId=Integer.parseInt(tvYincang.getText().toString());
+
+        Call<GetLogisticsTrackInfo> call = RetrofitService.getInstance().getLogisticsTrackInfo(new MyToken(LogisticsTrackingActivity.this).getToken() + "", logisticsId, number);
+        showToast( "物流id"+logisticsId+"物流编号"+number);
+        call.enqueue(new Callback<GetLogisticsTrackInfo>() {
+            @Override
+            public void onResponse(Response<GetLogisticsTrackInfo> response, Retrofit retrofit) {
+                if (response.body() == null) {
+                    showToast("服务器错误");
+                    return;
+                }
+                if (response.body().getStatus() == 0) {
+                    logisticsTrackInfoList=response.body().getList();
+                    setAdapter1();
+
+                }
             }
-            if (response.body().getStatus() == 0) {
-                logisticsTrackInfoList=response.body().getList();
-                loadData3();
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
             }
-        }
-
-        @Override
-        public void onFailure(Throwable throwable) {
-
-        }
-    });
-}
-private void loadData3(){
+        });
+    }
+    private void loadData(){
             /*
   物流信息查询接口
  */
-    Call<GetOrderLogisticsInfo> call1 = RetrofitService.getInstance().getOrderLogisticsInfo(new MyToken(LogisticsTrackingActivity.this).getToken() + "", invoiceid);
-    call1.enqueue(new Callback<GetOrderLogisticsInfo>() {
-        @Override
-        public void onResponse(Response<GetOrderLogisticsInfo> response, Retrofit retrofit) {
-            if (response.body() == null) {
-                showToast("服务器出错");
-                return;
-            }
-            if (response.body().getStatus() == 0) {
-                logisticsInfoList = response.body().getList();
-                setAdapter2();
-            }
-
-        }
-
-        @Override
-        public void onFailure(Throwable throwable) {
-        }
-    });
-}
-    private void loadData1() {
-
-
-
-  /*
-    获取物流公司字典接口
-   */
-        Call<GetLogisticsList> call2 = RetrofitService.getInstance().getLogisticsList();
-        call2.enqueue(new Callback<GetLogisticsList>() {
+        Call<GetOrderLogisticsInfo> call1 = RetrofitService.getInstance().getOrderLogisticsInfo(new MyToken(LogisticsTrackingActivity.this).getToken() + "", invoiceid);
+        call1.enqueue(new Callback<GetOrderLogisticsInfo>() {
             @Override
-            public void onResponse(Response<GetLogisticsList> response, Retrofit retrofit) {
+            public void onResponse(Response<GetOrderLogisticsInfo> response, Retrofit retrofit) {
                 if (response.body() == null) {
                     showToast("服务器出错");
                     return;
                 }
                 if (response.body().getStatus() == 0) {
-                    getLogisticsList = response.body().getList();
+                    logisticsInfoList = response.body().getList();
+                    setAdapter2();
 
-                    setAdapter1();
                 }
 
             }
@@ -156,55 +135,50 @@ private void loadData3(){
         });
     }
 
-    private void setAdapter1() {
-        getLogisticsListAdapter = new GetLogisticsListAdapter();
-        spLogistics.setAdapter(getLogisticsListAdapter);
+
+    private void setAdapter2() {
+        getOrderLogisticsInfoAdapter = new GetOrderLogisticsInfoAdapter();
+        spLogistics.setAdapter(getOrderLogisticsInfoAdapter);
 
     }
-    private void setAdapter2() {
+    private void setAdapter1() {
 
         getLogisticsTrackInfoAdapter=new GetLogisticsTrackInfoListAdapter();
         lvLogistics.setAdapter(getLogisticsTrackInfoAdapter);
     }
 
-    class GetLogisticsListAdapter extends BaseAdapter {
-        GetLogisticsListHolder holder = null;
+    class GetOrderLogisticsInfoAdapter extends BaseAdapter {
+        GetOrderLogisticsInfoHolder holder = null;
 
         @Override
         public int getCount() {
-            return getLogisticsList.size();
+            return logisticsInfoList.size();
         }
 
         @Override
-        public GetLogisticsList.GetLogisticsListList getItem(int i) {
-            return getLogisticsList.get(i);
+        public GetOrderLogisticsInfo.GetOrderLogisticsInfoList getItem(int i) {
+            return logisticsInfoList.get(i);
         }
 
         @Override
         public long getItemId(int i) {
-            return Long.parseLong(getLogisticsList.get(i).getLogisticsID() + "");
+            return i;
         }
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             if (view == null) {
                 view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_sp_logistics_tracking, null);
-                holder = new GetLogisticsListHolder();
+                holder = new GetOrderLogisticsInfoHolder();
                 holder.tvInfo = (TextView) view.findViewById(R.id.tv_info);
                 view.setTag(holder);
             }
-            holder = (GetLogisticsListHolder) view.getTag();
-            final GetLogisticsList.GetLogisticsListList list = getItem(i);
-
-
-
-
-            holder.tvInfo.setText(list.getLogisticsName() + list.getLogisticsID() + "");
-
+            holder = (GetOrderLogisticsInfoHolder) view.getTag();
+            final GetOrderLogisticsInfo.GetOrderLogisticsInfoList list = getItem(i);
+            holder.tvInfo.setText(list.getLogisticsName() + list.getLogisticsNumber() + "");
             return view;
         }
-
-        class GetLogisticsListHolder {
+        class GetOrderLogisticsInfoHolder {
             TextView tvInfo;
         }
     }
