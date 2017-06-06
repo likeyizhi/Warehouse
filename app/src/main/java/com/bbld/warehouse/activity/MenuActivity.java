@@ -122,7 +122,9 @@ public class MenuActivity extends BaseActivity{
             @Override
             public void onClick(View view) {
                 Bundle bundle=new Bundle();
-                bundle.putString("title","产品出库");
+                bundle.putString("title","产品入库");
+                bundle.putInt("type",2);
+                bundle.putInt("typeid",2);
                 readyGo(OutBoundOrderActivity.class, bundle);
             }
         });
@@ -130,7 +132,9 @@ public class MenuActivity extends BaseActivity{
             @Override
             public void onClick(View view) {
                 Bundle bundle=new Bundle();
-                bundle.putString("title","产品入库");
+                bundle.putString("title","产品出库");
+                bundle.putInt("type",1);
+                bundle.putInt("typeid",1);
                 readyGo(OutBoundOrderActivity.class, bundle);
             }
         });

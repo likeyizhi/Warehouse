@@ -88,6 +88,9 @@ public final class CaptureActivity extends Activity implements
     private TextView tv_scanCount;
     private String needCount;
     private int scanCount;
+    private String type;
+    private String storage;
+    private Call<ScanCode> call;
 
     public ViewfinderView getViewfinderView() {
         return viewfinderView;
@@ -146,8 +149,14 @@ public final class CaptureActivity extends Activity implements
         Intent intent=getIntent();
         productId=intent.getExtras().getString("productId");
         productName=intent.getExtras().getString("productName");
-        invoiceid=intent.getExtras().getString("orderId");
-        needCount=intent.getExtras().getString("needCount");
+        storage=intent.getExtras().getString("storage");
+        if (storage.equals("no")) {
+            invoiceid=intent.getExtras().getString("orderId");
+            needCount=intent.getExtras().getString("needCount");
+        }else{
+            type=intent.getExtras().getString("type");
+            needCount=100+"";
+        }
         TextView tvProductName = (TextView) findViewById(R.id.tv_productName);
         tvProductName.setText(productName+"");
         lvScan=(ListView)findViewById(R.id.lv_scan);
@@ -314,8 +323,13 @@ public final class CaptureActivity extends Activity implements
 
     private void getScanCode(final String code) {
 //        Toast.makeText(CaptureActivity.this,""+code,Toast.LENGTH_SHORT).show();
-        Call<ScanCode> call= RetrofitService.getInstance().scanCode(new MyToken(CaptureActivity.this).getToken()+"",
-                Integer.parseInt(invoiceid),Integer.parseInt(productId),code);
+        if (storage.equals("no")){
+            call= RetrofitService.getInstance().scanCode(new MyToken(CaptureActivity.this).getToken()+"",
+                    Integer.parseInt(invoiceid),Integer.parseInt(productId),code);
+        }else{
+            call=RetrofitService.getInstance().storageScanCode(new MyToken(CaptureActivity.this).getToken()+"",
+                    Integer.parseInt(type),Integer.parseInt(productId),code);
+        }
         call.enqueue(new Callback<ScanCode>() {
             @Override
             public void onResponse(Response<ScanCode> response, Retrofit retrofit) {

@@ -38,14 +38,10 @@
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="10dp"
         android:text="第1-10个" />
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:scrollbars="none"
+    <ListView
+        android:id="@+id/lv_productList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ListView
-            android:layout_width="match_parent"
-            android:dividerHeight="0dp"
-            android:divider="@null"
-            android:layout_height="wrap_content"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:dividerHeight="0dp"
+        android:divider="@null"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

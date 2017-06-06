@@ -5,12 +5,16 @@ import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
+import com.bbld.warehouse.bean.GetTypeList;
 import com.bbld.warehouse.bean.IndexInfo;
 import com.bbld.warehouse.bean.Login;
 import com.bbld.warehouse.bean.OrderDetails;
 import com.bbld.warehouse.bean.OrderList;
 import com.bbld.warehouse.bean.OrderSend;
+import com.bbld.warehouse.bean.ProductList;
 import com.bbld.warehouse.bean.ScanCode;
+import com.bbld.warehouse.bean.StorageDetails;
+import com.bbld.warehouse.bean.StorageList;
 import com.bbld.warehouse.bean.VersionAndroid;
 
 import retrofit.Call;
@@ -109,5 +113,37 @@ public class RetrofitService {
      */
     public Call<GetLogisticsTrackInfo> getLogisticsTrackInfo(String token, int logisticsId, String number){
         return retrofitInterface.getLogisticsTrackInfo(token, logisticsId, number);
+    }
+    /**
+     * 获取出入库类型列表
+     */
+    public Call<GetTypeList> getTypeList(int type){
+        return retrofitInterface.getTypeList(type);
+    }
+    /**
+     * 获取出/入库单列表
+     * type:1：出库，2：入库
+     */
+    public Call<StorageList> storageList(int type, int typeid, String token, int page, int pagesize){
+        return retrofitInterface.storageList(type, typeid, token, page, pagesize);
+    }
+    /**
+     * 获取出/入库单详情
+     * type:1：出库，2：入库
+     */
+    public Call<StorageDetails> storageDetails(int type, String token, String storageId){
+        return retrofitInterface.storageDetails(type, token, storageId);
+    }
+    /**
+     * 商品列表
+     */
+    public Call<ProductList> productList(String token){
+        return retrofitInterface.productList(token);
+    }
+    /**
+     * 出入库单扫码查询接口
+     */
+    public Call<ScanCode> storageScanCode(String token, int type, int productId, String  code){
+        return retrofitInterface.storageScanCode(token, type, productId, code);
     }
 }

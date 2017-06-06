@@ -27,6 +27,27 @@ public class UploadUserInformationByPostService {
         params.put("codejson", codejson);
         return sendPOSTRequest(path, params, "UTF-8");
     }
+    public static String saveStorage(String token, String type, String typeId, String number, String linkName, String linkPhone, String remark, String codejson) throws Exception{
+        String path = Constants.BASE_URL + "Storage/CommitStorage?token="+token+
+                "&type="+type+
+                "&typeId="+typeId+
+                "&number="+number+
+                "&linkName="+linkName+
+                "&linkPhone="+linkPhone+
+                "&remark="+remark+
+                "&codejson="+codejson;
+        Log.i("saveStorage", "saveStorage="+path);
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("type", type);
+        params.put("typeId", typeId);
+        params.put("number", number);
+        params.put("linkName", linkName);
+        params.put("linkPhone", linkPhone);
+        params.put("remark", remark);
+        params.put("codejson", codejson);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
 
     /**
      * 发送POST请求
@@ -78,7 +99,6 @@ public class UploadUserInformationByPostService {
                 return ress;
             }
         }
-
         return "出库失败";
     }
 }

@@ -313,6 +313,7 @@ public class OrderDeliveryActivity extends BaseActivity{
                             bundle.putString("productName",productName);
                             bundle.putString("orderId", orderId);
                             bundle.putString("needCount", productCount);
+                            bundle.putString("storage", "no");
                             readyGo(CaptureActivity.class, bundle);
                         }
                     }else{
@@ -321,6 +322,7 @@ public class OrderDeliveryActivity extends BaseActivity{
                         bundle.putString("productName",productName);
                         bundle.putString("orderId", orderId);
                         bundle.putString("needCount", productCount);
+                        bundle.putString("storage", "no");
                         readyGo(CaptureActivity.class, bundle);
                     }
                 }

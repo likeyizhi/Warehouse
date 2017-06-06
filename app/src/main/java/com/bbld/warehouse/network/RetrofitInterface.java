@@ -4,12 +4,16 @@ import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
+import com.bbld.warehouse.bean.GetTypeList;
 import com.bbld.warehouse.bean.IndexInfo;
 import com.bbld.warehouse.bean.Login;
 import com.bbld.warehouse.bean.OrderDetails;
 import com.bbld.warehouse.bean.OrderList;
 import com.bbld.warehouse.bean.OrderSend;
+import com.bbld.warehouse.bean.ProductList;
 import com.bbld.warehouse.bean.ScanCode;
+import com.bbld.warehouse.bean.StorageDetails;
+import com.bbld.warehouse.bean.StorageList;
 import com.bbld.warehouse.bean.VersionAndroid;
 
 import retrofit.Call;
@@ -109,4 +113,31 @@ public interface RetrofitInterface {
 //    Call<GetLogisticsTrackInfo> getLogisticsTrackInfo(@Field("token") String token, @Field("logisticsId") int logisticsId, @Field("number") String number);
     @GET("Order/GetLogisticsTrackInfo")
     Call<GetLogisticsTrackInfo> getLogisticsTrackInfo(@Query("token") String token, @Query("logisticsId") int logisticsId, @Query("number") String number);
+    /**
+     * 获取出入库类型列表
+     */
+    @GET("Storage/GetTypeList")
+    Call<GetTypeList> getTypeList(@Query("type") int type);
+    /**
+     * 获取出/入库单列表
+     * type:1：出库，2：入库
+     */
+    @GET("Storage/StorageList")
+    Call<StorageList> storageList(@Query("type") int type, @Query("typeid") int typeid, @Query("token") String token, @Query("page") int page, @Query("pagesize") int pagesize);
+    /**
+     * 获取出/入库单详情
+     * type:1：出库，2：入库
+     */
+    @GET("Storage/StorageDetails")
+    Call<StorageDetails> storageDetails(@Query("type") int type, @Query("token") String token, @Query("storageId") String storageId);
+    /**
+     * 商品列表
+     */
+    @GET("Storage/ProductList")
+    Call<ProductList> productList(@Query("token") String token);
+    /**
+     * 出入库单扫码查询接口
+     */
+    @GET("Storage/ScanCode")
+    Call<ScanCode> storageScanCode(@Query("token") String token, @Query("type") int type, @Query("productId") int productId, @Query("code") String code);
 }

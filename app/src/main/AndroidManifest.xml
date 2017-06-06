@@ -68,6 +68,21 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
+        <!--获取出/入库单详情-->
+        <activity android:name=".activity.OutBoundOrderInfoActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--添加出库单-->
+        <activity android:name=".activity.AddOutBoundOrderActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--添加选择商品-->
+        <activity android:name=".activity.SelectGoodsActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>
