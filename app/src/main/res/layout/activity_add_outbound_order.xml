@@ -13,11 +13,10 @@
             android:id="@+id/ib_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:background="@null"
-            android:layout_marginLeft="15dp"
-            android:src="@mipmap/back"
-            android:layout_alignTop="@+id/tv_title"
-            android:layout_alignParentStart="true" />
+            android:padding="10dp"
+            android:src="@mipmap/back" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -192,9 +191,15 @@
     </ScrollView>
     <Button
         android:id="@+id/btn_submit"
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
+        android:textSize="18sp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="完成"/>
+        android:background="@drawable/bg_btn_bule50"
+        android:text="完成"
+        android:textColor="#ffffff"
+        android:layout_margin="10dp"
+        style="?android:attr/borderlessButtonStyle"/>
+
 
 </LinearLayout>

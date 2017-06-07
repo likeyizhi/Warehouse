@@ -127,6 +127,7 @@ public final class CaptureActivity extends Activity implements
         mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(CaptureActivity.this);
         mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
 
+        tv_needCount=(TextView)findViewById(R.id.tv_needCount);
         imageButton_back = (ImageButton) findViewById(R.id.capture_imageview_back);
         imageButton_back.setOnClickListener(new View.OnClickListener() {
 
@@ -155,7 +156,8 @@ public final class CaptureActivity extends Activity implements
             needCount=intent.getExtras().getString("needCount");
         }else{
             type=intent.getExtras().getString("type");
-            needCount=100+"";
+            needCount=10000+"";
+            tv_needCount.setVisibility(View.INVISIBLE);
         }
         TextView tvProductName = (TextView) findViewById(R.id.tv_productName);
         tvProductName.setText(productName+"");
@@ -179,7 +181,7 @@ public final class CaptureActivity extends Activity implements
                 }
             }
         });
-        tv_needCount=(TextView)findViewById(R.id.tv_needCount);
+
         tv_needCount.setText(needCount+"(盒)");
         tv_scanCount=(TextView)findViewById(R.id.tv_scanCount);
         scanCount=0;

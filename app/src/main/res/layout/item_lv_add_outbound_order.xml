@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/cha"
             android:layout_alignTop="@+id/iv_img"
+            android:visibility="gone"
             android:layout_alignStart="@+id/iv_img" />
     </RelativeLayout>
     <LinearLayout

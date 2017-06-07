@@ -21,6 +21,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -55,7 +56,8 @@ public class BackOrderActivity extends BaseActivity{
     SwipeRefreshLayout srlOrder;
     @BindView(R.id.ib_back)
     ImageButton ibBack;
-
+    @BindView(R.id.ll_kong)
+    LinearLayout llKong;
     private List<OrderList.OrderListList> orderlist;
     private BackOrderAdapter backOrderAdapter;
     private int status;
@@ -157,7 +159,11 @@ public class BackOrderActivity extends BaseActivity{
                         backOrderAdapter.notifyDataSetChanged();
                     }else{
                         orderlist = response.body().getList();
-                        setAdapter();
+                        if(orderlist.isEmpty()){
+                            llKong.setBackgroundResource(R.mipmap.kong);
+                        }else{
+                            setAdapter();
+                        }
                     }
                 }else{
                     showToast(response.body().getMes()+"");

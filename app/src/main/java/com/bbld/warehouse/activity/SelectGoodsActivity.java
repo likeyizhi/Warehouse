@@ -52,7 +52,10 @@ public class SelectGoodsActivity extends BaseActivity{
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityManagerUtil.getInstance().finishActivity(SelectGoodsActivity.this);
+                Intent intent=new Intent();
+                intent.putExtra("init","no");
+                setResult(1020, intent);
+                finish();
             }
         });
     }

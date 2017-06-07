@@ -11,6 +11,7 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -45,6 +46,8 @@ public class OutBoundOrderActivity extends BaseActivity{
     ImageButton ibBack;
     @BindView(R.id.btn_addOutBound)
     Button btnAddOutBound;
+    @BindView(R.id.ll_kong)
+    LinearLayout llKong;
 
     private String title;
     private int type;
@@ -154,7 +157,11 @@ public class OutBoundOrderActivity extends BaseActivity{
                         outBoundAdapter.notifyDataSetChanged();
                     }else{
                         storageList=response.body().getList();
-                        setAdapter();
+                        if(storageList.isEmpty()){
+                            llKong.setBackgroundResource(R.mipmap.kong);
+                        }else{
+                            setAdapter();
+                        }
                     }
                 }else{
                     showToast(response.body().getMes()+"");
