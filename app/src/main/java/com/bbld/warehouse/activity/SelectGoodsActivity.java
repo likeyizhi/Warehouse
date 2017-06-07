@@ -89,6 +89,9 @@ public class SelectGoodsActivity extends BaseActivity{
     }
 
     class SelectGoodsAdapter extends BaseAdapter{
+        private static final int TYPE_COUNT = 2;//item类型的总数
+        private static final int TYPE_POSITION = 0;//第n~n+9个
+        private static final int TYPE_PRODUCT = 1;//商品
 
         @Override
         public int getCount() {
@@ -106,39 +109,110 @@ public class SelectGoodsActivity extends BaseActivity{
         }
 
         @Override
+        public int getItemViewType(int position) {
+            if ("0".equals((position+"").substring((position+"").length()-1,(position+"").length()))){
+                return TYPE_POSITION;
+            }else{
+                return TYPE_PRODUCT;
+            }
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return TYPE_COUNT;
+        }
+
+        @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             SelectGoodsHolder holder=null;
+            SelectGoodsHolder02 holder02=null;
+            int type=getItemViewType(i);
+
             if (view==null){
-                view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_lv_select_goods,null);
-                holder=new SelectGoodsHolder();
-                holder.iv_productImg=(ImageView)view.findViewById(R.id.iv_productImg);
-                holder.tv_productName=(TextView)view.findViewById(R.id.tv_productName);
-                holder.tv_productSpec=(TextView)view.findViewById(R.id.tv_productSpec);
-                view.setTag(holder);
+                switch (type){
+                    case TYPE_POSITION:
+                        view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_lv_select_goods02,null);
+                        holder02=new SelectGoodsHolder02();
+                        holder02.tv_position=(TextView)view.findViewById(R.id.tv_position);
+                        holder02.iv_productImg=(ImageView)view.findViewById(R.id.iv_productImg);
+                        holder02.tv_productName=(TextView)view.findViewById(R.id.tv_productName);
+                        holder02.tv_productSpec=(TextView)view.findViewById(R.id.tv_productSpec);
+                        view.setTag(holder02);
+                        break;
+                    case TYPE_PRODUCT:
+                        view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_lv_select_goods,null);
+                        holder=new SelectGoodsHolder();
+                        holder.iv_productImg=(ImageView)view.findViewById(R.id.iv_productImg);
+                        holder.tv_productName=(TextView)view.findViewById(R.id.tv_productName);
+                        holder.tv_productSpec=(TextView)view.findViewById(R.id.tv_productSpec);
+                        view.setTag(holder);
+                        break;
+                    default:
+                        break;
+                }
+            }else{
+                switch (type){
+                    case TYPE_POSITION:
+                        holder02= (SelectGoodsHolder02) view.getTag();
+                        break;
+                    case TYPE_PRODUCT:
+                        holder= (SelectGoodsHolder) view.getTag();
+                        break;
+                }
             }
-            holder= (SelectGoodsHolder) view.getTag();
             final ProductList.ProductListList product = getItem(i);
-            Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.cha).into(holder.iv_productImg);
-            holder.tv_productName.setText(product.getProductName()+"");
-            holder.tv_productSpec.setText(product.getProductSpec()+"");
-            if (view!=null){
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent=new Intent();
-                        intent.putExtra("productid",product.getProductID()+"");
-                        intent.putExtra("productimg",product.getProductImg()+"");
-                        intent.putExtra("productName",product.getProductName()+"");
-                        intent.putExtra("productSpec",product.getProductSpec()+"");
-                        intent.putExtra("init","yes");
-                        setResult(1020, intent);
-                        finish();
+            switch (type){
+                case TYPE_POSITION:
+                    Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.cha).into(holder02.iv_productImg);
+                    holder02.tv_position.setText("第"+(i+1)+"-"+(i+10)+"个");
+                    holder02.tv_productName.setText(product.getProductName()+"");
+                    holder02.tv_productSpec.setText(product.getProductSpec()+"");
+                    if (view!=null){
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent=new Intent();
+                                intent.putExtra("productid",product.getProductID()+"");
+                                intent.putExtra("productimg",product.getProductImg()+"");
+                                intent.putExtra("productName",product.getProductName()+"");
+                                intent.putExtra("productSpec",product.getProductSpec()+"");
+                                intent.putExtra("init","yes");
+                                setResult(1020, intent);
+                                finish();
+                            }
+                        });
                     }
-                });
+                    break;
+                case TYPE_PRODUCT:
+                    Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.cha).into(holder.iv_productImg);
+                    holder.tv_productName.setText(product.getProductName()+"");
+                    holder.tv_productSpec.setText(product.getProductSpec()+"");
+                    if (view!=null){
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent=new Intent();
+                                intent.putExtra("productid",product.getProductID()+"");
+                                intent.putExtra("productimg",product.getProductImg()+"");
+                                intent.putExtra("productName",product.getProductName()+"");
+                                intent.putExtra("productSpec",product.getProductSpec()+"");
+                                intent.putExtra("init","yes");
+                                setResult(1020, intent);
+                                finish();
+                            }
+                        });
+                    }
+                    break;
             }
             return view;
         }
         class SelectGoodsHolder{
+            ImageView iv_productImg;
+            TextView tv_productName;
+            TextView tv_productSpec;
+        }
+        class SelectGoodsHolder02{
+            TextView tv_position;
             ImageView iv_productImg;
             TextView tv_productName;
             TextView tv_productSpec;
