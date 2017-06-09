@@ -47,8 +47,12 @@ public class MenuActivity extends BaseActivity{
     LinearLayout llToInBound;
     @BindView(R.id.ll_toOutBound)
     LinearLayout llToOutBound;
-    @BindView(R.id.ll_toOrderUpdate)
-    LinearLayout llToOrderUpdate;
+    @BindView(R.id.ll_toStocking)
+    LinearLayout llToStocking;
+    @BindView(R.id.ll_toQuery)
+    LinearLayout llToQuery;
+    @BindView(R.id.ll_toTransfer)
+    LinearLayout llToTransfer;
     @BindView(R.id.tv_type)
     TextView tvType;
     @BindView(R.id.srl_menu)
@@ -82,16 +86,7 @@ public class MenuActivity extends BaseActivity{
         tvSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MyToken(MenuActivity.this).delToken();
-//                new MyToken(MenuActivity.this).delSPFile();
-                SharedPreferences sharedAP=getSharedPreferences("WearhouseAP",MODE_PRIVATE);
-                SharedPreferences.Editor editorAP = sharedAP.edit();
-                editorAP.putString("WHACC","");
-                editorAP.putString("WHPWD","");
-                editorAP.commit();
-                ActivityManagerUtil.getInstance().finishActivity(MenuActivity.this);
-                readyGo(LoginActivity.class);
-//                ActivityManagerUtil.getInstance().appExit();
+                showSignOutDialog();
             }
         });
         llToBackOrder.setOnClickListener(new View.OnClickListener() {
@@ -138,10 +133,22 @@ public class MenuActivity extends BaseActivity{
                 readyGo(OutBoundOrderActivity.class, bundle);
             }
         });
-        llToOrderUpdate.setOnClickListener(new View.OnClickListener() {
+        llToStocking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast("产品调拨");
+                readyGo(StockingActivity.class);
+            }
+        });
+        llToQuery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(QueryActivity.class);
+            }
+        });
+        llToTransfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(TransferActivity.class);
             }
         });
         srlMenu.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -161,6 +168,33 @@ public class MenuActivity extends BaseActivity{
                 }).start();
             }
         });
+    }
+
+    private void showSignOutDialog() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(MenuActivity.this);
+        builder.setMessage("确认退出登录？");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //                new MyToken(MenuActivity.this).delSPFile();
+                new MyToken(MenuActivity.this).delToken();
+                SharedPreferences sharedAP=getSharedPreferences("WearhouseAP",MODE_PRIVATE);
+                SharedPreferences.Editor editorAP = sharedAP.edit();
+                editorAP.putString("WHACC","");
+                editorAP.putString("WHPWD","");
+                editorAP.commit();
+                ActivityManagerUtil.getInstance().finishActivity(MenuActivity.this);
+                readyGo(LoginActivity.class);
+//                ActivityManagerUtil.getInstance().appExit();
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
     }
 
     private void loadData() {
@@ -212,11 +246,6 @@ public class MenuActivity extends BaseActivity{
     }
 
     @Override
-    public int getContentView() {
-        return R.layout.activity_menu;
-    }
-
-    @Override
     protected void onRestart() {
         super.onRestart();
         loadData();
@@ -246,5 +275,10 @@ public class MenuActivity extends BaseActivity{
             }
         });
         builder.create().show();
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_menu;
     }
 }

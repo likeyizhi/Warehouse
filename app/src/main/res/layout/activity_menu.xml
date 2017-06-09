@@ -3,391 +3,396 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:background="#ffffff"
+    android:fitsSystemWindows="true"
     android:layout_height="match_parent">
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl_menu"
         android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
+            android:scrollbars="none">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#00a3d9"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/iv_head"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="30dp"
-
-                    android:src="@mipmap/xiuzhneg" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:text="用户名"
-                    android:textColor="#ffffff"
-                    android:visibility="gone" />
+                    android:background="#00a3d9"
+                    android:orientation="vertical">
 
+                    <ImageView
+                        android:id="@+id/iv_head"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="30dp"
+                        android:src="@mipmap/xiuzhneg" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:text="用户名"
+                        android:textColor="#ffffff"
+                        android:visibility="gone" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="20dp"
+                        android:background="#eeeeee" />
+
+                    <TextView
+                        android:id="@+id/tv_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="总部"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:id="@+id/ll_toBackOrder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:padding="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        >
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:src="@mipmap/dck" />
+
+                        <TextView
+                            android:id="@+id/tv_dck"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="待出库"
+                            android:textSize="14sp"
+                            android:layout_marginTop="15dp"
+                            android:textColor="#666666" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#eeeeee"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_toOutOrder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:padding="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:src="@mipmap/yck" />
+
+                        <TextView
+                            android:id="@+id/tv_yck"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="已出库"
+                            android:textSize="14sp"
+                            android:layout_marginTop="15dp"
+
+                            android:textColor="#666666" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#eeeeee"/>
+                    <LinearLayout
+                        android:id="@+id/ll_toGetOrder"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:orientation="vertical"
+                        >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:src="@mipmap/dsh" />
+
+                        <TextView
+                            android:id="@+id/tv_dsh"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:text="待收货"
+                            android:textColor="#666666"
+                            android:textSize="14sp" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="20dp"
                     android:background="#eeeeee" />
-
-                <TextView
-                    android:id="@+id/tv_type"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="总部"
-                    android:textColor="#ffffff"
-                    android:textSize="18sp" />
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:id="@+id/ll_toInBound"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:layout_weight="1"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:src="@mipmap/cprk" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="产品入库"
+                            android:textSize="14sp"
+                            android:layout_marginTop="15dp"
+                            android:textColor="#666666" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#eeeeee"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_toOutBound"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:orientation="vertical"
+                        >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:src="@mipmap/cpck" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="产品出库"
+                            android:textSize="14sp"
+                            android:layout_marginTop="15dp"
+                            android:textColor="#666666"  />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#eeeeee"/>
+                    <LinearLayout
+                        android:id="@+id/ll_toStocking"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:orientation="vertical"
+                        >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:src="@mipmap/kcpd" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="库存盘点"
+                            android:textSize="14sp"
+                            android:layout_marginTop="15dp"
+                            android:textColor="#666666"  />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#eeeeee" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:id="@+id/ll_toQuery"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:padding="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:src="@mipmap/kccx" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="库存查询"
+                            android:textSize="14sp"
+                            android:layout_marginTop="15dp"
+                            android:textColor="#666666" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#eeeeee"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_toTransfer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:padding="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:src="@mipmap/scjj" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="市场交接"
+                            android:textSize="14sp"
+                            android:layout_marginTop="15dp"
+
+                            android:textColor="#666666" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#eeeeee"/>
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:visibility="invisible"
+                        android:orientation="vertical"
+                        >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:src="@mipmap/dsh" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:text="待收货"
+                            android:textColor="#666666"
+                            android:textSize="14sp" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#eeeeee" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tv_signOut"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="50dp"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:textSize="18sp"
+                        android:background="@drawable/bg_btn_bule"
+                        android:text="退出登录"
+                        android:textColor="#ffffff" />
+                </RelativeLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:id="@+id/ll_toBackOrder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#ffffff"
-                    android:padding="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    >
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:src="@mipmap/dck" />
-
-                    <TextView
-                        android:id="@+id/tv_dck"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="待出库"
-                        android:textSize="14sp"
-                        android:layout_marginTop="15dp"
-                        android:textColor="#666666" />
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="#eeeeee"/>
-
-                <LinearLayout
-                    android:id="@+id/ll_toOutOrder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#ffffff"
-                    android:padding="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:src="@mipmap/yck" />
-
-                    <TextView
-                        android:id="@+id/tv_yck"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="已出库"
-                        android:textSize="14sp"
-                        android:layout_marginTop="15dp"
-
-                        android:textColor="#666666" />
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="#eeeeee"/>
-                <LinearLayout
-                    android:id="@+id/ll_toGetOrder"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#ffffff"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:orientation="vertical"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:src="@mipmap/dsh" />
-
-                    <TextView
-                        android:id="@+id/tv_dsh"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="待收货"
-                        android:textColor="#666666"
-                        android:textSize="14sp" />
-
-
-                </LinearLayout>
-
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#eeeeee" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:id="@+id/ll_toInBound"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#ffffff"
-                    android:layout_weight="1"
-                    android:padding="10dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:src="@mipmap/cprk" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="产品入库"
-                        android:textSize="14sp"
-                        android:layout_marginTop="15dp"
-                        android:textColor="#666666" />
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="#eeeeee"/>
-
-                <LinearLayout
-                    android:id="@+id/ll_toOutBound"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#ffffff"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:orientation="vertical"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:src="@mipmap/cpck" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="产品出库"
-                        android:textSize="14sp"
-                        android:layout_marginTop="15dp"
-                        android:textColor="#666666"  />
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="#eeeeee"/>
-                <LinearLayout
-                    android:id="@+id/ll_toOrderUpdate"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#ffffff"
-                    android:padding="10dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:src="@mipmap/cpdb" />
-
-                    <TextView
-                        android:id="@+id/textView8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="库存盘点"
-                        android:textSize="14sp"
-                        android:layout_marginTop="15dp"
-                        android:textColor="#666666"  />
-
-
-                </LinearLayout>
-
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#eeeeee" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#ffffff"
-                    android:padding="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:src="@mipmap/dck" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="库存查询"
-                        android:textSize="14sp"
-                        android:layout_marginTop="15dp"
-                        android:textColor="#666666" />
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="#eeeeee"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#ffffff"
-                    android:padding="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:src="@mipmap/yck" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="市场交接"
-                        android:textSize="14sp"
-                        android:layout_marginTop="15dp"
-
-                        android:textColor="#666666" />
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="#eeeeee"/>
-                <LinearLayout
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#ffffff"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:visibility="invisible"
-                    android:orientation="vertical"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:src="@mipmap/dsh" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="待收货"
-                        android:textColor="#666666"
-                        android:textSize="14sp" />
-
-
-                </LinearLayout>
-
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#eeeeee" />
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/tv_signOut"
-                    android:layout_width="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_height="45dp"
-                    android:layout_marginTop="50dp"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:textSize="18sp"
-                    android:background="@drawable/bg_btn_bule"
-                    android:text="退出登录"
-                    android:textColor="#ffffff" />
-            </RelativeLayout>
-        </LinearLayout>
-
+        </ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

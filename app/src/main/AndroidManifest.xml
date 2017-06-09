@@ -12,9 +12,9 @@
     <application
         android:name=".app.WHApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/xiuzhneg"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/xiuzhneg"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <!--主页-->
@@ -80,6 +80,46 @@
         </activity>
         <!--添加选择商品-->
         <activity android:name=".activity.SelectGoodsActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--库存查询-->
+        <activity android:name=".activity.QueryActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--库存盘点-->
+        <activity android:name=".activity.StockingActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--添加库存盘点-->
+        <activity android:name=".activity.AddStockingActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--库存盘点详情-->
+        <activity android:name=".activity.StockingInfoActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--库存盘点,明细-->
+        <activity android:name=".activity.CodeInfoActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--市场交接-->
+        <activity android:name=".activity.TransferActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--市场交接，详情-->
+        <activity android:name=".activity.TransferInfoActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--市场交接，编辑-->
+        <activity android:name=".activity.TransferEditActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>

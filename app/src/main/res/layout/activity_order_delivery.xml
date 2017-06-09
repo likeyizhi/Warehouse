@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="订单号：9998819238921389123"
+                android:text="订单号："
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:textColor="#00A3D9"/>
@@ -100,7 +100,7 @@
                     <TextView
                         android:id="@+id/tvChannelName"
                         android:layout_marginLeft="10dp"
-                        android:text="和爱佳儿"
+                        android:text="--"
                         android:textSize="14sp"
                         android:textColor="#999999"
                         android:layout_width="wrap_content"
@@ -126,7 +126,7 @@
                     <TextView
                         android:id="@+id/tvDealerName"
                         android:layout_marginLeft="10dp"
-                        android:text="和爱佳儿-吉林一部"
+                        android:text="--"
                         android:textColor="#999999"
                         android:textSize="14sp"
                         android:layout_width="wrap_content"
@@ -153,7 +153,7 @@
                     <TextView
                         android:id="@+id/tv_name_phone"
                         android:layout_marginLeft="10dp"
-                        android:text="和爱佳儿"
+                        android:text="--"
                         android:textColor="#ff4d4d"
                         android:textSize="14sp"
                         android:drawablePadding="5dp"
@@ -182,7 +182,7 @@
                     <TextView
                         android:id="@+id/tv_address"
                         android:layout_marginLeft="10dp"
-                        android:text="中央绿地广场B10B1627室"
+                        android:text="--"
                         android:textColor="#ff4d4d"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

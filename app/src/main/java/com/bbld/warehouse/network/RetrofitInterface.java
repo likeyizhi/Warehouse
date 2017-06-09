@@ -1,15 +1,25 @@
 package com.bbld.warehouse.network;
 
 import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
+import com.bbld.warehouse.bean.CancelInventory;
+import com.bbld.warehouse.bean.FinishInventory;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
 import com.bbld.warehouse.bean.GetTypeList;
+import com.bbld.warehouse.bean.HandOverSacnFinish;
+import com.bbld.warehouse.bean.HandoverEdit;
+import com.bbld.warehouse.bean.HandoverInfo;
+import com.bbld.warehouse.bean.HandoverList;
 import com.bbld.warehouse.bean.IndexInfo;
+import com.bbld.warehouse.bean.InventoryEdit;
+import com.bbld.warehouse.bean.InventoryInfo;
+import com.bbld.warehouse.bean.InventoryList;
 import com.bbld.warehouse.bean.Login;
 import com.bbld.warehouse.bean.OrderDetails;
 import com.bbld.warehouse.bean.OrderList;
 import com.bbld.warehouse.bean.OrderSend;
+import com.bbld.warehouse.bean.ProductCountList;
 import com.bbld.warehouse.bean.ProductList;
 import com.bbld.warehouse.bean.ScanCode;
 import com.bbld.warehouse.bean.StorageDetails;
@@ -140,4 +150,54 @@ public interface RetrofitInterface {
      */
     @GET("Storage/ScanCode")
     Call<ScanCode> storageScanCode(@Query("token") String token, @Query("type") int type, @Query("productId") int productId, @Query("code") String code);
+    /**
+     * 库存查询
+     */
+    @GET("Storage/ProductCountList")
+    Call<ProductCountList> productCountList(@Query("token") String token, @Query("page") int page, @Query("pagesize") int pagesize);
+    /**
+     * 库存盘点
+     */
+    @GET("Storage/InventoryList")
+    Call<InventoryList> inventoryList(@Query("token") String token);
+    /**
+     * 库存盘点详情
+     */
+    @GET("Storage/InventoryInfo")
+    Call<InventoryInfo> inventoryInfo(@Query("token") String token, @Query("inventoryId") String inventoryId);
+    /**
+     * 库存盘点作废
+     */
+    @GET("Storage/CancelInventory")
+    Call<CancelInventory> cancelInventory(@Query("token") String token, @Query("inventoryId") String inventoryId);
+    /**
+     * 库存盘点决策
+     */
+    @GET("Storage/FinishInventory")
+    Call<FinishInventory> finishInventory(@Query("token") String token, @Query("inventoryId") String inventoryId);
+    /**
+     * 库存盘点编辑
+     */
+    @GET("Storage/InventoryEdit")
+    Call<InventoryEdit> inventoryEdit(@Query("token") String token, @Query("inventoryId") String inventoryId);
+    /**
+     * 市场交接
+     */
+    @GET("Storage/HandoverList")
+    Call<HandoverList> handoverList(@Query("token") String token);
+    /**
+     * 市场交接--详情
+     */
+    @GET("Storage/HandoverInfo")
+    Call<HandoverInfo> handoverInfo(@Query("token") String token, @Query("handoverId") String handoverId);
+    /**
+     * 市场交接--编辑
+     */
+    @GET("Storage/HandoverEdit")
+    Call<HandoverEdit> handoverEdit(@Query("token") String token, @Query("handoverId") String handoverId);
+    /**
+     * 市场交接--提交
+     */
+    @GET("Storage/HandOverSacnFinish")
+    Call<HandOverSacnFinish> handOverSacnFinish(@Query("token") String token, @Query("handoverId") String handoverId);
 }

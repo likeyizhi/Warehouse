@@ -14,7 +14,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
             android:background="@null"
             android:padding="10dp"
             android:src="@mipmap/back" />
@@ -35,20 +34,20 @@
         android:background="#eeeeee" />
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/srl_outBound"
+        android:id="@+id/srl_stocking"
         android:scrollbars="none"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ListView
-            android:id="@+id/lv_outBound"
+            android:id="@+id/lv_stocking"
             android:layout_width="match_parent"
             android:dividerHeight="0dp"
             android:divider="@null"
             android:layout_height="wrap_content"/>
     </android.support.v4.widget.SwipeRefreshLayout>
     <Button
-        android:id="@+id/btn_addOutBound"
+        android:id="@+id/btn_addStocking"
         android:layout_width="180dp"
         android:textSize="18sp"
         android:layout_height="wrap_content"

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="75dp"
+            android:layout_marginLeft="15dp"
+            android:padding="1dp"
+            android:background="@drawable/bg_border"
+            android:src="@mipmap/ic_launcher"
+            android:id="@+id/iv_img" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/cha"
+            android:layout_alignTop="@+id/iv_img"
+            android:visibility="gone"
+            android:layout_alignStart="@+id/iv_img" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        android:textSize="15sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="{标题}"
+                android:textColor="#333333"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_spec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:textSize="13sp"
+                    android:text="620mg/粒x90粒/盒"
+                    android:textColor="#333333" />
+
+                <TextView
+                    android:id="@+id/tv_scanCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="扫码数量:1000（盒）"
+                    android:layout_marginTop="15dp"
+
+                    android:textSize="13sp"
+                    android:textColor="#333333" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_toScan"
+                    android:layout_width="65dp"
+                    android:layout_height="25dp"
+                    android:gravity="center"
+                    android:background="@drawable/bg_btn_bule"
+                    android:textColor="#ffffff"
+                    android:text="扫码"/>
+                <TextView
+                    android:id="@+id/tv_toInfo"
+                    android:layout_width="65dp"
+                    android:layout_height="25dp"
+                    android:gravity="center"
+                    android:background="@drawable/bg_btn_write"
+                    android:textColor="#00a3d9"
+                    android:layout_marginTop="5dp"
+                    android:text="明细"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -14,7 +14,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
             android:background="@null"
             android:padding="10dp"
             android:src="@mipmap/back" />
@@ -55,8 +54,9 @@
                     android:id="@+id/et_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_btn_f9f9f9_5"
+                    android:background="@null"
                     android:hint="盘点单号"
+                    android:singleLine="true"
                     android:textSize="15sp"
                     android:textColorHint="#999999"
                     android:textColor="#999999"
@@ -114,7 +114,7 @@
                     android:paddingLeft="10dp"/>
             </LinearLayout>
             <com.bbld.warehouse.widget.ZListview
-                android:id="@+id/lv_addOutBound"
+                android:id="@+id/lv_addStocking"
                 android:layout_width="match_parent"
                 android:dividerHeight="0dp"
                 android:divider="@null"

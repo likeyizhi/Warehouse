@@ -88,6 +88,7 @@ public class OrderDeliveryActivity extends BaseActivity{
     private UserSQLiteOpenHelper mUserSQLiteOpenHelper;
     private UserDataBaseOperate mUserDataBaseOperate;
     private String request;
+    private String doType;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -98,10 +99,12 @@ public class OrderDeliveryActivity extends BaseActivity{
                     //出库成功清空数据库，释放当前acticity
                     mUserDataBaseOperate.deleteAll();
                     ActivityManagerUtil.getInstance().finishActivity(OrderDeliveryActivity.this);
-                    BackOrderActivity.boActivity.finish();
-                    Bundle bundle=new Bundle();
-                    bundle.putInt("status", 2);
-                    readyGo(BackOrderActivity.class, bundle);
+                    if (doType.equals("out")){
+                        BackOrderActivity.boActivity.finish();
+                        Bundle bundle=new Bundle();
+                        bundle.putInt("status", 2);
+                        readyGo(BackOrderActivity.class, bundle);
+                    }
                     break;
                 case 222:
                     showToast(""+request);
@@ -109,6 +112,7 @@ public class OrderDeliveryActivity extends BaseActivity{
             }
         }
     };
+
     @Override
     protected void initViewsAndEvents() {
         mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(OrderDeliveryActivity.this);
@@ -221,8 +225,13 @@ public class OrderDeliveryActivity extends BaseActivity{
                     @Override
                     public void run() {
                         try {
-                            request= UploadUserInformationByPostService.save(new MyToken(OrderDeliveryActivity.this).getToken()+""
-                                    ,orderId+"",codejson);
+                            if (doType.equals("sure")){
+                                request= UploadUserInformationByPostService.orderReceipt(new MyToken(OrderDeliveryActivity.this).getToken()+""
+                                        ,orderId+"",codejson);
+                            }else{
+                                request= UploadUserInformationByPostService.save(new MyToken(OrderDeliveryActivity.this).getToken()+""
+                                        ,orderId+"",codejson);
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -354,6 +363,7 @@ public class OrderDeliveryActivity extends BaseActivity{
     protected void getBundleExtras(Bundle extras) {
         invoiceid=extras.getString("OrderID");
         orderCount=extras.getString("OrderCount");
+        doType=extras.getString("doType");
     }
 
     @Override

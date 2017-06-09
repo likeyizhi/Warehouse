@@ -54,14 +54,19 @@
                     android:id="@+id/et_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_btn_f9f9f9_5"
+                    android:background="@null"
                     android:hint="出库单号"
+                    android:singleLine="true"
                     android:textSize="15sp"
                     android:textColorHint="#999999"
                     android:textColor="#999999"
                     android:paddingLeft="10dp"/>
 
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#eeeeee" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,14 +82,19 @@
                     android:id="@+id/tv_typeId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_btn_f9f9f9_5"
+                    android:background="@null"
                     android:text="选择出库类型"
+                    android:singleLine="true"
                     android:textSize="15sp"
                     android:textColorHint="#999999"
                     android:textColor="#999999"
                     android:paddingLeft="10dp"/>
 
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#eeeeee" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -100,7 +110,8 @@
                     android:id="@+id/et_linkName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_btn_f9f9f9_5"
+                    android:background="@null"
+                    android:singleLine="true"
                     android:hint="联系人"
                     android:textSize="15sp"
                     android:textColorHint="#999999"
@@ -108,6 +119,10 @@
                     android:paddingLeft="10dp"/>
 
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#eeeeee" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,14 +138,20 @@
                     android:id="@+id/et_linkPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_btn_f9f9f9_5"
+                    android:background="@null"
                     android:hint="联系电话"
+                    android:digits="1234567890"
+                    android:singleLine="true"
                     android:textSize="15sp"
                     android:textColorHint="#999999"
                     android:textColor="#999999"
                     android:paddingLeft="10dp"/>
 
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#eeeeee" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

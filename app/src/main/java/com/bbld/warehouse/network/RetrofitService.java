@@ -2,15 +2,25 @@ package com.bbld.warehouse.network;
 
 import com.bbld.warehouse.base.Constants;
 import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
+import com.bbld.warehouse.bean.CancelInventory;
+import com.bbld.warehouse.bean.FinishInventory;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
 import com.bbld.warehouse.bean.GetTypeList;
+import com.bbld.warehouse.bean.HandOverSacnFinish;
+import com.bbld.warehouse.bean.HandoverEdit;
+import com.bbld.warehouse.bean.HandoverInfo;
+import com.bbld.warehouse.bean.HandoverList;
 import com.bbld.warehouse.bean.IndexInfo;
+import com.bbld.warehouse.bean.InventoryEdit;
+import com.bbld.warehouse.bean.InventoryInfo;
+import com.bbld.warehouse.bean.InventoryList;
 import com.bbld.warehouse.bean.Login;
 import com.bbld.warehouse.bean.OrderDetails;
 import com.bbld.warehouse.bean.OrderList;
 import com.bbld.warehouse.bean.OrderSend;
+import com.bbld.warehouse.bean.ProductCountList;
 import com.bbld.warehouse.bean.ProductList;
 import com.bbld.warehouse.bean.ScanCode;
 import com.bbld.warehouse.bean.StorageDetails;
@@ -145,5 +155,65 @@ public class RetrofitService {
      */
     public Call<ScanCode> storageScanCode(String token, int type, int productId, String  code){
         return retrofitInterface.storageScanCode(token, type, productId, code);
+    }
+    /**
+     * 库存查询
+     */
+    public Call<ProductCountList> productCountList(String token, int page, int pagesize){
+        return retrofitInterface.productCountList(token,page,pagesize);
+    }
+    /**
+     * 库存盘点
+     */
+    public Call<InventoryList> inventoryList(String token){
+        return retrofitInterface.inventoryList(token);
+    }
+    /**
+     * 库存盘点详情
+     */
+    public Call<InventoryInfo> inventoryInfo(String token, String inventoryId){
+        return retrofitInterface.inventoryInfo(token, inventoryId);
+    }
+    /**
+     * 库存盘点作废
+     */
+    public Call<CancelInventory> cancelInventory(String token, String inventoryId){
+        return retrofitInterface.cancelInventory(token, inventoryId);
+    }
+    /**
+     * 库存盘点决策
+     */
+    public Call<FinishInventory> finishInventory(String token, String inventoryId){
+        return retrofitInterface.finishInventory(token, inventoryId);
+    }
+    /**
+     * 库存盘点决策
+     */
+    public Call<InventoryEdit> inventoryEdit(String token, String inventoryId){
+        return retrofitInterface.inventoryEdit(token, inventoryId);
+    }
+    /**
+     * 市场交接
+     */
+    public Call<HandoverList> handoverList(String token){
+        return retrofitInterface.handoverList(token);
+    }
+    /**
+     * 市场交接--详情
+     */
+    public Call<HandoverInfo> handoverInfo(String token, String handoverId){
+        return retrofitInterface.handoverInfo(token, handoverId);
+    }
+    /**
+     * 市场交接--编辑
+     */
+    public Call<HandoverEdit> handoverEdit(String token, String handoverId){
+        return retrofitInterface.handoverEdit(token, handoverId);
+    }
+    /**
+     * 市场交接--提交
+     */
+    public Call<HandOverSacnFinish> handOverSacnFinish(String token, String handoverId){
+        return retrofitInterface.handOverSacnFinish(token, handoverId);
     }
 }

@@ -62,6 +62,8 @@ public class OutBoundOrderInfoActivity extends BaseActivity{
     Button btnOut;
     @BindView(R.id.ib_back)
     ImageButton ibBack;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
 
     private int type;
     private String storageId;
@@ -70,12 +72,21 @@ public class OutBoundOrderInfoActivity extends BaseActivity{
     @Override
     protected void initViewsAndEvents() {
         loadData();
+        setTitle();
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ActivityManagerUtil.getInstance().finishActivity(OutBoundOrderInfoActivity.this);
             }
         });
+    }
+
+    private void setTitle() {
+        if (type==1){
+            tvTitle.setText("出库单详情");
+        }else{
+            tvTitle.setText("入库单详情");
+        }
     }
 
     private void loadData() {

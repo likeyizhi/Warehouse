@@ -55,6 +55,7 @@
 
 
             <TextView
+                android:id="@+id/tv_productCount"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
@@ -69,8 +70,10 @@
              android:layout_height="wrap_content"
              android:layout_weight="1"
              android:gravity="right"
+             android:visibility="gone"
              android:orientation="horizontal">
              <Button
+                 android:id="@+id/btn_productCodeInfo"
                  android:layout_width="wrap_content"
                  android:layout_height="35dp"
                  style="?android:attr/borderlessButtonStyle"
@@ -78,7 +81,6 @@
                  android:textColor="#ffffff"
                  android:layout_marginTop="10dp"
                  android:layout_marginRight="10dp"
-
                  android:text="条码明细"/>
          </LinearLayout>
      </LinearLayout>

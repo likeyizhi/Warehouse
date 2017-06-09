@@ -48,6 +48,41 @@ public class UploadUserInformationByPostService {
         params.put("codejson", codejson);
         return sendPOSTRequest(path, params, "UTF-8");
     }
+    public static String saveStocking(String token,String number, String remark, String codejson) throws Exception{
+        String path = Constants.BASE_URL + "Storage/CommitInventory?token="+token+
+                "&number="+number+
+                "&remark="+remark+
+                "&codejson="+codejson;
+        Log.i("saveStocking", "saveStocking="+path);
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("number", number);
+        params.put("remark", remark);
+        params.put("codejson", codejson);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    public static String commitHandOver(String token,String handoverId, String codejson) throws Exception{
+        String path = Constants.BASE_URL + "Storage/CommitHandOver?token="+token+
+                "&handoverId="+handoverId+
+                "&codejson="+codejson;
+        Log.i("saveStocking", "saveStocking="+path);
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("handoverId", handoverId);
+        params.put("codejson", codejson);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    public static String orderReceipt(String token,String invoiceid, String codejson) throws Exception{
+        String path = Constants.BASE_URL + "Order/OrderReceipt?token="+token+
+                "&invoiceid="+invoiceid+
+                "&codejson="+codejson;
+        Log.i("saveStocking", "saveStocking="+path);
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("invoiceid", invoiceid);
+        params.put("codejson", codejson);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
 
     /**
      * 发送POST请求
@@ -94,11 +129,11 @@ public class UploadUserInformationByPostService {
             Log.i("ress", "ress="+ress);
             Log.i("status", "status="+status);
             if (status==0){
-                return "出库成功";
+                return "操作成功";
             }else{
                 return ress;
             }
         }
-        return "出库失败";
+        return "操作失败";
     }
 }

@@ -387,6 +387,8 @@ public final class CaptureActivity extends Activity implements
                             e.printStackTrace();
                         }
                     }
+                }else{
+                    Toast.makeText(CaptureActivity.this,""+response.body().getMes(),Toast.LENGTH_SHORT).show();
                 }
             }
 

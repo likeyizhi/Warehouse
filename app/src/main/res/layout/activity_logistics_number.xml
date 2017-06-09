@@ -168,7 +168,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="10dp"
-
+            android:singleLine="true"
             android:background="@drawable/bg_btn_f9f9f9_5"
             android:hint="物流编号"
             android:textSize="15sp"

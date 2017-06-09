@@ -13,6 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
             android:background="@null"
             android:padding="10dp"
             android:src="@mipmap/back"/>
@@ -22,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="盘点单详情"
+            android:text="交接单详情"
             android:textSize="17sp" />
     </RelativeLayout>
 
@@ -39,6 +40,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,30 +62,108 @@
                     android:padding="10dp">
 
                     <TextView
-                        android:id="@+id/tvInventoryNumber"
+                        android:id="@+id/tvNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="盘点单号：984691641946"
+                        android:text="交接单号：2312312321321312"
                         android:textColor="#333333" />
 
                     <TextView
-                        android:id="@+id/tvInventoryStatus"
+                        android:id="@+id/tvState"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="扫码完成"
+                        android:text="已交接"
                         android:textSize="14sp"
                         android:textColor="#999999" />
                 </LinearLayout>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="监交人："
+                        android:textColor="#333333" />
+
+                    <TextView
+                        android:id="@+id/tv_jjr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="000"
+                        android:textSize="14sp"
+                        android:textColor="#999999" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="转出人："
+                        android:textColor="#333333" />
+
+                    <TextView
+                        android:id="@+id/tv_zcr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="#999999"
+                        android:text=""
+                        android:textSize="14sp"
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_btn_write5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="备注："
+                    android:textColor="#333333"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_remark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="备注"
+                    android:textColor="#666666"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
@@ -91,17 +171,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:text="发货商品"
+                    android:text="商品列表："
                     android:textColor="#333333" />
 
-                <TextView
-                    android:id="@+id/tv_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:text="待发货"
-                    android:visibility="gone"
-                    android:textColor="#66ccff" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -113,7 +186,7 @@
                 android:orientation="vertical">
 
                 <com.bbld.warehouse.widget.ZListview
-                    android:id="@+id/lvProductList"
+                    android:id="@+id/lv_transferInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 </com.bbld.warehouse.widget.ZListview>
@@ -122,84 +195,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#eeeeee" />
-
-                <TextView
-                    android:id="@+id/tv_more"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:textSize="14sp"
-                    android:visibility="gone"
-                    android:text="发货商品共x类x盒，查看更多"
-                    android:textColor="#66ccff" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/bg_btn_write5"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="订单备注："
-                    android:textColor="#333333"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tvInventoryRemark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="订单备注"
-                    android:textColor="#666666"
-                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="80dp"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/btnCancle"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/bg_btn_bule"
-            android:text="作废"
-            style="?android:attr/borderlessButtonStyle"
-            android:textColor="#ffffff"/>
-        <Button
-            android:id="@+id/btnEdit"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/bg_btn_bule"
-            android:text="编辑"
-            style="?android:attr/borderlessButtonStyle"
-            android:textColor="#ffffff"/>
-        <Button
-            android:id="@+id/btnDecision"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/bg_btn_bule"
-            android:text="决策"
-            style="?android:attr/borderlessButtonStyle"
-            android:textColor="#ffffff"/>
-    </LinearLayout>
 
 </LinearLayout>

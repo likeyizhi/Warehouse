@@ -237,6 +237,7 @@ public class BackOrderActivity extends BaseActivity{
                 holder.btn_goOut=(Button)view.findViewById(R.id.btn_goOut);
                 holder.btn_track=(Button)view.findViewById(R.id.btn_track);
                 holder.btn_writTrack=(Button)view.findViewById(R.id.btn_writTrack);
+                holder.btn_sure=(Button)view.findViewById(R.id.btn_sure);
                 holder.iv_open=(ImageView)view.findViewById(R.id.iv_open);
                 view.setTag(holder);
             }
@@ -268,6 +269,7 @@ public class BackOrderActivity extends BaseActivity{
                         Bundle bundle=new Bundle();
                         bundle.putString("OrderID",order.getOrderID()+"");
                         bundle.putString("OrderCount",getCount()+"");
+                        bundle.putString("doType","out");
                         readyGo(OrderDeliveryActivity.class,bundle);
                     }
                 });
@@ -309,20 +311,21 @@ public class BackOrderActivity extends BaseActivity{
                         bundle.putString("Count()",getCount()+"");
                         bundle.putString("ProductCount()","类"+order.getProductCount()+"盒");
                         bundle.putString("Date()",order.getDate()+"");
-
                         readyGo(LogisticsNumberActivity.class,bundle);
 
                     }
                 });
             }else{
-                holder.btn_track.setVisibility(View.VISIBLE);
-                holder.btn_track.setOnClickListener(new View.OnClickListener() {
+                holder.btn_sure.setVisibility(View.VISIBLE);
+                holder.btn_sure.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showToast("物流跟踪");
+//                        showToast("确认收货");
                         Bundle bundle=new Bundle();
-                        bundle.putString("OrderID()",order.getOrderID()+"");
-                        readyGo(LogisticsTrackingActivity.class,bundle);
+                        bundle.putString("OrderID",order.getOrderID()+"");
+                        bundle.putString("OrderCount",getCount()+"");
+                        bundle.putString("doType","sure");
+                        readyGo(OrderDeliveryActivity.class,bundle);
 
                     }
                 });
@@ -370,6 +373,7 @@ public class BackOrderActivity extends BaseActivity{
             Button btn_goOut;
             Button btn_track;
             Button btn_writTrack;
+            Button btn_sure;
             ImageView iv_open;
         }
 

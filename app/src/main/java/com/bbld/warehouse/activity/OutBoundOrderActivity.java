@@ -72,6 +72,11 @@ public class OutBoundOrderActivity extends BaseActivity{
     @Override
     protected void initViewsAndEvents() {
         tvTitle.setText(title);
+        if (type==1){
+            btnAddOutBound.setText("添加出库单");
+        }else{
+            btnAddOutBound.setText("添加入库单");
+        }
         loadData(false);
         setListeners();
     }
