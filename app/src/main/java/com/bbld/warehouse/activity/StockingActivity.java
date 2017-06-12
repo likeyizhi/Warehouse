@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -42,6 +43,8 @@ public class StockingActivity extends BaseActivity{
     SwipeRefreshLayout srlStocking;
     @BindView(R.id.btn_addStocking)
     Button btnAddStocking;
+    @BindView(R.id.ll_kong)
+    LinearLayout llKong;
     private List<InventoryList.InventoryListlist> inventoryList;
     private StockingAdapter adapter;
     private Handler mHandler=new Handler(){
@@ -107,10 +110,13 @@ public class StockingActivity extends BaseActivity{
                 }
                 if (response.body().getStatus()==0){
                     inventoryList = response.body().getList();
+                    if (inventoryList.isEmpty()) {
+                        llKong.setBackgroundResource(R.mipmap.kong);
+                    }
                     setAdapter();
-                }else{
-                    showToast(""+response.body().getMes());
-                }
+                }else {
+                        showToast("" + response.body().getMes());
+                    }
             }
 
             @Override
@@ -162,7 +168,7 @@ public class StockingActivity extends BaseActivity{
             holder.tvInventoryNumber.setText("盘点单号"+inventory.getInventoryNumber());
             holder.tvInventoryStatus.setText(inventory.getInventoryStatus()+"");
             holder.tvInventoryRemark.setText(inventory.getInventoryRemark()+"");
-            holder.tvProduct.setText("无字段");
+            holder.tvProduct.setText(inventory.getProductTypeCount()+"");
             holder.tvProductCount.setText("类"+inventory.getProductCount()+"盒");
             holder.tvInventoryDate.setText(inventory.getInventoryDate()+"");
             holder.btnInfo.setOnClickListener(new View.OnClickListener() {

@@ -46,6 +46,7 @@ public class HandoverInfo {
          "zcr": "婴童营销中心吉林省办",
          "Remark": "测试添加交接单",
          "Date": "2017-06-06",
+         "Status": "Status,
          "ProductList": []*/
         private String HandOverID;
         private String HandoverCode;
@@ -53,7 +54,16 @@ public class HandoverInfo {
         private String zcr;
         private String Remark;
         private String Date;
+        private String Status;
         private List<HandoverInfoProductList> ProductList;
+
+        public String getStatus() {
+            return Status;
+        }
+
+        public void setStatus(String status) {
+            Status = status;
+        }
 
         public String getHandOverID() {
             return HandOverID;

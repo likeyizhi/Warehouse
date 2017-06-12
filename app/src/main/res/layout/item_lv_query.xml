@@ -52,17 +52,35 @@
                 android:textSize="13sp" />
 
 
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_productCount"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
-                android:text="库存数量：1000"
+                android:text="库存数量：  "
                 android:textColor="#666666"
                 android:textSize="13sp" />
-
+                <TextView
+                    android:id="@+id/tv_productCount"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
+                    android:text="1000"
+                    android:textColor="#666666"
+                    android:textSize="16sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
+                    android:text="  （盒）"
+                    android:textColor="#666666"
+                    android:textSize="13sp" />
+            </LinearLayout>
 
         </LinearLayout>
          <LinearLayout

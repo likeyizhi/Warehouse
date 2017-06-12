@@ -304,7 +304,7 @@ public class AddStockingActivity extends BaseActivity{
             }
             holder= (AddStockingHolder) view.getTag();
             final AddOutBoundProduct product = getItem(i);
-            Glide.with(getApplicationContext()).load(product.getImg()).error(R.mipmap.cha).into(holder.iv_img);
+            Glide.with(getApplicationContext()).load(product.getImg()).error(R.mipmap.xiuzhneg).into(holder.iv_img);
             holder.tv_title.setText(product.getName()+"");
             holder.tv_spec.setText(product.getSpec()+"");
             holder.tv_scanCount.setText("扫码数量:"+product.getScanCount()+"(盒)");

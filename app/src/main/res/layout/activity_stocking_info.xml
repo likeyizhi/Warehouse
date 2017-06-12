@@ -172,6 +172,7 @@
         android:gravity="center_horizontal"
         android:layout_marginTop="80dp"
         android:layout_gravity="bottom"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
         <Button
             android:id="@+id/btnCancle"
@@ -195,7 +196,6 @@
             android:id="@+id/btnDecision"
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:layout_marginRight="8dp"
             android:background="@drawable/bg_btn_bule"
             android:text="决策"
             style="?android:attr/borderlessButtonStyle"

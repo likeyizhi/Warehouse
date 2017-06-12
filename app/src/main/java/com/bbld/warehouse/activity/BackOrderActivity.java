@@ -403,7 +403,7 @@ public class BackOrderActivity extends BaseActivity{
 
         @Override
         public void onBindViewHolder(RecHolder holder, int position) {
-            Glide.with(getApplicationContext()).load(productList.get(0).getProductImg()).error(R.mipmap.cha).into(holder.img);
+            Glide.with(getApplicationContext()).load(productList.get(0).getProductImg()).error(R.mipmap.xiuzhneg).into(holder.img);
             holder.img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

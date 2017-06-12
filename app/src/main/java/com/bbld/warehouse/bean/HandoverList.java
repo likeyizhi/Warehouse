@@ -44,6 +44,7 @@ public class HandoverList {
          "HandoverCode": "JJD-b6b4c5e89",
          "jjr": "经销商1",
          "zcr": "",
+         "Status": "Status",
          "Remark": "测试添加交接单",
          "Date": "2017-06-06",
          "Edit": 1*/
@@ -51,9 +52,18 @@ public class HandoverList {
         private String HandoverCode;
         private String jjr;
         private String zcr;
+        private String Status;
         private String Remark;
         private String Date;
         private int Edit;
+
+        public String getStatus() {
+            return Status;
+        }
+
+        public void setStatus(String status) {
+            Status = status;
+        }
 
         public String getHandOverID() {
             return HandOverID;

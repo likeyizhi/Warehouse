@@ -82,7 +82,7 @@ public class TransferInfoActivity extends BaseActivity{
         tvJjr.setText(""+handoverInfo.getJjr());
         tvZcr.setText(""+handoverInfo.getZcr());
         tvRemark.setText(handoverInfo.getRemark()+"");
-        tvState.setText("无字段");
+        tvState.setText(handoverInfo.getStatus()+"");
         productList = handoverInfo.getProductList();
         setAdapter();
     }
@@ -123,7 +123,7 @@ public class TransferInfoActivity extends BaseActivity{
             }
             holder= (TransferInfoHolder) view.getTag();
             HandoverInfo.HandoverInfoInfo.HandoverInfoProductList handover = getItem(i);
-            Glide.with(getApplicationContext()).load(handover.getProductImg()+"").error(R.mipmap.cha).into(holder.iv_productImg);
+            Glide.with(getApplicationContext()).load(handover.getProductImg()+"").error(R.mipmap.xiuzhneg).into(holder.iv_productImg);
             holder.tv_productName.setText(handover.getProductName()+"");
             holder.tv_productSpec.setText(handover.getProductSpec()+"");
             holder.tv_count.setText("盘点数量："+handover.getProductCount()+"(盒)");

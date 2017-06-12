@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -43,7 +44,8 @@ public class QueryActivity extends BaseActivity{
     ImageButton ibBack;
     @BindView(R.id.srl_productList)
     SwipeRefreshLayout srlProductList;
-
+    @BindView(R.id.ll_kong)
+    LinearLayout llKong;
     private int page=1;
     private int pagesize=10;
     private List<ProductCountList.ProductCountListList> products;
@@ -92,33 +94,33 @@ public class QueryActivity extends BaseActivity{
                 }).start();
             }
         });
-        lvProductList.setOnScrollListener(new AbsListView.OnScrollListener() {
-            private boolean isBottom;
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-                switch (i) {
-                    case SCROLL_STATE_FLING:
-                        //Log.i("info", "SCROLL_STATE_FLING");
-                        break;
-                    case SCROLL_STATE_IDLE:
-                        if (isBottom) {
-                            page++;
-                            loadData(true);
-                        }
-                        break;
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if(firstVisibleItem+visibleItemCount == totalItemCount){
-                    //Log.i("info", "到底了....");
-                    isBottom = true;
-                }else{
-                    isBottom = false;
-                }
-            }
-        });
+//        lvProductList.setOnScrollListener(new AbsListView.OnScrollListener() {
+//            private boolean isBottom;
+//            @Override
+//            public void onScrollStateChanged(AbsListView absListView, int i) {
+//                switch (i) {
+//                    case SCROLL_STATE_FLING:
+//                        //Log.i("info", "SCROLL_STATE_FLING");
+//                        break;
+//                    case SCROLL_STATE_IDLE:
+//                        if (isBottom) {
+//                            page++;
+//                            loadData(true);
+//                        }
+//                        break;
+//                }
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//                if(firstVisibleItem+visibleItemCount == totalItemCount){
+//                    //Log.i("info", "到底了....");
+//                    isBottom = true;
+//                }else{
+//                    isBottom = false;
+//                }
+//            }
+//        });
     }
 
     private void loadData(final boolean isLoadMore) {
@@ -127,7 +129,7 @@ public class QueryActivity extends BaseActivity{
             @Override
             public void onResponse(Response<ProductCountList> response, Retrofit retrofit) {
                 if (response==null){
-                    showToast("数据接收错误");
+                    showToast(getResources().getString(R.string.get_data_fail));
                     return;
                 }
                 if (response.body().getStatus()==0){
@@ -137,7 +139,10 @@ public class QueryActivity extends BaseActivity{
                         adapter.notifyDataSetChanged();
                     }else{
                         products = response.body().getList();
-                        setAdapter();
+                        if( products .isEmpty()){
+                            llKong.setBackgroundResource(R.mipmap.kong);
+                        }
+                            setAdapter();
                     }
                 }else{
                     showToast(response.body().getMes()+"");
@@ -157,7 +162,9 @@ public class QueryActivity extends BaseActivity{
     }
 
     class QueryAdapter extends BaseAdapter{
-
+        private static final int TYPE_COUNT = 2;//item类型的总数
+        private static final int TYPE_POSITION = 0;//第n~n+9个
+        private static final int TYPE_PRODUCT = 1;//商品
         @Override
         public int getCount() {
             return products.size();
@@ -172,32 +179,90 @@ public class QueryActivity extends BaseActivity{
         public long getItemId(int i) {
             return Long.parseLong(products.get(i).getProductID());
         }
+        @Override
+        public int getItemViewType(int position) {
+            if ("0".equals((position+"").substring((position+"").length()-1,(position+"").length()))){
+                return TYPE_POSITION;
+            }else{
+                return TYPE_PRODUCT;
+            }
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return TYPE_COUNT;
+        }
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             QueryHolder holder=null;
+            QueryHolder02 holder02=null;
+            int type=getItemViewType(i);
             if (view==null){
-                view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_lv_query,null);
-                holder=new QueryHolder();
-                holder.iv_productImg=(ImageView)view.findViewById(R.id.iv_productImg);
-                holder.tv_productName=(TextView)view.findViewById(R.id.tv_productName);
-                holder.tv_productSpec=(TextView)view.findViewById(R.id.tv_productSpec);
-                holder.tv_productCount=(TextView)view.findViewById(R.id.tv_productCount);
-                holder.btn_productCodeInfo=(Button)view.findViewById(R.id.btn_productCodeInfo);
-                view.setTag(holder);
-            }
-            holder= (QueryHolder) view.getTag();
-            final ProductCountList.ProductCountListList product = getItem(i);
-            Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.cha).into(holder.iv_productImg);
-            holder.tv_productName.setText(product.getProductName()+"");
-            holder.tv_productSpec.setText(product.getProductSpec()+"");
-            holder.tv_productCount.setText("库存数量:"+product.getCount()+"(盒)");
-            holder.btn_productCodeInfo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showToast("条码明细"+product.getProductID());
+                switch (type){
+                    case TYPE_POSITION:
+                        view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_lv_query02,null);
+                        holder02=new QueryHolder02();
+                        holder02.iv_productImg=(ImageView)view.findViewById(R.id.iv_productImg);
+                        holder02.tv_productName=(TextView)view.findViewById(R.id.tv_productName);
+                        holder02.tv_productSpec=(TextView)view.findViewById(R.id.tv_productSpec);
+                        holder02.tv_productCount=(TextView)view.findViewById(R.id.tv_productCount);
+                        holder02.btn_productCodeInfo=(Button)view.findViewById(R.id.btn_productCodeInfo);
+                        holder02.tv_position=(TextView) view.findViewById(R.id.tv_position);
+                        view.setTag(holder02);
+                        break;
+                    case TYPE_PRODUCT:
+                        view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_lv_query,null);
+                        holder=new QueryHolder();
+                        holder.iv_productImg=(ImageView)view.findViewById(R.id.iv_productImg);
+                        holder.tv_productName=(TextView)view.findViewById(R.id.tv_productName);
+                        holder.tv_productSpec=(TextView)view.findViewById(R.id.tv_productSpec);
+                        holder.tv_productCount=(TextView)view.findViewById(R.id.tv_productCount);
+                        holder.btn_productCodeInfo=(Button)view.findViewById(R.id.btn_productCodeInfo);
+                        view.setTag(holder);
+                        break;
+                    default:
+                        break;
                 }
-            });
+            }else{
+                switch (type){
+                    case TYPE_POSITION:
+                        holder02= (QueryHolder02) view.getTag();
+                        break;
+                    case TYPE_PRODUCT:
+                        holder= (QueryHolder) view.getTag();
+                        break;
+                }
+            }
+            final ProductCountList.ProductCountListList product = getItem(i);
+            switch (type){
+                case TYPE_POSITION:
+                    Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.xiuzhneg).into(holder02.iv_productImg);
+                    holder02.tv_productName.setText(product.getProductName()+"");
+                    holder02.tv_productSpec.setText(product.getProductSpec()+"");
+                    holder02.tv_productCount.setText(product.getCount()+"");
+                    holder02.tv_position.setText("第"+(i+1)+"-"+(i+10)+"个");
+                    holder02.btn_productCodeInfo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showToast("条码明细"+product.getProductID());
+                        }
+                    });
+                    break;
+                case TYPE_PRODUCT:
+                    Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.xiuzhneg).into(holder.iv_productImg);
+                    holder.tv_productName.setText(product.getProductName()+"");
+                    holder.tv_productSpec.setText(product.getProductSpec()+"");
+                    holder.tv_productCount.setText(product.getCount()+"");
+                    holder.btn_productCodeInfo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showToast("条码明细"+product.getProductID());
+                        }
+                    });
+                    break;
+            }
+
             return view;
         }
 
@@ -207,6 +272,14 @@ public class QueryActivity extends BaseActivity{
             TextView tv_productSpec;
             TextView tv_productCount;
             Button btn_productCodeInfo;
+        }
+        class QueryHolder02{
+            ImageView iv_productImg;
+            TextView tv_productName;
+            TextView tv_productSpec;
+            TextView tv_productCount;
+            Button btn_productCodeInfo;
+            TextView tv_position;
         }
     }
 

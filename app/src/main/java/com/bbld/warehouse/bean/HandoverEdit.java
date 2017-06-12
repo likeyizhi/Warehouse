@@ -45,15 +45,25 @@ public class HandoverEdit {
          "jjr": "经销商1",
          "zcr": "婴童营销中心吉林省办",
          "Remark": "测试添加交接单",
+         "Status": "Status",
          "Date": "2017-06-06",
          "ProductList": []*/
         private String HandOverID;
         private String HandoverCode;
         private String jjr;
         private String zcr;
+        private String Status;
         private String Remark;
         private String Date;
         private List<HandoverEditProductList> ProductList;
+
+        public String getStatus() {
+            return Status;
+        }
+
+        public void setStatus(String status) {
+            Status = status;
+        }
 
         public String getHandOverID() {
             return HandOverID;

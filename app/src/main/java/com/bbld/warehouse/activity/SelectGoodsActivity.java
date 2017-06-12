@@ -163,7 +163,7 @@ public class SelectGoodsActivity extends BaseActivity{
             final ProductList.ProductListList product = getItem(i);
             switch (type){
                 case TYPE_POSITION:
-                    Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.cha).into(holder02.iv_productImg);
+                    Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.xiuzhneg).into(holder02.iv_productImg);
                     holder02.tv_position.setText("第"+(i+1)+"-"+(i+10)+"个");
                     holder02.tv_productName.setText(product.getProductName()+"");
                     holder02.tv_productSpec.setText(product.getProductSpec()+"");
@@ -184,7 +184,7 @@ public class SelectGoodsActivity extends BaseActivity{
                     }
                     break;
                 case TYPE_PRODUCT:
-                    Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.cha).into(holder.iv_productImg);
+                    Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.xiuzhneg).into(holder.iv_productImg);
                     holder.tv_productName.setText(product.getProductName()+"");
                     holder.tv_productSpec.setText(product.getProductSpec()+"");
                     if (view!=null){

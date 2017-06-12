@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.IndexInfo;
+import com.bbld.warehouse.db.UserDataBaseOperate;
+import com.bbld.warehouse.db.UserSQLiteOpenHelper;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
 import com.bbld.warehouse.zxing.android.CaptureActivity;
@@ -65,6 +67,12 @@ public class MenuActivity extends BaseActivity{
     TextView tvYck;
     @BindView(R.id.tv_dsh)
     TextView tvDsh;
+    @BindView(R.id.warehouseName)
+    TextView tvWarehouseName;
+    @BindView(R.id.tvName)
+    TextView tvName;
+    @BindView(R.id.ll_menu)
+    LinearLayout llMenu;
 
     private Handler mHandler=new Handler(){
         @Override
@@ -79,10 +87,17 @@ public class MenuActivity extends BaseActivity{
             }
         }
     };
+    private String name;
+    private String dealerName;
+    private String warehouseName;
+    private int type;
+    private int ishandover;
+
     @Override
     protected void initViewsAndEvents() {
         loadData();
-
+        setData();
+        delDB();
         tvSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,6 +183,37 @@ public class MenuActivity extends BaseActivity{
                 }).start();
             }
         });
+        tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(llMenu.getVisibility()==View.VISIBLE){
+                    llMenu.setVisibility(View.GONE);
+                }else{
+                    llMenu.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    private void delDB() {
+        UserSQLiteOpenHelper mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(MenuActivity.this);
+        UserDataBaseOperate mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
+        mUserDataBaseOperate.deleteAll();
+    }
+
+    private void setData() {
+//        if(type==1){
+//            tvType.setText("总部");
+//        }else{
+//            tvType.setText("经销商");
+//        }
+        tvType.setText(dealerName);
+        tvWarehouseName.setText(warehouseName);
+        tvName.setText(name);
+        if (ishandover!=1){
+            llToTransfer.setVisibility(View.INVISIBLE);
+            llToTransfer.setClickable(false);
+        }
     }
 
     private void showSignOutDialog() {
@@ -207,11 +253,6 @@ public class MenuActivity extends BaseActivity{
                     return;
                 }
                 if (response.body().getStatus()==0){
-                    if(response.body().getType()==1){
-                        tvType.setText("总部");
-                    }else{
-                        tvType.setText("经销商");
-                    }
                     if (response.body().getDck()!=0){
 //                        tvDck.setText("待出库  "+response.body().getDck());
                         tvDck.setText(Html.fromHtml("待出库  "+"<font color=\"#00A3D9\">"+response.body().getDck()+"</font>"));//#00A3D9
@@ -242,7 +283,12 @@ public class MenuActivity extends BaseActivity{
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        llMenu.setVisibility(View.GONE);
+        name=extras.getString("name");
+        dealerName=extras.getString("dealerName");
+        warehouseName=extras.getString("warehouseName");
+        type=extras.getInt("type", 0);
+        ishandover=extras.getInt("ishandover", 0);
     }
 
     @Override

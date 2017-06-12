@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -32,6 +33,8 @@ public class CaptureFinishActivity extends BaseActivity{
     TextView tvNeedCount;
     @BindView(R.id.tv_scanCount)
     TextView tvScanCount;
+    @BindView(R.id.ib_back)
+    ImageButton ibBack;
     private UserSQLiteOpenHelper mUserSQLiteOpenHelper;
     private UserDataBaseOperate mUserDataBaseOperate;
     private String productId;
@@ -42,6 +45,12 @@ public class CaptureFinishActivity extends BaseActivity{
     @Override
     protected void initViewsAndEvents() {
         loadData();
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityManagerUtil.getInstance().finishActivity(CaptureFinishActivity.this);
+            }
+        });
     }
 
     private void loadData() {

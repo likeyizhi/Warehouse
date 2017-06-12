@@ -224,7 +224,7 @@ public class OutBoundOrderActivity extends BaseActivity{
             holder.tv_item_order_state.setText(item.getTypeName()+"");
             holder.tv_channelName.setText(item.getLinkName()+"");
             holder.tv_phone.setText(item.getLinkPhone()+"");
-            holder.tv_product.setText("2"/*item.getProductTypeCount()+""*/);
+            holder.tv_product.setText(item.getProductTypeCount()+"");
             holder.tv_productCount.setText("类"+item.getProductCount()+"盒");
             holder.tv_date.setText(item.getDate()+"");
             holder.btn_info.setOnClickListener(new View.OnClickListener() {

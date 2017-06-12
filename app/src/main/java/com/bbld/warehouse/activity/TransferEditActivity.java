@@ -67,6 +67,8 @@ public class TransferEditActivity extends BaseActivity{
     TextView tvRemark;
     @BindView(R.id.tv_addProduct)
     TextView tvAddProduct;
+    @BindView(R.id.tv_status)
+    TextView tvStatus;
     @BindView(R.id.btn_keep)
     Button btnKeep;
     @BindView(R.id.btn_submit)
@@ -232,6 +234,7 @@ public class TransferEditActivity extends BaseActivity{
         tvNumber.setText("交接单号："+handoverEditInfo.getHandoverCode());
         tvJjr.setText(handoverEditInfo.getJjr()+"");
         tvZcr.setText(handoverEditInfo.getZcr()+"");
+        tvStatus.setText(handoverEditInfo.getStatus()+"");
         tvRemark.setText(handoverEditInfo.getRemark()+"");
         netProductList=handoverEditInfo.getProductList();
         intoLocationList();
@@ -301,7 +304,7 @@ public class TransferEditActivity extends BaseActivity{
             }
             holder= (TransferEditHolder) view.getTag();
             final AddOutBoundProduct product = getItem(i);
-            Glide.with(getApplicationContext()).load(product.getImg()).error(R.mipmap.cha).into(holder.iv_img);
+            Glide.with(getApplicationContext()).load(product.getImg()).error(R.mipmap.xiuzhneg).into(holder.iv_img);
             holder.tv_title.setText(product.getName()+"");
             holder.tv_spec.setText(product.getSpec()+"");
             holder.tv_scanCount.setText("扫码数量:"+product.getScanCount()+"(盒)");
@@ -345,7 +348,7 @@ public class TransferEditActivity extends BaseActivity{
                     Bundle bundle=new Bundle();
                     bundle.putString("productId", product.getId()+"");
                     bundle.putString("productName",product.getName()+"");
-                    bundle.putString("needCount", 100+"");
+                    bundle.putString("needCount", "");
                     readyGo(CaptureFinishActivity.class, bundle);
                 }
             });

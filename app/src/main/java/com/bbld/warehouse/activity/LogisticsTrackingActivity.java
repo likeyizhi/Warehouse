@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
+import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
 import java.util.List;
 
@@ -44,6 +46,8 @@ public class LogisticsTrackingActivity extends BaseActivity {
     Spinner spLogistics;
     @BindView(R.id.lv_logistics_trackinfo)
     ListView lvLogistics;
+    @BindView(R.id.ib_back)
+    ImageButton ibBack;
     private List<GetLogisticsTrackInfo.GetLogisticsTrackInfoList> logisticsTrackInfoList;
     private List<GetOrderLogisticsInfo.GetOrderLogisticsInfoList> logisticsInfoList;
     private GetOrderLogisticsInfoAdapter getOrderLogisticsInfoAdapter;
@@ -62,8 +66,8 @@ public class LogisticsTrackingActivity extends BaseActivity {
                 tvName.setText(logisticsInfoList.get(i).getLogisticsName() + "");
                 tvNumber.setText(logisticsInfoList.get(i).getLogisticsNumber() + "");
                 tvYincang.setText(logisticsInfoList.get(i).getLogisticsID()+"");
-        number=tvNumber.getText().toString();
-        logisticsId=Integer.parseInt(tvYincang.getText().toString());
+                number=tvNumber.getText().toString();
+                logisticsId=Integer.parseInt(tvYincang.getText().toString());
                 loadData1();
             }
 
@@ -71,7 +75,12 @@ public class LogisticsTrackingActivity extends BaseActivity {
 
             }
         });
-
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityManagerUtil.getInstance().finishActivity(LogisticsTrackingActivity.this);
+            }
+        });
     }
 
     @Override
@@ -88,7 +97,7 @@ public class LogisticsTrackingActivity extends BaseActivity {
 //        logisticsId=Integer.parseInt(tvYincang.getText().toString());
 
         Call<GetLogisticsTrackInfo> call = RetrofitService.getInstance().getLogisticsTrackInfo(new MyToken(LogisticsTrackingActivity.this).getToken() + "", logisticsId, number);
-        showToast( "物流id"+logisticsId+"物流编号"+number);
+//        showToast( "物流id"+logisticsId+"物流编号"+number);
         call.enqueue(new Callback<GetLogisticsTrackInfo>() {
             @Override
             public void onResponse(Response<GetLogisticsTrackInfo> response, Retrofit retrofit) {

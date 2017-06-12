@@ -289,7 +289,7 @@ public class OrderDeliveryActivity extends BaseActivity{
             }
             holder= (OrderDelHolder) view.getTag();
             final OrderDetails.OrderDetailsInfo.OrderDetailsProductList product = getItem(i);
-            Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.cha).into(holder.ivProductImg);
+            Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.xiuzhneg).into(holder.ivProductImg);
             holder.tvProductName.setText(product.getProductName()+"");
             holder.tvShouldCount.setText(product.getProductCount()+"");
             holder.tvSacnCount.setText(setScanCount(product.getProductID()+""));

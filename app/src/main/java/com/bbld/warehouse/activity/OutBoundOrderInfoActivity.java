@@ -162,7 +162,7 @@ public class OutBoundOrderInfoActivity extends BaseActivity{
             }
             holder= (OrderInfoHolder) view.getTag();
             StorageDetails.StorageDetailsInfo.StorageDetailsProductList product = getItem(i);
-            Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.cha).into(holder.iv_ProductImg);
+            Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.xiuzhneg).into(holder.iv_ProductImg);
             holder.tv_ProductName.setText(product.getProductName()+"");
             holder.tv_ProductSpec.setText(product.getProductSpec()+"");
             holder.tv_Unit.setText(product.getUnit()+"");

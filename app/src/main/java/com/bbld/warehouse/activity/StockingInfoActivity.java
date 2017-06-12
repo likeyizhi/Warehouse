@@ -187,7 +187,7 @@ public class StockingInfoActivity extends BaseActivity{
             }
             holder= (StockingInfoHolder) view.getTag();
             final InventoryInfo.InventoryInfoInfo.InventoryInfoProductList product = getItem(i);
-            Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.cha).into(holder.iv_productImg);
+            Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.xiuzhneg).into(holder.iv_productImg);
             holder.tv_productName.setText(product.getProductName()+"");
             holder.tv_productSpec.setText(product.getProductSpec()+"");
             holder.tv_productCount.setText("盘点数量："+product.getProductCount());

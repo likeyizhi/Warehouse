@@ -43,6 +43,7 @@ public class InventoryList {
          "InventoryNumber": "239782198",
          "InventoryDate": "2017-06-01",
          "InventoryRemark": "5月底盘点",
+         "ProductTypeCount": "2",
          "InventoryStatus": "1",
          "ProductCount": "0",
          "ProductList": []*/
@@ -50,9 +51,18 @@ public class InventoryList {
         private String InventoryNumber;
         private String InventoryDate;
         private String InventoryRemark;
+        private String ProductTypeCount;
         private String InventoryStatus;
         private String ProductCount;
         private List<InventoryListProductList> ProductList;
+
+        public String getProductTypeCount() {
+            return ProductTypeCount;
+        }
+
+        public void setProductTypeCount(String productTypeCount) {
+            ProductTypeCount = productTypeCount;
+        }
 
         public String getInventoryID() {
             return InventoryID;

@@ -6,14 +6,14 @@ package com.bbld.warehouse.bean;
  */
 
 public class Login {
-    /**{
-     "status": 0,
-     "mes": "成功",
-     "token":"97ef896b5f4d4519b52379a65b272d21"
-     }*/
     private int status;
     private String mes;
     private String token;
+    private String name;
+    private int type;
+    private String dealerName;
+    private String warehouseName;
+    private int ishandover;
 
     public int getStatus() {
         return status;
@@ -37,5 +37,45 @@ public class Login {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getDealerName() {
+        return dealerName;
+    }
+
+    public void setDealerName(String dealerName) {
+        this.dealerName = dealerName;
+    }
+
+    public String getWarehouseName() {
+        return warehouseName;
+    }
+
+    public void setWarehouseName(String warehouseName) {
+        this.warehouseName = warehouseName;
+    }
+
+    public int getIshandover() {
+        return ishandover;
+    }
+
+    public void setIshandover(int ishandover) {
+        this.ishandover = ishandover;
     }
 }

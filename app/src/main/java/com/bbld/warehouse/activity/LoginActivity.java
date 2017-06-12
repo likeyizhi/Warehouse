@@ -87,7 +87,13 @@ public class LoginActivity extends BaseActivity{
                     //提示登录成功
                     showToast(response.body().getMes()+"");
                     //跳转到主页，并释放LoginActivity.class
-                    readyGo(MenuActivity.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putString("name", response.body().getName());
+                    bundle.putString("dealerName", response.body().getDealerName());
+                    bundle.putString("warehouseName", response.body().getWarehouseName());
+                    bundle.putInt("type", response.body().getType());
+                    bundle.putInt("ishandover", response.body().getIshandover());
+                    readyGo(MenuActivity.class, bundle);
                     ActivityManagerUtil.getInstance().finishActivity(LoginActivity.this);
                 }else{
                     showToast(response.body().getMes()+"");

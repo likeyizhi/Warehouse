@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.InventoryEdit;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
+import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
 import java.util.List;
 
@@ -34,6 +36,8 @@ public class CodeInfoActivity extends BaseActivity{
     TextView tvProductName;
     @BindView(R.id.tv_scanCount)
     TextView tvScanCount;
+    @BindView(R.id.ib_back)
+    ImageButton ibBack;
 
     private String InventoryId;
     private int clickPosition;
@@ -44,6 +48,12 @@ public class CodeInfoActivity extends BaseActivity{
     @Override
     protected void initViewsAndEvents() {
         loadData();
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityManagerUtil.getInstance().finishActivity(CodeInfoActivity.this);
+            }
+        });
     }
 
     @Override

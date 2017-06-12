@@ -66,7 +66,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignTop="@+id/tv_product"
                 android:layout_marginStart="12dp"
-                android:text="爱和佳儿 "
+                android:text="爱和佳儿"
                 android:textColor="#666666" />
 
             <TextView
@@ -75,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/tv_product"
                 android:layout_alignStart="@+id/tv_channelName"
+                android:layout_marginStart="12dp"
                 android:text="爱和佳儿-吉林一部 "
                 android:textColor="#666666" />
 
@@ -85,6 +86,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/tv_productCount"
                 android:text="9"
+                android:visibility="invisible"
                 android:textColor="#FF4D4D"
                 android:textSize="36sp" />
 
@@ -97,6 +99,7 @@
                 android:layout_toStartOf="@+id/iv_open"
                 android:paddingBottom="5dp"
                 android:text="类XX盒 "
+                android:visibility="invisible"
                 android:textColor="#666666"
                 android:textSize="16sp" />
 

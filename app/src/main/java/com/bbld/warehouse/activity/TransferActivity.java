@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,7 +41,8 @@ public class TransferActivity extends BaseActivity{
     ListView lvTransfer;
     @BindView(R.id.srl_transfer)
     SwipeRefreshLayout srlTransfer;
-
+    @BindView(R.id.ll_kong)
+    LinearLayout llKong;
 
     private List<HandoverList.HandoverListlist> handoverList;
     private TransferAdapter adapter;
@@ -100,8 +102,11 @@ public class TransferActivity extends BaseActivity{
                 }
                 if (response.body().getStatus()==0){
                     handoverList = response.body().getList();
+                    if (handoverList.isEmpty()) {
+                        llKong.setBackgroundResource(R.mipmap.kong);
+                    }
                     setAdapter();
-                }else{
+                }else {
                     showToast(response.body().getMes());
                 }
             }
@@ -154,7 +159,7 @@ public class TransferActivity extends BaseActivity{
             holder= (TransferHolder) view.getTag();
             final HandoverList.HandoverListlist handover = getItem(i);
             holder.tvNumber.setText(handover.getHandoverCode()+"");
-            holder.tvState.setText("无字段");
+            holder.tvState.setText(handover.getStatus()+"");
             holder.tv_jjr.setText("监交人："+handover.getJjr());
             holder.tv_zcr.setText("转出人："+handover.getZcr());
             holder.tv_date.setText(handover.getDate()+"");

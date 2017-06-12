@@ -42,6 +42,7 @@ public class StorageList {
         /**"StorageID": "29",
          "StorageNumber": "ckd_20170605132144788",
          "TypeName": "发货出库",
+         "ProductTypeCount": "2",
          "LinkName": "收货人名2",
          "LinkPhone": "联系电话2",
          "Remark": "",
@@ -51,12 +52,21 @@ public class StorageList {
         private String StorageID;
         private String StorageNumber;
         private String TypeName;
+        private String ProductTypeCount;
         private String LinkName;
         private String LinkPhone;
         private String Remark;
         private String Date;
         private String ProductCount;
         private List<StorageListProductList> ProductList;
+
+        public String getProductTypeCount() {
+            return ProductTypeCount;
+        }
+
+        public void setProductTypeCount(String productTypeCount) {
+            ProductTypeCount = productTypeCount;
+        }
 
         public String getStorageID() {
             return StorageID;
