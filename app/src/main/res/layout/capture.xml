@@ -52,11 +52,21 @@
             android:layout_marginBottom="10dp"
             android:text="商品名"
             android:textColor="#FFFFFF" />
+        <TextView
+            android:id="@+id/tvBatchNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:text="批号"
+            android:visibility="invisible"
+            android:layout_below="@+id/tv_productName"
+            android:textColor="#FFFFFF" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/tv_productName"
+            android:layout_below="@+id/tvBatchNumber"
             android:background="#ffffff"
             android:orientation="vertical">
 

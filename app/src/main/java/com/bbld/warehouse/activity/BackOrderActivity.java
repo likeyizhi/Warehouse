@@ -452,6 +452,7 @@ public class BackOrderActivity extends BaseActivity{
     @Override
     protected void onRestart() {
         super.onRestart();
+        page=1;
         loadData(false);
     }
 }

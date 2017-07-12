@@ -8,7 +8,25 @@ public class CartSQLBean {
     private String productId;
     private String productCode;
     private String productType;
+    private String SerialNumber;
+    private String BatchNumber;
     private int proCount;
+
+    public String getSerialNumber() {
+        return SerialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        SerialNumber = serialNumber;
+    }
+
+    public String getBatchNumber() {
+        return BatchNumber;
+    }
+
+    public void setBatchNumber(String batchNumber) {
+        BatchNumber = batchNumber;
+    }
 
     public String getProductId() {
         return productId;

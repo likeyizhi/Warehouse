@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -91,6 +93,9 @@ public final class CaptureActivity extends Activity implements
     private String type;
     private String storage;
     private Call<ScanCode> call;
+    private int isNeedBatch;
+    private String batchNumber;
+    private TextView tvBatchNumber;
 
     public ViewfinderView getViewfinderView() {
         return viewfinderView;
@@ -146,8 +151,14 @@ public final class CaptureActivity extends Activity implements
             }
         });
 
-
+        tvBatchNumber=(TextView)findViewById(R.id.tvBatchNumber);
         Intent intent=getIntent();
+        isNeedBatch=intent.getExtras().getInt("NeedBatch", 0);
+        if (isNeedBatch==1){
+            showBatchDialog();
+        }else{
+            batchNumber="";
+        }
         productId=intent.getExtras().getString("productId");
         productName=intent.getExtras().getString("productName");
         storage=intent.getExtras().getString("storage");
@@ -156,9 +167,14 @@ public final class CaptureActivity extends Activity implements
             needCount=intent.getExtras().getString("needCount");
             type=intent.getExtras().getString("type");
         }else{
-            type=intent.getExtras().getString("type");
-            needCount=10000+"";
-            tv_needCount.setVisibility(View.INVISIBLE);
+            if (intent.getExtras().getString("other").equals("yes")){
+                type=intent.getExtras().getString("type");
+                needCount=intent.getExtras().getString("needCount");
+            }else{
+                type=intent.getExtras().getString("type");
+                needCount=10000+"";
+                tv_needCount.setVisibility(View.INVISIBLE);
+            }
         }
         TextView tvProductName = (TextView) findViewById(R.id.tv_productName);
         tvProductName.setText(productName+"");
@@ -190,6 +206,34 @@ public final class CaptureActivity extends Activity implements
             scanCount=scanCount+products.get(i).getProCount();
         }
         tv_scanCount.setText(scanCount+"(盒)");
+    }
+
+    private void showBatchDialog() {
+        final EditText et = new EditText(this);
+        new AlertDialog.Builder(this).setTitle("请设置批号")
+                .setView(et)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String input = et.getText().toString();
+                        if (input.equals("")) {
+                            Toast.makeText(getApplicationContext(), "还未设置批号！" + input, Toast.LENGTH_LONG).show();
+                            showBatchDialog();
+                        }else {
+                            batchNumber=input;
+                            tvBatchNumber.setText("批号:"+batchNumber);
+                            tvBatchNumber.setVisibility(View.VISIBLE);
+                            dialog.dismiss();
+                        }
+                    }
+                })
+                .setNegativeButton("返回", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                })
+                .setCancelable(false)
+                .show();
     }
 
     @Override
@@ -342,6 +386,7 @@ public final class CaptureActivity extends Activity implements
                     return;
                 }
                 if (response.body().getStatus()==0){
+//                    Toast.makeText(CaptureActivity.this,invoiceid+","+productId+","+code+","+type,Toast.LENGTH_SHORT).show();
                     if (response.body().getInfo().getIsRight()==1){
                         //IsRight--条码是否正确，优先进行判断，如果是 0，则代表条码不存在，
                         //如果是 1，则代表条码存在
@@ -352,6 +397,8 @@ public final class CaptureActivity extends Activity implements
                             sqlBean.setProductId(productId+"");
                             sqlBean.setProductCode(code+"");
                             sqlBean.setProductType(response.body().getInfo().getType()+"");
+                            sqlBean.setSerialNumber(response.body().getInfo().getSerialNumber()+"");
+                            sqlBean.setBatchNumber(batchNumber+"");
                             sqlBean.setProCount(response.body().getInfo().getCount());
                             mUserDataBaseOperate.insertToUser(sqlBean);
                             List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
@@ -529,6 +576,7 @@ public final class CaptureActivity extends Activity implements
                 holder.tv_code=(TextView)view.findViewById(R.id.tv_code);
                 holder.tv_type=(TextView)view.findViewById(R.id.tv_type);
                 holder.tv_count=(TextView)view.findViewById(R.id.tv_count);
+                holder.tv_serialNumber=(TextView)view.findViewById(R.id.tv_serialNumber);
                 holder.iv_del=(ImageView) view.findViewById(R.id.iv_del);
                 view.setTag(holder);
             }
@@ -537,6 +585,22 @@ public final class CaptureActivity extends Activity implements
             holder.tv_code.setText(product.getProductCode()+"");
             holder.tv_type.setText(getType(product.getProductType())+"");
             holder.tv_count.setText(product.getProCount()+"(盒)");
+            if (storage.equals("no")){
+                holder.tv_serialNumber.setVisibility(View.VISIBLE);
+                if (product.getSerialNumber().trim().equals("")){
+                    holder.tv_serialNumber.setText("请输入序列号");
+                }else{
+                    holder.tv_serialNumber.setText(product.getSerialNumber()+"");
+                }
+                holder.tv_serialNumber.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showSerialNumberDialog(product.getProductCode());
+                    }
+                });
+            }else{
+                holder.tv_serialNumber.setVisibility(View.GONE);
+            }
             holder.iv_del.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -559,9 +623,42 @@ public final class CaptureActivity extends Activity implements
             TextView tv_code;
             TextView tv_type;
             TextView tv_count;
+            TextView tv_serialNumber;
             ImageView iv_del;
         }
     }
+
+    private void showSerialNumberDialog(final String productCode) {
+        final EditText et = new EditText(this);
+        new AlertDialog.Builder(this).setTitle("请设置序列号")
+                .setView(et)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String input = et.getText().toString();
+                        if (input.equals("")) {
+                            Toast.makeText(getApplicationContext(), "还未设置序列号！" + input, Toast.LENGTH_LONG).show();
+                        }else {
+                            List<CartSQLBean> bean = mUserDataBaseOperate.findUserByName(productCode);
+                            CartSQLBean one = bean.get(0);
+                            one.setSerialNumber(input);
+                            mUserDataBaseOperate.updateUser(one);
+                            List<CartSQLBean> products = mUserDataBaseOperate.findAll();
+                            Collections.reverse(products);
+                            lvScan.setAdapter(new ScanAdapter(products));
+                            dialog.dismiss();
+                        }
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                       dialogInterface.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .show();
+    }
+
     /**
      * 使Zxing能够继续扫描
      */

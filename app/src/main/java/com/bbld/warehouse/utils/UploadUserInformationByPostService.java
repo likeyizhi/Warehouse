@@ -21,6 +21,7 @@ import java.util.Map;
 public class UploadUserInformationByPostService {
     public static String save(String token, String orderId, String codejson) throws Exception{
         String path = Constants.BASE_URL + "Order/OrderSend?token="+token+"&invoiceid="+orderId+"&codejson="+codejson;
+        Log.i("save", "save="+path);
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", token);
         params.put("orderId", orderId);
@@ -65,7 +66,7 @@ public class UploadUserInformationByPostService {
         String path = Constants.BASE_URL + "Storage/CommitHandOver?token="+token+
                 "&handoverId="+handoverId+
                 "&codejson="+codejson;
-        Log.i("saveStocking", "saveStocking="+path);
+        Log.i("commitHandOver", "commitHandOver="+path);
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", token);
         params.put("handoverId", handoverId);
@@ -80,6 +81,17 @@ public class UploadUserInformationByPostService {
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", token);
         params.put("invoiceid", invoiceid);
+        params.put("codejson", codejson);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    public static String commitOutStorage(String token,String storageId, String codejson) throws Exception{
+        String path = Constants.BASE_URL + "Storage/CommitOutStorage?token="+token+
+                "&storageId="+storageId+
+                "&codejson="+codejson;
+        Log.i("commitOutStorage", "commitOutStorage="+path);
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("storageId", storageId);
         params.put("codejson", codejson);
         return sendPOSTRequest(path, params, "UTF-8");
     }
@@ -134,6 +146,6 @@ public class UploadUserInformationByPostService {
                 return ress;
             }
         }
-        return "操作失败";
+        return "发生错误,操作失败";
     }
 }

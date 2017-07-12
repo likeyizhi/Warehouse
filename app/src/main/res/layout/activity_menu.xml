@@ -287,7 +287,7 @@
                         android:layout_height="match_parent"
                         android:background="#eeeeee"/>
                     <LinearLayout
-                        android:id="@+id/ll_toStocking"
+                        android:id="@+id/ll_toOthers"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#ffffff"
@@ -301,12 +301,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:src="@mipmap/kcpd" />
+                            android:src="@mipmap/dck" />
 
                         <TextView
+                            android:id="@+id/tv_qtckdck"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="库存盘点"
+                            android:text="其他出库"
                             android:textSize="14sp"
                             android:layout_marginTop="15dp"
                             android:textColor="#666666"  />
@@ -323,6 +324,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+                    <LinearLayout
+                        android:id="@+id/ll_toStocking"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:padding="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:src="@mipmap/kcpd" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="库存盘点"
+                            android:textSize="14sp"
+                            android:layout_marginTop="15dp"
+                            android:textColor="#666666" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#eeeeee"/>
+
                     <LinearLayout
                         android:id="@+id/ll_toQuery"
                         android:layout_width="match_parent"
@@ -347,23 +381,21 @@
                             android:textSize="14sp"
                             android:layout_marginTop="15dp"
                             android:textColor="#666666" />
-
-
                     </LinearLayout>
 
                     <View
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
                         android:background="#eeeeee"/>
-
                     <LinearLayout
                         android:id="@+id/ll_toTransfer"
+                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#ffffff"
-                        android:padding="10dp"
-                        android:layout_weight="1"
                         android:gravity="center"
+                        android:padding="10dp"
+                        android:visibility="visible"
                         android:orientation="vertical"
                         >
 
@@ -376,41 +408,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
                             android:text="市场交接"
-                            android:textSize="14sp"
-                            android:layout_marginTop="15dp"
-
-                            android:textColor="#666666" />
-
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#eeeeee"/>
-                    <LinearLayout
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#ffffff"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:visibility="invisible"
-                        android:orientation="vertical"
-                        >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:src="@mipmap/dsh" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:text="待收货"
                             android:textColor="#666666"
                             android:textSize="14sp" />
 

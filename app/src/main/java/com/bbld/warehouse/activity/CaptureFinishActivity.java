@@ -35,6 +35,9 @@ public class CaptureFinishActivity extends BaseActivity{
     TextView tvScanCount;
     @BindView(R.id.ib_back)
     ImageButton ibBack;
+    @BindView(R.id.tv_title)
+    TextView tv_title;
+
     private UserSQLiteOpenHelper mUserSQLiteOpenHelper;
     private UserDataBaseOperate mUserDataBaseOperate;
     private String productId;
@@ -65,6 +68,7 @@ public class CaptureFinishActivity extends BaseActivity{
             scanCount=scanCount+products.get(i).getProCount();
         }
         tvScanCount.setText(scanCount+"(盒)");
+        tv_title.setText(productName+"");
     }
 
     class ScanAdapter extends BaseAdapter{

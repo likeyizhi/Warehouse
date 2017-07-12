@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
@@ -24,32 +23,22 @@ import android.widget.TextView;
 
 import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
-import com.bbld.warehouse.base.Constants;
 import com.bbld.warehouse.bean.CartSQLBean;
 import com.bbld.warehouse.bean.CodeJson;
-import com.bbld.warehouse.bean.OrderDetails;
+import com.bbld.warehouse.bean.StorageDetails;
 import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
 import com.bbld.warehouse.utils.UploadUserInformationByPostService;
-import com.bbld.warehouse.utils.UploadUtil;
 import com.bbld.warehouse.zxing.android.CaptureActivity;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import butterknife.BindView;
 import retrofit.Call;
@@ -58,41 +47,35 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 /**
- * 待出库--出库，待收货--确认收货
- * Created by likey on 2017/5/24.
+ * 其他订单出库
+ * Created by likey on 2017/7/12.
  */
 
-public class OrderDeliveryActivity extends BaseActivity{
-    @BindView(R.id.lv_fahuo)
-    ListView lvFahuo;
+public class CommitOutStorageActivity extends BaseActivity{
+    @BindView(R.id.ib_back)
+    ImageButton ibBack;
     @BindView(R.id.tv_orderNumber)
     TextView tvOrderNumber;
-    @BindView(R.id.tvChannelName)
-    TextView tvChannelName;
-    @BindView(R.id.tvDealerName)
-    TextView tvDealerName;
+    @BindView(R.id.lv_fahuo)
+    ListView lv_fahuo;
+    @BindView(R.id.tvType)
+    TextView tvType;
     @BindView(R.id.tv_name_phone)
     TextView tvNamePhone;
-    @BindView(R.id.tv_address)
-    TextView tvAddress;
     @BindView(R.id.tv_remark)
     TextView tvRemark;
     @BindView(R.id.btn_out)
-    TextView btnOut;
-    @BindView(R.id.ib_back)
-    ImageButton ibBack;
-    @BindView(R.id.tvTitle)
-    TextView tvTitle;
+    Button btnOut;
 
-    private String invoiceid;
     private String orderCount;
-    private String orderId;
+    private int type;
+    private String storageId;
+    private List<StorageDetails.StorageDetailsInfo.StorageDetailsProductList> products;
     private UserSQLiteOpenHelper mUserSQLiteOpenHelper;
     private UserDataBaseOperate mUserDataBaseOperate;
+    private String storageID;
+    private CommitOutAdapter adapter;
     private String request;
-    private String doType;
-    private String type;
-    private int isNeedBatch;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -102,13 +85,7 @@ public class OrderDeliveryActivity extends BaseActivity{
                     showToast(""+request);
                     //出库成功清空数据库，释放当前acticity
                     mUserDataBaseOperate.deleteAll();
-                    ActivityManagerUtil.getInstance().finishActivity(OrderDeliveryActivity.this);
-                    if (doType.equals("out")){
-                        BackOrderActivity.boActivity.finish();
-                        Bundle bundle=new Bundle();
-                        bundle.putInt("status", 2);
-                        readyGo(BackOrderActivity.class, bundle);
-                    }
+                    ActivityManagerUtil.getInstance().finishActivity(CommitOutStorageActivity.this);
                     break;
                 case 222:
                     showToast(""+request);
@@ -119,23 +96,10 @@ public class OrderDeliveryActivity extends BaseActivity{
 
     @Override
     protected void initViewsAndEvents() {
-        mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(OrderDeliveryActivity.this);
+        mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(CommitOutStorageActivity.this);
         mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
         loadData();
         setListeners();
-        setText();
-    }
-
-    private void setText() {
-        if (doType.equals("sure")){
-            type="2";
-            tvTitle.setText("订单收货");
-            btnOut.setText("确认收货");
-        }else{
-            type="1";
-            tvTitle.setText("订单发货");
-            btnOut.setText("发货出库");
-        }
     }
 
     private void setListeners() {
@@ -145,69 +109,6 @@ public class OrderDeliveryActivity extends BaseActivity{
                 showBackDialog();
             }
         });
-    }
-
-    private void showBackDialog() {
-        AlertDialog.Builder builder=new AlertDialog.Builder(OrderDeliveryActivity.this);
-        builder.setMessage("退出将清空已扫的产品");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                mUserDataBaseOperate.deleteAll();
-                dialogInterface.dismiss();
-                ActivityManagerUtil.getInstance().finishActivity(OrderDeliveryActivity.this);
-            }
-        });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        builder.create().show();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
-            showBackDialog();
-        }
-        return false;
-    }
-
-    private void loadData() {
-        Call<OrderDetails> call= RetrofitService.getInstance().orderDetails(new MyToken(OrderDeliveryActivity.this).getToken()+"", Integer.parseInt(invoiceid+""));
-        call.enqueue(new Callback<OrderDetails>() {
-            @Override
-            public void onResponse(Response<OrderDetails> response, Retrofit retrofit) {
-                if (response.body()==null){
-                    showToast("服务器错误");
-                    return;
-                }
-                if (response.body().getStatus()==0){
-                    OrderDetails.OrderDetailsInfo info = response.body().getInfo();
-                    setData(info);
-                }else{
-                    showToast(response.body().getMes()+"");
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-
-            }
-        });
-    }
-
-    private void setData(final OrderDetails.OrderDetailsInfo info) {
-        isNeedBatch=info.getSendNeedBatchNumber();
-        orderId=info.getOrderID()+"";
-        tvOrderNumber.setText("订单号:"+info.getOrderNumber()+"");
-        tvChannelName.setText(info.getChannelName()+"");
-        tvDealerName.setText(info.getDealerName()+"");
-        tvNamePhone.setText(info.getDeliveryName()+"("+info.getDeliveryPhone()+")");
-        tvAddress.setText(info.getDeliveryAddress()+"");
-        tvRemark.setText(info.getRemark()+"");
         btnOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -229,8 +130,8 @@ public class OrderDeliveryActivity extends BaseActivity{
                         if (sqlProducts.get(q).getProductId().toString().equals(A.get(k).getProductID()+"")){
                             CodeJson.CodeJsonList.CodeJsonCodeList x=new CodeJson.CodeJsonList.CodeJsonCodeList();
                             x.setCode(sqlProducts.get(q).getProductCode()+"");
-                            x.setSerialNumber(sqlProducts.get(q).getSerialNumber()+"");
-                            x.setBatchNumber(sqlProducts.get(q).getBatchNumber()+"");
+//                            x.setSerialNumber(sqlProducts.get(q).getSerialNumber()+"");
+//                            x.setBatchNumber(sqlProducts.get(q).getBatchNumber()+"");
                             A.get(k).getCodeList().add(x);
                             B.setList(A);
                         }
@@ -245,13 +146,8 @@ public class OrderDeliveryActivity extends BaseActivity{
                     @Override
                     public void run() {
                         try {
-                            if (doType.equals("sure")){
-                                request= UploadUserInformationByPostService.orderReceipt(new MyToken(OrderDeliveryActivity.this).getToken()+""
-                                        ,orderId+"",codejson);
-                            }else{
-                                request= UploadUserInformationByPostService.save(new MyToken(OrderDeliveryActivity.this).getToken()+""
-                                        ,orderId+"",codejson);
-                            }
+                                request= UploadUserInformationByPostService.commitOutStorage(new MyToken(CommitOutStorageActivity.this).getToken()+""
+                                        ,storageId+"",codejson);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -268,36 +164,70 @@ public class OrderDeliveryActivity extends BaseActivity{
                 }).start();
             }
         });
-        lvFahuo.setAdapter(new OrderDelAdapter(info.getProductList()));
     }
-    class OrderDelAdapter extends BaseAdapter{
-        private List<OrderDetails.OrderDetailsInfo.OrderDetailsProductList> orders;
-        public OrderDelAdapter(List<OrderDetails.OrderDetailsInfo.OrderDetailsProductList> orders){
-            super();
-            this.orders=orders;
-        }
+
+    private void loadData() {
+        Call<StorageDetails> call= RetrofitService.getInstance().storageDetails(type, new MyToken(CommitOutStorageActivity.this).getToken()+"", storageId);
+        call.enqueue(new Callback<StorageDetails>() {
+            @Override
+            public void onResponse(Response<StorageDetails> response, Retrofit retrofit) {
+                if (response.body()==null){
+                    showToast("服务器错误");
+                    return;
+                }
+                if (response.body().getStatus()==0){
+                    StorageDetails.StorageDetailsInfo info = response.body().getInfo();
+                    setData(info);
+                }else{
+                    showToast(response.body().getMes()+"");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
+    }
+
+    private void setData(StorageDetails.StorageDetailsInfo info) {
+        storageID=info.getStorageID();
+        tvType.setText(info.getTypeName()+"");
+        tvNamePhone.setText(info.getLinkName()+"("+info.getLinkPhone()+")");
+        tvRemark.setText(info.getRemark()+"");
+        tvOrderNumber.setText("订单号："+info.getStorageNumber()+"");
+        products=info.getProductList();
+        setAdapter();
+    }
+
+    private void setAdapter() {
+        adapter=new CommitOutAdapter();
+        lv_fahuo.setAdapter(adapter);
+    }
+
+    class CommitOutAdapter extends BaseAdapter{
 
         @Override
         public int getCount() {
-            return orders.size();
+            return products.size();
         }
 
         @Override
-        public OrderDetails.OrderDetailsInfo.OrderDetailsProductList getItem(int i) {
-            return orders.get(i);
+        public StorageDetails.StorageDetailsInfo.StorageDetailsProductList getItem(int i) {
+            return products.get(i);
         }
 
         @Override
         public long getItemId(int i) {
-            return Long.parseLong(orders.get(i).getProductID());
+            return i;
         }
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            OrderDelHolder holder=null;
+            CommitOutHolder holder=null;
             if (view==null){
-                view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_lv_order_delivery,null);
-                holder=new OrderDelHolder();
+                view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_lv_commit_out,null);
+                holder=new CommitOutHolder();
                 holder.ivProductImg=(ImageView)view.findViewById(R.id.ivProductImg);
                 holder.tvProductName=(TextView)view.findViewById(R.id.tvProductName);
                 holder.tvShouldCount=(TextView)view.findViewById(R.id.tvShouldCount);
@@ -307,8 +237,8 @@ public class OrderDeliveryActivity extends BaseActivity{
                 holder.btn_scan=(Button)view.findViewById(R.id.btn_scan);
                 view.setTag(holder);
             }
-            holder= (OrderDelHolder) view.getTag();
-            final OrderDetails.OrderDetailsInfo.OrderDetailsProductList product = getItem(i);
+            holder= (CommitOutHolder) view.getTag();
+            final StorageDetails.StorageDetailsInfo.StorageDetailsProductList product = getItem(i);
             Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.xiuzhneg).into(holder.ivProductImg);
             holder.tvProductName.setText(product.getProductName()+"");
             holder.tvShouldCount.setText(product.getProductCount()+"");
@@ -327,35 +257,33 @@ public class OrderDeliveryActivity extends BaseActivity{
             holder.btn_scan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    toScan(product.getProductID(),product.getProductName(),orderId,product.getProductCount(),type);
+                    toScan(product.getProductID(),product.getProductName(),product.getProductCount(),type+"");
                 }
 
-                private void toScan(String productID, String productName, String orderId, String productCount,String type) {
+                private void toScan(String productID, String productName, String productCount,String type) {
                     if (Build.VERSION.SDK_INT >= 23){
                         int cameraPermission= ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA);
                         if (cameraPermission != PackageManager.PERMISSION_GRANTED){
-                            ActivityCompat.requestPermissions(OrderDeliveryActivity.this, new String[]{Manifest.permission.CAMERA}, 123);
+                            ActivityCompat.requestPermissions(CommitOutStorageActivity.this, new String[]{Manifest.permission.CAMERA}, 123);
                             return;
                         }else{
                             Bundle bundle=new Bundle();
                             bundle.putString("productId", productID);
                             bundle.putString("productName",productName);
-                            bundle.putString("orderId", orderId);
-                            bundle.putString("needCount", productCount);
-                            bundle.putString("storage", "no");
                             bundle.putString("type", type+"");
-                            bundle.putInt("NeedBatch", isNeedBatch);
+                            bundle.putString("needCount", productCount+"");
+                            bundle.putString("storage", "yes");
+                            bundle.putString("other", "yes");
                             readyGo(CaptureActivity.class, bundle);
                         }
                     }else{
                         Bundle bundle=new Bundle();
                         bundle.putString("productId", productID);
                         bundle.putString("productName",productName);
-                        bundle.putString("orderId", orderId);
-                        bundle.putString("needCount", productCount);
-                        bundle.putString("storage", "no");
                         bundle.putString("type", type+"");
-                        bundle.putInt("NeedBatch", isNeedBatch);
+                        bundle.putString("needCount", productCount+"");
+                        bundle.putString("storage", "yes");
+                        bundle.putString("other", "yes");
                         readyGo(CaptureActivity.class, bundle);
                     }
                 }
@@ -363,16 +291,7 @@ public class OrderDeliveryActivity extends BaseActivity{
             return view;
         }
 
-        private String setScanCount(String s) {
-            List<CartSQLBean> thisPros = mUserDataBaseOperate.findUserById(s);
-            int scanCount = 0;
-            for (int i=0;i<thisPros.size();i++){
-                scanCount=scanCount+thisPros.get(i).getProCount();
-            }
-            return scanCount+"";
-        }
-
-        class OrderDelHolder{
+        class CommitOutHolder{
             ImageView ivProductImg;
             TextView tvProductName;
             TextView tvShouldCount;
@@ -383,21 +302,54 @@ public class OrderDeliveryActivity extends BaseActivity{
         }
     }
 
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-        invoiceid=extras.getString("OrderID");
-        orderCount=extras.getString("OrderCount");
-        doType=extras.getString("doType");
+    private String setScanCount(String s) {
+        List<CartSQLBean> thisPros = mUserDataBaseOperate.findUserById(s);
+        int scanCount = 0;
+        for (int i=0;i<thisPros.size();i++){
+            scanCount=scanCount+thisPros.get(i).getProCount();
+        }
+        return scanCount+"";
     }
-
     @Override
-    public int getContentView() {
-        return R.layout.activity_order_delivery;
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+            showBackDialog();
+        }
+        return false;
     }
-
+    private void showBackDialog() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(CommitOutStorageActivity.this);
+        builder.setMessage("退出将清空已扫的产品");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mUserDataBaseOperate.deleteAll();
+                dialogInterface.dismiss();
+                ActivityManagerUtil.getInstance().finishActivity(CommitOutStorageActivity.this);
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
+    }
     @Override
     protected void onRestart() {
         super.onRestart();
         loadData();
+    }
+    @Override
+    protected void getBundleExtras(Bundle extras) {
+        orderCount=extras.getString("typeId");
+        type=extras.getInt("type");
+        storageId=extras.getString("storageId");
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_commit_out_storage;
     }
 }

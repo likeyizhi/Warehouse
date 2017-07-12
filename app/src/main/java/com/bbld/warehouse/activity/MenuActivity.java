@@ -68,6 +68,8 @@ public class MenuActivity extends BaseActivity{
     LinearLayout llToQuery;
     @BindView(R.id.ll_toTransfer)
     LinearLayout llToTransfer;
+    @BindView(R.id.ll_toOthers)
+    LinearLayout llToOthers;
     @BindView(R.id.tv_type)
     TextView tvType;
     @BindView(R.id.srl_menu)
@@ -80,6 +82,8 @@ public class MenuActivity extends BaseActivity{
     TextView tvYck;
     @BindView(R.id.tv_dsh)
     TextView tvDsh;
+    @BindView(R.id.tv_qtckdck)
+    TextView tvQtckdck;
     @BindView(R.id.warehouseName)
     TextView tvWarehouseName;
     @BindView(R.id.tvName)
@@ -183,6 +187,12 @@ public class MenuActivity extends BaseActivity{
             @Override
             public void onClick(View view) {
                 readyGo(TransferActivity.class);
+            }
+        });
+        llToOthers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(PendingOutActivity.class);
             }
         });
         srlMenu.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -329,6 +339,11 @@ public class MenuActivity extends BaseActivity{
                         tvDsh.setText(Html.fromHtml("待收货  "+"<font color=\"#00A3D9\">"+response.body().getDsh()+"</font>"));//#00A3D9
                     }else{
                         tvDsh.setText("待收货");
+                    }
+                    if (response.body().getQtckdck()!=0){
+                        tvQtckdck.setText(Html.fromHtml("其他出库"+"<font color=\"#00A3D9\">"+response.body().getQtckdck()+"</font>"));//#00A3D9
+                    }else{
+                        tvQtckdck.setText("其他出库");
                     }
                 }
             }

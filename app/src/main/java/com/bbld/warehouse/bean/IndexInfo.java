@@ -14,6 +14,7 @@ public class IndexInfo {
      "dck": 0,
      "yck": 1,
      "dsh": 0
+     "qtckdck": 1
      }*/
     private int status;
     private String mes;
@@ -22,6 +23,15 @@ public class IndexInfo {
     private int dck;
     private int yck;
     private int dsh;
+    private int qtckdck;
+
+    public int getQtckdck() {
+        return qtckdck;
+    }
+
+    public void setQtckdck(int qtckdck) {
+        this.qtckdck = qtckdck;
+    }
 
     public int getStatus() {
         return status;

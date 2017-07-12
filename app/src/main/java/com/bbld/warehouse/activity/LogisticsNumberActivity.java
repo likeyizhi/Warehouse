@@ -2,6 +2,8 @@ package com.bbld.warehouse.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,6 +25,7 @@ import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
+import com.bbld.warehouse.zxinglogistics.android.CaptureActivity;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
 import java.util.Collections;
@@ -65,6 +69,9 @@ public class LogisticsNumberActivity extends BaseActivity {
     TextView tvYincangName;
     @BindView(R.id.ib_back)
     ImageButton ibBack;
+    @BindView(R.id.ivScan)
+    ImageView ivScan;
+
     private  int  invoiceid;
     private int logisticsId;
     private String number;
@@ -78,6 +85,10 @@ public class LogisticsNumberActivity extends BaseActivity {
     private List<GetLogisticsList.GetLogisticsListList> getLogisticsList;
     private List<GetOrderLogisticsInfo.GetOrderLogisticsInfoList> logisticsInfoList;
     private GetOrderLogisticsInfoAdapter getOrderLogisticsInfoAdapter;
+    private static final String DECODED_CONTENT_KEY = "codedContent";
+    private static final String DECODED_BITMAP_KEY = "codedBitmap";
+    private static final int REQUEST_CODE_SCAN = 0x0000;
+
     @Override
     protected void initViewsAndEvents() {
         tvOrderID.setText("订单号"+OrderID);
@@ -111,6 +122,24 @@ public class LogisticsNumberActivity extends BaseActivity {
                 hideInputMethod();
             }
         });
+        ivScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGoForResult(CaptureActivity.class,REQUEST_CODE_SCAN);
+            }
+        });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 扫描二维码/条码回传
+        if (requestCode == REQUEST_CODE_SCAN && resultCode == RESULT_OK) {
+            if (data != null) {
+                String content = data.getStringExtra(DECODED_CONTENT_KEY);
+                Bitmap bitmap = data.getParcelableExtra(DECODED_BITMAP_KEY);
+                edLogisticsID.setText(content+"");
+            }
+        }
     }
     @Override
     protected void getBundleExtras(Bundle extras) {

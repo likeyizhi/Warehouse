@@ -52,6 +52,7 @@ public class OrderDetails {
          "DeliveryPhone": "联系电话 2",
          "DeliveryAddress": "详细地址 2",
          "Status": "已出库",
+         "SendNeedBatchNumber": 1,
          "ProductList": []*/
         private String OrderID;
         private String OrderNumber;
@@ -66,7 +67,16 @@ public class OrderDetails {
         private String DeliveryPhone;
         private String DeliveryAddress;
         private String Status;
+        private int SendNeedBatchNumber;
         private List<OrderDetailsProductList> ProductList;
+
+        public int getSendNeedBatchNumber() {
+            return SendNeedBatchNumber;
+        }
+
+        public void setSendNeedBatchNumber(int sendNeedBatchNumber) {
+            SendNeedBatchNumber = sendNeedBatchNumber;
+        }
 
         public String getOrderID() {
             return OrderID;

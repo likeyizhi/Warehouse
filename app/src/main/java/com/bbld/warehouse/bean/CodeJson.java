@@ -29,6 +29,8 @@ public class CodeJson {
 //            CodeList: [
 //            {
 //                Code: "1110000001000"
+//                "SerialNumber": "123123123",
+//                "BatchNumber": "12312312312"
 //            },
 //            {
 //                Code: "1110000001001"
@@ -75,6 +77,24 @@ public class CodeJson {
 
         public static class CodeJsonCodeList{
             private String Code;
+            private String SerialNumber;
+            private String BatchNumber;
+
+            public String getSerialNumber() {
+                return SerialNumber;
+            }
+
+            public void setSerialNumber(String serialNumber) {
+                SerialNumber = serialNumber;
+            }
+
+            public String getBatchNumber() {
+                return BatchNumber;
+            }
+
+            public void setBatchNumber(String batchNumber) {
+                BatchNumber = batchNumber;
+            }
 
             public String getCode() {
                 return Code;

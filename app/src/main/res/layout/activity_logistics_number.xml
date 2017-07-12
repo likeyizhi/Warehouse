@@ -165,19 +165,30 @@
             android:drawableEnd="@mipmap/sanjiao"
             android:background="@drawable/bg_btn_f9f9f9_5"
             android:paddingLeft="10dp"/>
-
-        <EditText
-            android:id="@+id/ed_logisticsid"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="10dp"
-            android:singleLine="true"
-            android:background="@drawable/bg_btn_f9f9f9_5"
-            android:hint="物流编号"
-            android:textSize="15sp"
-            android:textColorHint="#999999"
-            android:textColor="#999999"
-            android:paddingLeft="10dp" />
+            android:layout_height="match_parent">
+            <EditText
+                android:id="@+id/ed_logisticsid"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:singleLine="true"
+                android:background="@drawable/bg_btn_f9f9f9_5"
+                android:hint="物流编号"
+                android:textSize="15sp"
+                android:textColorHint="#999999"
+                android:textColor="#999999"
+                android:paddingLeft="10dp" />
+            <ImageView
+                android:id="@+id/ivScan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingRight="10dp"
+                android:src="@mipmap/checkthisout"/>
+        </RelativeLayout>
 
         <Button
             android:id="@+id/btn_add"

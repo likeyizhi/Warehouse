@@ -41,11 +41,31 @@ public class ScanCode {
         /**"IsRight": 1,
          "Type": 2,
          "Code": "1110000001005",
+         "SerialNumber": "",
+         "BatchNumber": "",
          "Count": 1*/
         private int IsRight;
         private int Type;
         private String Code;
+        private String SerialNumber;
+        private String BatchNumber;
         private int Count;
+
+        public String getSerialNumber() {
+            return SerialNumber;
+        }
+
+        public void setSerialNumber(String serialNumber) {
+            SerialNumber = serialNumber;
+        }
+
+        public String getBatchNumber() {
+            return BatchNumber;
+        }
+
+        public void setBatchNumber(String batchNumber) {
+            BatchNumber = batchNumber;
+        }
 
         public int getIsRight() {
             return IsRight;

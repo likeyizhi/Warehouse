@@ -13,10 +13,13 @@ public class UserSQLiteOpenHelper extends SQLiteOpenHelper {
 	public static final String COL_PRODUCT_ID = "productid";
 	public static final String COL_PRODUCT_CODE = "productcode";
 	public static final String COL_PRODUCT_TYPE = "producttype";
+	public static final String COL_SERIAL_NUMBER = "SerialNumber";
+	public static final String COL_BATCH_NUMBER = "BatchNumber";
 	public static final String COL_PRODUCT_COUNT = "productcount";
 	private final String REMOTE_LIVE_DATABASE_CREATE ="create table IF NOT EXISTS "+DATABASE_TABLE_USER+"("+
 			COL_ID +" integer primary key autoincrement,"+
 			COL_PRODUCT_ID +" text," +COL_PRODUCT_CODE +" text,"+
+			COL_SERIAL_NUMBER +" text," +COL_BATCH_NUMBER +" text,"+
 			COL_PRODUCT_TYPE +" text," +COL_PRODUCT_COUNT+" integer)";
 	private static UserSQLiteOpenHelper mInstance = null;
 	private static Context mContext;

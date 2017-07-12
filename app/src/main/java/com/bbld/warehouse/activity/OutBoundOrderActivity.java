@@ -35,7 +35,7 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 /**
- * 产品出库，产品入库
+ * 产品出库，产品入库（入库单/出库单）
  * Created by likey on 2017/5/27.
  */
 

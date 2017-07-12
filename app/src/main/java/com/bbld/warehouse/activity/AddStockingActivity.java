@@ -354,6 +354,7 @@ public class AddStockingActivity extends BaseActivity{
                             bundle.putString("type", type+"");
                             bundle.putString("needCount", productCount+"");
                             bundle.putString("storage", "yes");
+                            bundle.putString("other", "no");
                             readyGo(CaptureActivity.class, bundle);
                         }
                     }else{
@@ -363,6 +364,7 @@ public class AddStockingActivity extends BaseActivity{
                         bundle.putString("type", type+"");
                         bundle.putString("needCount", productCount+"");
                         bundle.putString("storage", "yes");
+                        bundle.putString("other", "no");
                         readyGo(CaptureActivity.class, bundle);
                     }
                 }

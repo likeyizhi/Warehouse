@@ -30,6 +30,8 @@ public class UserDataBaseOperate {
 		ContentValues values = new ContentValues();
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_ID, cart.getProductId());
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_CODE, cart.getProductCode());
+		values.put(UserSQLiteOpenHelper.COL_SERIAL_NUMBER, cart.getSerialNumber());
+		values.put(UserSQLiteOpenHelper.COL_BATCH_NUMBER, cart.getBatchNumber());
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_TYPE, cart.getProductType());
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_COUNT, cart.getProCount());
 		return mDB.insert(UserSQLiteOpenHelper.DATABASE_TABLE_USER, null,
@@ -40,10 +42,12 @@ public class UserDataBaseOperate {
 		ContentValues values = new ContentValues();
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_ID, cart.getProductId());
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_CODE, cart.getProductCode());
+		values.put(UserSQLiteOpenHelper.COL_SERIAL_NUMBER, cart.getSerialNumber());
+		values.put(UserSQLiteOpenHelper.COL_BATCH_NUMBER, cart.getBatchNumber());
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_TYPE, cart.getProductType());
 		values.put(UserSQLiteOpenHelper.COL_PRODUCT_COUNT, cart.getProCount());
 		return mDB.update(UserSQLiteOpenHelper.DATABASE_TABLE_USER, values,
-				"productid=?", new String[] { ""+cart.getProductId() });
+				"productcode=?", new String[] { ""+cart.getProductCode() });
 	}
 
 	// clear databases
@@ -90,6 +94,10 @@ public class UserDataBaseOperate {
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_ID)));
 				cart.setProductCode(cursor.getString(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_CODE)));
+				cart.setSerialNumber(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_SERIAL_NUMBER)));
+				cart.setBatchNumber(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_BATCH_NUMBER)));
 				cart.setProductType(cursor.getString(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_TYPE)));
 				cart.setProCount(cursor.getInt(cursor
@@ -112,6 +120,10 @@ public class UserDataBaseOperate {
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_ID)));
 				cart.setProductCode(cursor.getString(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_CODE)));
+				cart.setSerialNumber(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_SERIAL_NUMBER)));
+				cart.setBatchNumber(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_BATCH_NUMBER)));
 				cart.setProductType(cursor.getString(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_TYPE)));
 				cart.setProCount(cursor.getInt(cursor
@@ -148,6 +160,10 @@ public class UserDataBaseOperate {
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_ID)));
 				cart.setProductCode(cursor.getString(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_CODE)));
+				cart.setSerialNumber(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_SERIAL_NUMBER)));
+				cart.setBatchNumber(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_BATCH_NUMBER)));
 				cart.setProductType(cursor.getString(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_TYPE)));
 				cart.setProCount(cursor.getInt(cursor
@@ -184,6 +200,10 @@ public class UserDataBaseOperate {
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_ID)));
 				cart.setProductCode(cursor.getString(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_CODE)));
+				cart.setSerialNumber(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_SERIAL_NUMBER)));
+				cart.setBatchNumber(cursor.getString(cursor
+						.getColumnIndex(UserSQLiteOpenHelper.COL_BATCH_NUMBER)));
 				cart.setProductType(cursor.getString(cursor
 						.getColumnIndex(UserSQLiteOpenHelper.COL_PRODUCT_TYPE)));
 				cart.setProCount(cursor.getInt(cursor
