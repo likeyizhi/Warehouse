@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import com.bbld.warehouse.bean.HandoverInfo;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
 import com.bumptech.glide.Glide;
+import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
 import java.util.List;
 
@@ -31,6 +33,8 @@ import retrofit.Retrofit;
  */
 
 public class TransferInfoActivity extends BaseActivity{
+    @BindView(R.id.ib_back)
+    ImageButton ibBack;
     @BindView(R.id.tvNumber)
     TextView tvNumber;
     @BindView(R.id.tvState)
@@ -51,8 +55,17 @@ public class TransferInfoActivity extends BaseActivity{
     @Override
     protected void initViewsAndEvents() {
         loadData();
+        setListeners();
     }
+    private void setListeners() {
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityManagerUtil.getInstance().finishActivity(TransferInfoActivity.this);
+            }
+        });
 
+    }
     private void loadData() {
         Call<HandoverInfo> call= RetrofitService.getInstance().handoverInfo(new MyToken(TransferInfoActivity.this).getToken(), handoverId);
         call.enqueue(new Callback<HandoverInfo>() {

@@ -49,14 +49,7 @@ android:layout_marginLeft="15dp"
                 android:text="620mg/粒x90粒/盒"
                 android:textColor="#cccccc" />
 
-            <TextView
-                android:id="@+id/tv_Unit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#cccccc"
-                android:textSize="13sp"
-                android:layout_marginRight="15dp"
-                android:text="单位(盒)"/>
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,6 +72,14 @@ android:layout_marginLeft="15dp"
                 android:textColor="#FF794C"
                 android:textSize="13sp"
                 android:text="1100"/>
+            <TextView
+                android:id="@+id/tv_Unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#cccccc"
+                android:textSize="13sp"
+                android:layout_marginLeft="15dp"
+                android:text="(盒)"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

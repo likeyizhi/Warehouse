@@ -5,7 +5,9 @@ import com.bbld.warehouse.bean.CancelInventory;
 import com.bbld.warehouse.bean.FinishInventory;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
+import com.bbld.warehouse.bean.GetNewNumber;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
+import com.bbld.warehouse.bean.GetSearchTypeList;
 import com.bbld.warehouse.bean.GetTypeList;
 import com.bbld.warehouse.bean.HandOverSacnFinish;
 import com.bbld.warehouse.bean.HandoverEdit;
@@ -82,7 +84,7 @@ public interface RetrofitInterface {
 //    @POST("Order/ScanCode")
 //    Call<ScanCode> scanCode(@Field("token") String token, @Field("invoiceid") int invoiceid, @Field("productId") int productId, @Field("code") String code);
     @GET("Order/ScanCode")
-    Call<ScanCode> scanCode(@Query("token") String token, @Query("invoiceid") int invoiceid, @Query("productId") int productId, @Query("code") String code);
+    Call<ScanCode> scanCode(@Query("token") String token, @Query("invoiceid") int invoiceid, @Query("productId") int productId, @Query("code") String code, @Query("type") int type);
     /**
      * 订单出库接口
      */
@@ -200,4 +202,14 @@ public interface RetrofitInterface {
      */
     @GET("Storage/HandOverSacnFinish")
     Call<HandOverSacnFinish> handOverSacnFinish(@Query("token") String token, @Query("handoverId") String handoverId);
+    /**
+     * 创建新单号
+     */
+    @GET("Storage/GetNewNumber")
+    Call<GetNewNumber> getNewNumber(@Query("token") String token, @Query("type") String type);
+    /**
+     * 出入库筛选
+     */
+    @GET("Storage/GetSearchTypeList")
+    Call<GetSearchTypeList> getSearchTypeList(@Query("token") String token, @Query("type") String type);
 }

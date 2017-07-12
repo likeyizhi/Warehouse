@@ -154,14 +154,17 @@
             android:layout_marginRight="10dp"
             android:background="#eeeeee" />
 
-        <Spinner
-            android:id="@+id/sp_logistics"
+        <TextView
+            android:id="@+id/tv_logistics"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="10dp"
-
+            android:text="请选择物流"
+            android:gravity="center_vertical"
+            android:paddingRight="10dp"
+            android:drawableEnd="@mipmap/sanjiao"
             android:background="@drawable/bg_btn_f9f9f9_5"
-            android:paddingLeft="10dp"></Spinner>
+            android:paddingLeft="10dp"/>
 
         <EditText
             android:id="@+id/ed_logisticsid"

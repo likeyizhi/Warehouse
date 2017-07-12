@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="交接单详情"
+            android:text="交接单编辑"
             android:textSize="17sp" />
     </RelativeLayout>
 
@@ -212,33 +212,33 @@
                     android:text="发货商品共x类x盒，查看更多"
                     android:textColor="#66ccff" />
             </LinearLayout>
-
+            <Button
+                android:id="@+id/btn_keep"
+                android:layout_width="match_parent"
+                android:textSize="18sp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/bg_btn_bule"
+                android:text="未完成，保存盘点信息"
+                android:textColor="#ffffff"
+                style="?android:attr/borderlessButtonStyle"/>
+            <Button
+                android:id="@+id/btn_submit"
+                android:layout_width="match_parent"
+                android:textSize="18sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_btn_bule"
+                android:text="盘点完成，提交"
+                android:textColor="#ffffff"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                style="?android:attr/borderlessButtonStyle"/>
         </LinearLayout>
 
     </ScrollView>
-    <Button
-        android:id="@+id/btn_keep"
-        android:layout_width="match_parent"
-        android:textSize="18sp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/bg_btn_bule"
-        android:text="未完成，保存盘点信息"
-        android:textColor="#ffffff"
-        style="?android:attr/borderlessButtonStyle"/>
-    <Button
-        android:id="@+id/btn_submit"
-        android:layout_width="match_parent"
-        android:textSize="18sp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:background="@drawable/bg_btn_bule"
-        android:text="盘点完成，提交"
-        android:textColor="#ffffff"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        style="?android:attr/borderlessButtonStyle"/>
+
 </LinearLayout>

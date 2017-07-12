@@ -58,7 +58,7 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 /**
- * 待出库--出库
+ * 待出库--出库，待收货--确认收货
  * Created by likey on 2017/5/24.
  */
 
@@ -81,6 +81,8 @@ public class OrderDeliveryActivity extends BaseActivity{
     TextView btnOut;
     @BindView(R.id.ib_back)
     ImageButton ibBack;
+    @BindView(R.id.tvTitle)
+    TextView tvTitle;
 
     private String invoiceid;
     private String orderCount;
@@ -89,6 +91,7 @@ public class OrderDeliveryActivity extends BaseActivity{
     private UserDataBaseOperate mUserDataBaseOperate;
     private String request;
     private String doType;
+    private String type;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -119,6 +122,19 @@ public class OrderDeliveryActivity extends BaseActivity{
         mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
         loadData();
         setListeners();
+        setText();
+    }
+
+    private void setText() {
+        if (doType.equals("sure")){
+            type="2";
+            tvTitle.setText("订单收货");
+            btnOut.setText("确认收货");
+        }else{
+            type="1";
+            tvTitle.setText("订单发货");
+            btnOut.setText("发货出库");
+        }
     }
 
     private void setListeners() {
@@ -307,10 +323,10 @@ public class OrderDeliveryActivity extends BaseActivity{
             holder.btn_scan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    toScan(product.getProductID(),product.getProductName(),orderId,product.getProductCount());
+                    toScan(product.getProductID(),product.getProductName(),orderId,product.getProductCount(),type);
                 }
 
-                private void toScan(String productID, String productName, String orderId, String productCount) {
+                private void toScan(String productID, String productName, String orderId, String productCount,String type) {
                     if (Build.VERSION.SDK_INT >= 23){
                         int cameraPermission= ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA);
                         if (cameraPermission != PackageManager.PERMISSION_GRANTED){
@@ -323,6 +339,7 @@ public class OrderDeliveryActivity extends BaseActivity{
                             bundle.putString("orderId", orderId);
                             bundle.putString("needCount", productCount);
                             bundle.putString("storage", "no");
+                            bundle.putString("type", type+"");
                             readyGo(CaptureActivity.class, bundle);
                         }
                     }else{
@@ -332,6 +349,7 @@ public class OrderDeliveryActivity extends BaseActivity{
                         bundle.putString("orderId", orderId);
                         bundle.putString("needCount", productCount);
                         bundle.putString("storage", "no");
+                        bundle.putString("type", type+"");
                         readyGo(CaptureActivity.class, bundle);
                     }
                 }

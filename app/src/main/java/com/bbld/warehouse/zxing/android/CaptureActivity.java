@@ -139,7 +139,7 @@ public final class CaptureActivity extends Activity implements
                     scanCount=scanCount+products.get(i).getProCount();
                 }
                 if (Integer.parseInt(needCount+"")<Integer.parseInt(scanCount+"")){
-                    showBiggerDialog("扫码数量 大于 应发数量，确定完成并退出？");
+                    showBiggerDialog("扫码数量不能大于发货数量");
                 }else{
                     finish();
                 }
@@ -154,6 +154,7 @@ public final class CaptureActivity extends Activity implements
         if (storage.equals("no")) {
             invoiceid=intent.getExtras().getString("orderId");
             needCount=intent.getExtras().getString("needCount");
+            type=intent.getExtras().getString("type");
         }else{
             type=intent.getExtras().getString("type");
             needCount=10000+"";
@@ -175,7 +176,7 @@ public final class CaptureActivity extends Activity implements
                     scanCount=scanCount+products.get(i).getProCount();
                 }
                 if (Integer.parseInt(needCount+"")<Integer.parseInt(scanCount+"")){
-                    showBiggerDialog("扫码数量 大于 应发数量，确定完成并退出？");
+                    showBiggerDialog("扫码数量不能大于发货数量");
                 }else {
                     finish();
                 }
@@ -200,7 +201,7 @@ public final class CaptureActivity extends Activity implements
                 scanCount=scanCount+products.get(i).getProCount();
             }
             if (Integer.parseInt(needCount+"")<Integer.parseInt(scanCount+"")){
-                showBiggerDialog("扫码数量 大于 应发数量，确定完成并退出？");
+                showBiggerDialog("扫码数量不能大于发货数量");
             }else {
                 finish();
             }
@@ -327,7 +328,7 @@ public final class CaptureActivity extends Activity implements
 //        Toast.makeText(CaptureActivity.this,""+code,Toast.LENGTH_SHORT).show();
         if (storage.equals("no")){
             call= RetrofitService.getInstance().scanCode(new MyToken(CaptureActivity.this).getToken()+"",
-                    Integer.parseInt(invoiceid),Integer.parseInt(productId),code);
+                    Integer.parseInt(invoiceid),Integer.parseInt(productId),code,Integer.parseInt(type));
         }else{
             call=RetrofitService.getInstance().storageScanCode(new MyToken(CaptureActivity.this).getToken()+"",
                     Integer.parseInt(type),Integer.parseInt(productId),code);
@@ -337,6 +338,7 @@ public final class CaptureActivity extends Activity implements
             public void onResponse(Response<ScanCode> response, Retrofit retrofit) {
                 if (response.body()==null){
                     Toast.makeText(CaptureActivity.this,"服务器错误",Toast.LENGTH_SHORT).show();
+                    continuePreview();
                     return;
                 }
                 if (response.body().getStatus()==0){
@@ -388,13 +390,21 @@ public final class CaptureActivity extends Activity implements
                         }
                     }
                 }else{
-                    Toast.makeText(CaptureActivity.this,""+response.body().getMes(),Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CaptureActivity.this,""+response.body().getMes(),Toast.LENGTH_SHORT).show();
+                    showFailDialog(""+response.body().getMes());
+                    try {
+                        Thread.sleep(1000);
+                        continuePreview();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Throwable throwable) {
                 Toast.makeText(CaptureActivity.this,""+throwable,Toast.LENGTH_SHORT).show();
+                continuePreview();
             }
         });
     }
@@ -421,12 +431,12 @@ public final class CaptureActivity extends Activity implements
     private void showBiggerDialog(String biggerMessage) {
         AlertDialog.Builder builder=new AlertDialog.Builder(CaptureActivity.this);
         builder.setMessage(biggerMessage+"");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
+//        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                finish();
+//            }
+//        });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

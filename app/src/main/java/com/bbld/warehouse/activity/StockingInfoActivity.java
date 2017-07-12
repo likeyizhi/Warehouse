@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -53,6 +54,8 @@ public class StockingInfoActivity extends BaseActivity{
     Button btnEdit;
     @BindView(R.id.btnDecision)
     Button btnDecision;
+    @BindView(R.id.llBottom)
+    LinearLayout llBottom;
 
 
     private String InventoryId;
@@ -147,6 +150,11 @@ public class StockingInfoActivity extends BaseActivity{
         tvInventoryStatus.setText(inventoryInfo.getInventoryStatus()+"");
         tvInventoryRemark.setText(inventoryInfo.getInventoryRemark()+"");
         productList = inventoryInfo.getProductList();
+        if (inventoryInfo.getCanOperation()==0){
+            llBottom.setVisibility(View.GONE);
+        }else{
+            llBottom.setVisibility(View.VISIBLE);
+        }
         setAdapter();
     }
 

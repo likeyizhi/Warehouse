@@ -312,7 +312,7 @@ public class TransferEditActivity extends BaseActivity{
                 @Override
                 public void onClick(View view) {
 //                    showToast("扫码"+product.getId());
-                    toScan(product.getId(),product.getName(),1,10000);
+                    toScan(product.getId(),product.getName(),4,10000);
                 }
 
                 private void toScan(String productID, String productName, int type, int productCount) {

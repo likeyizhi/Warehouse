@@ -1,29 +1,42 @@
 package com.bbld.warehouse.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bbld.warehouse.R;
+import com.bbld.warehouse.adapter.GroupAdapter;
 import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.IndexInfo;
 import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
-import com.bbld.warehouse.zxing.android.CaptureActivity;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import retrofit.Call;
@@ -92,6 +105,12 @@ public class MenuActivity extends BaseActivity{
     private String warehouseName;
     private int type;
     private int ishandover;
+    private LayoutInflater mInflater;
+    private Context mContext;
+    private PopupWindow popupWindow;
+    private View view;
+    private ListView lv_group;
+    private ArrayList<String> groups;
 
     @Override
     protected void initViewsAndEvents() {
@@ -134,7 +153,7 @@ public class MenuActivity extends BaseActivity{
                 Bundle bundle=new Bundle();
                 bundle.putString("title","产品入库");
                 bundle.putInt("type",2);
-                bundle.putInt("typeid",2);
+                bundle.putInt("typeid",0);
                 readyGo(OutBoundOrderActivity.class, bundle);
             }
         });
@@ -144,7 +163,7 @@ public class MenuActivity extends BaseActivity{
                 Bundle bundle=new Bundle();
                 bundle.putString("title","产品出库");
                 bundle.putInt("type",1);
-                bundle.putInt("typeid",1);
+                bundle.putInt("typeid",0);
                 readyGo(OutBoundOrderActivity.class, bundle);
             }
         });
@@ -185,16 +204,56 @@ public class MenuActivity extends BaseActivity{
         });
         tvName.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if(llMenu.getVisibility()==View.VISIBLE){
-                    llMenu.setVisibility(View.GONE);
-                }else{
-                    llMenu.setVisibility(View.VISIBLE);
+            public void onClick(View v) {
+                showWindow(tvName);
+            }
+        });
+    }
+    private void showWindow(View parent) {
+
+        if (popupWindow == null) {
+            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            view = layoutInflater.inflate(R.layout.group_list, null);
+
+            lv_group = (ListView) view.findViewById(R.id.lvGroup);
+            // 加载数据
+            groups = new ArrayList<String>();
+            groups.add("退出登录");
+
+            GroupAdapter groupAdapter = new GroupAdapter(this, groups);
+            lv_group.setAdapter(groupAdapter);
+            // 创建一个PopuWidow对象
+            popupWindow = new PopupWindow(view, 300, 350);
+        }
+
+        // 使其聚集
+        popupWindow.setFocusable(true);
+        // 设置允许在外点击消失
+        popupWindow.setOutsideTouchable(true);
+
+        // 这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        // 显示的位置为:屏幕的宽度的一半-PopupWindow的高度的一半
+        int xPos = windowManager.getDefaultDisplay().getWidth() / 2
+                - popupWindow.getWidth() / 2;
+        Log.i("coder", "xPos:" + xPos);
+
+        popupWindow.showAsDropDown(parent, xPos, 0);
+
+        lv_group.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+//                showToast("退出登录");
+                showSignOutDialog();
+                if (popupWindow != null) {
+                    popupWindow.dismiss();
                 }
             }
         });
     }
-
     private void delDB() {
         UserSQLiteOpenHelper mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(MenuActivity.this);
         UserDataBaseOperate mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());

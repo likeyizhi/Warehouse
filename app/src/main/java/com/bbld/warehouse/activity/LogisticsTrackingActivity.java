@@ -1,5 +1,7 @@
 package com.bbld.warehouse.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +34,8 @@ import retrofit.Retrofit;
 import static android.R.id.list;
 
 /**
- * Created by dell on 2017/5/24.
+ * Created by zzy on 2017/5/24.
+ * 物流追踪
  */
 
 public class LogisticsTrackingActivity extends BaseActivity {
@@ -42,43 +45,35 @@ public class LogisticsTrackingActivity extends BaseActivity {
     TextView tvYincang;
     @BindView(R.id.tv_number)
     TextView tvNumber;
-    @BindView(R.id.sp_logistics)
-    Spinner spLogistics;
+    @BindView(R.id.tv_logistics)
+    TextView tvLogistics;
     @BindView(R.id.lv_logistics_trackinfo)
     ListView lvLogistics;
     @BindView(R.id.ib_back)
     ImageButton ibBack;
     private List<GetLogisticsTrackInfo.GetLogisticsTrackInfoList> logisticsTrackInfoList;
     private List<GetOrderLogisticsInfo.GetOrderLogisticsInfoList> logisticsInfoList;
-    private GetOrderLogisticsInfoAdapter getOrderLogisticsInfoAdapter;
     private GetLogisticsTrackInfoListAdapter getLogisticsTrackInfoAdapter;
-    int logisticsId;
-    String number;
-    int invoiceid;
-
+    private int logisticsId;
+    private  String number;
+    private  int invoiceid;
+    private String[] items;
     @Override
     protected void initViewsAndEvents() {
         loadData();
-
-        spLogistics.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {//选择item的选择点击监听事件
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                tvName.setText(logisticsInfoList.get(i).getLogisticsName() + "");
-                tvNumber.setText(logisticsInfoList.get(i).getLogisticsNumber() + "");
-                tvYincang.setText(logisticsInfoList.get(i).getLogisticsID()+"");
-                number=tvNumber.getText().toString();
-                logisticsId=Integer.parseInt(tvYincang.getText().toString());
-                loadData1();
-            }
-
-            public void onNothingSelected(AdapterView<?> arg0) {
-
-            }
-        });
+        setListeners();
+    }
+    private void setListeners() {
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ActivityManagerUtil.getInstance().finishActivity(LogisticsTrackingActivity.this);
+            }
+        });
+        tvLogistics.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chooseTypeIdDialog();
             }
         });
     }
@@ -86,16 +81,11 @@ public class LogisticsTrackingActivity extends BaseActivity {
     @Override
     protected void getBundleExtras(Bundle extras) {
         invoiceid = Integer.parseInt(extras.getString("OrderID()"));
-
     }
     private void loadData1(){
-    /*
-  物流跟踪查询接口
-     */
-
-//        number=tvNumber.getText().toString();
-//        logisticsId=Integer.parseInt(tvYincang.getText().toString());
-
+        /**
+         物流跟踪查询接口
+         */
         Call<GetLogisticsTrackInfo> call = RetrofitService.getInstance().getLogisticsTrackInfo(new MyToken(LogisticsTrackingActivity.this).getToken() + "", logisticsId, number);
 //        showToast( "物流id"+logisticsId+"物流编号"+number);
         call.enqueue(new Callback<GetLogisticsTrackInfo>() {
@@ -107,7 +97,7 @@ public class LogisticsTrackingActivity extends BaseActivity {
                 }
                 if (response.body().getStatus() == 0) {
                     logisticsTrackInfoList=response.body().getList();
-                    setAdapter1();
+                    setAdapter();
 
                 }
             }
@@ -127,15 +117,27 @@ public class LogisticsTrackingActivity extends BaseActivity {
             @Override
             public void onResponse(Response<GetOrderLogisticsInfo> response, Retrofit retrofit) {
                 if (response.body() == null) {
-                    showToast("服务器出错");
+                    showToast("请选择物流信息");
                     return;
                 }
                 if (response.body().getStatus() == 0) {
                     logisticsInfoList = response.body().getList();
-                    setAdapter2();
-
+                    if(!logisticsInfoList.isEmpty()){
+                        tvLogistics.setText("【"+logisticsInfoList.get(0).getLogisticsName()+"】"+logisticsInfoList.get(0).getLogisticsNumber());
+                        tvName.setText(logisticsInfoList.get(0).getLogisticsName() + "");
+                        tvNumber.setText(logisticsInfoList.get(0).getLogisticsNumber() + "");
+                        tvYincang.setText(logisticsInfoList.get(0).getLogisticsID()+"");
+                        number=tvNumber.getText().toString();
+                        logisticsId=Integer.parseInt(tvYincang.getText().toString());
+                        loadData1();
+                    }
+                    items = new String[ logisticsInfoList.size()];
+                    for (int t=0;t< logisticsInfoList.size();t++){
+                        items[t]= "【"+logisticsInfoList.get(t).getLogisticsName()+"】"+logisticsInfoList.get(t).getLogisticsNumber();
+                    }
+                }else {
+                    showToast(""+response.body().getMes());
                 }
-
             }
 
             @Override
@@ -144,52 +146,9 @@ public class LogisticsTrackingActivity extends BaseActivity {
         });
     }
 
-
-    private void setAdapter2() {
-        getOrderLogisticsInfoAdapter = new GetOrderLogisticsInfoAdapter();
-        spLogistics.setAdapter(getOrderLogisticsInfoAdapter);
-
-    }
-    private void setAdapter1() {
-
+    private void setAdapter() {
         getLogisticsTrackInfoAdapter=new GetLogisticsTrackInfoListAdapter();
         lvLogistics.setAdapter(getLogisticsTrackInfoAdapter);
-    }
-
-    class GetOrderLogisticsInfoAdapter extends BaseAdapter {
-        GetOrderLogisticsInfoHolder holder = null;
-
-        @Override
-        public int getCount() {
-            return logisticsInfoList.size();
-        }
-
-        @Override
-        public GetOrderLogisticsInfo.GetOrderLogisticsInfoList getItem(int i) {
-            return logisticsInfoList.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_sp_logistics_tracking, null);
-                holder = new GetOrderLogisticsInfoHolder();
-                holder.tvInfo = (TextView) view.findViewById(R.id.tv_info);
-                view.setTag(holder);
-            }
-            holder = (GetOrderLogisticsInfoHolder) view.getTag();
-            final GetOrderLogisticsInfo.GetOrderLogisticsInfoList list = getItem(i);
-            holder.tvInfo.setText(list.getLogisticsName() + list.getLogisticsNumber() + "");
-            return view;
-        }
-        class GetOrderLogisticsInfoHolder {
-            TextView tvInfo;
-        }
     }
 
     class GetLogisticsTrackInfoListAdapter extends BaseAdapter {
@@ -217,6 +176,7 @@ public class LogisticsTrackingActivity extends BaseActivity {
                 holder = new GetLogisticsTrackInfoListHolder();
                 holder.tvTime = (TextView) view.findViewById(R.id.tv_time);
                 holder.tvContent = (TextView) view.findViewById(R.id.tv_content);
+
                 view.setTag(holder);
             }
             holder = (GetLogisticsTrackInfoListHolder) view.getTag();
@@ -236,5 +196,25 @@ public class LogisticsTrackingActivity extends BaseActivity {
     @Override
     public int getContentView() {
         return R.layout.activity_logistics_tracking;
+    }
+
+    private void chooseTypeIdDialog() {
+        AlertDialog alertDialog=new AlertDialog.Builder(LogisticsTrackingActivity.this)
+
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        logisticsId=Integer.parseInt(logisticsInfoList.get(i).getLogisticsID());
+                        tvLogistics.setText("【"+logisticsInfoList.get(i).getLogisticsName()+"】"+logisticsInfoList.get(i).getLogisticsNumber());
+                        tvName.setText(logisticsInfoList.get(i).getLogisticsName() + "");
+                        tvNumber.setText(logisticsInfoList.get(i).getLogisticsNumber() + "");
+                        tvYincang.setText(logisticsInfoList.get(i).getLogisticsID()+"");
+                        number=tvNumber.getText().toString();
+                        logisticsId=Integer.parseInt(tvYincang.getText().toString());
+                        loadData1();
+                        dialogInterface.dismiss();
+                    }
+                }).create();
+        alertDialog.show();
     }
 }

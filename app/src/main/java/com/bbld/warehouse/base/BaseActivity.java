@@ -46,12 +46,6 @@ public abstract class BaseActivity extends AppCompatActivity{
             getBundleExtras(extras);
         }
         initViewsAndEvents();
-//        boolean isNetConnected = NetConnectUtil.isNetConnected(getApplicationContext());
-//        if (isNetConnected){
-//
-//        }else{
-//            showNetDialog();
-//        }
     }
     /**
      * init all views and add events

@@ -1,5 +1,8 @@
 package com.bbld.warehouse.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 
 import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
+import com.bbld.warehouse.bean.GetSearchTypeList;
 import com.bbld.warehouse.bean.StorageList;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
@@ -48,6 +52,10 @@ public class OutBoundOrderActivity extends BaseActivity{
     Button btnAddOutBound;
     @BindView(R.id.ll_kong)
     LinearLayout llKong;
+    @BindView(R.id.tvChangeType)
+    TextView tvChangeType;
+    @BindView(R.id.llChangeType)
+    LinearLayout llChangeType;
 
     private String title;
     private int type;
@@ -55,6 +63,8 @@ public class OutBoundOrderActivity extends BaseActivity{
     private int page=1;
     private List<StorageList.StorageListList> storageList;
     private OutBoundAdapter outBoundAdapter;
+    private List<GetSearchTypeList.GetSearchTypeListlist> typeList;
+    private String[] items;
     private Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -77,8 +87,50 @@ public class OutBoundOrderActivity extends BaseActivity{
         }else{
             btnAddOutBound.setText("添加入库单");
         }
+        loadSearchTypeData();
         loadData(false);
         setListeners();
+    }
+
+    private void loadSearchTypeData() {
+        Call<GetSearchTypeList> call=RetrofitService.getInstance().getSearchTypeList(new MyToken(OutBoundOrderActivity.this).getToken(), type+"");
+        call.enqueue(new Callback<GetSearchTypeList>() {
+            @Override
+            public void onResponse(Response<GetSearchTypeList> response, Retrofit retrofit) {
+                if (response==null){
+                    showToast(getResources().getString(R.string.get_data_fail));
+                    return;
+                }
+                if (response.body().getStatus()==0){
+                    typeList = response.body().getList();
+                    items = new String[typeList.size()];
+                    for (int t=0;t<typeList.size();t++){
+                        items[t]=typeList.get(t).getName();
+                    }
+                }else{
+                    showToast(response.body().getMes());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
+    }
+    private void changeTypeDialog() {
+        AlertDialog alertDialog=new AlertDialog.Builder(OutBoundOrderActivity.this)
+                .setTitle("请选择类型")
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        typeid=Integer.parseInt(typeList.get(i).getID());
+                        tvChangeType.setText(typeList.get(i).getName());
+                        loadData(false);
+                        dialogInterface.dismiss();
+                    }
+                }).create();
+        alertDialog.show();
     }
 
     private void setListeners() {
@@ -144,6 +196,18 @@ public class OutBoundOrderActivity extends BaseActivity{
                 readyGo(AddOutBoundOrderActivity.class, bundle);
             }
         });
+//        tvChangeType.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                changeTypeDialog();
+//            }
+//        });
+        llChangeType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeTypeDialog();
+            }
+        });
     }
 
     private void loadData(final boolean isLoadMore) {
@@ -164,7 +228,9 @@ public class OutBoundOrderActivity extends BaseActivity{
                         storageList=response.body().getList();
                         if(storageList.isEmpty()){
                             llKong.setBackgroundResource(R.mipmap.kong);
+                            setAdapter();
                         }else{
+                            llKong.setBackgroundColor(Color.WHITE);
                             setAdapter();
                         }
                     }

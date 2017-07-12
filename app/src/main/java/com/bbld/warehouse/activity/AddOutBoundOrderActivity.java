@@ -28,6 +28,7 @@ import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.AddOutBoundProduct;
 import com.bbld.warehouse.bean.CartSQLBean;
 import com.bbld.warehouse.bean.CodeJson;
+import com.bbld.warehouse.bean.GetNewNumber;
 import com.bbld.warehouse.bean.GetTypeList;
 import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
@@ -73,6 +74,8 @@ public class AddOutBoundOrderActivity extends BaseActivity{
     EditText etRemark;
     @BindView(R.id.tv_typeId)
     TextView tvTypeId;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
 
     private List<AddOutBoundProduct> productList;
     private AddOutBoundAdapter adapter;
@@ -107,8 +110,38 @@ public class AddOutBoundOrderActivity extends BaseActivity{
         mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(AddOutBoundOrderActivity.this);
         mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
         productList=new ArrayList<AddOutBoundProduct>();
+        if (type.equals("1")){
+            tvTitle.setText("添加出库单");
+        }else{
+            tvTitle.setText("添加入库单");
+        }
         loadTypeId();
+        setNewNumber();
         setListeners();
+    }
+
+    private void setNewNumber() {
+        etNumber.setFocusable(false);
+        Call<GetNewNumber> call=RetrofitService.getInstance().getNewNumber(new MyToken(AddOutBoundOrderActivity.this).getToken(),type);
+        call.enqueue(new Callback<GetNewNumber>() {
+            @Override
+            public void onResponse(Response<GetNewNumber> response, Retrofit retrofit) {
+                if (response==null){
+                    showToast(getResources().getString(R.string.get_data_fail));
+                    return;
+                }
+                if (response.body().getStatus()==0){
+                    etNumber.setText(response.body().getNumber()+"");
+                }else{
+                    showToast(response.body().getMes()+"");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
     }
 
     private void loadTypeId() {

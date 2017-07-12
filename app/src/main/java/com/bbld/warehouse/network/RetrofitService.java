@@ -6,7 +6,9 @@ import com.bbld.warehouse.bean.CancelInventory;
 import com.bbld.warehouse.bean.FinishInventory;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
+import com.bbld.warehouse.bean.GetNewNumber;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
+import com.bbld.warehouse.bean.GetSearchTypeList;
 import com.bbld.warehouse.bean.GetTypeList;
 import com.bbld.warehouse.bean.HandOverSacnFinish;
 import com.bbld.warehouse.bean.HandoverEdit;
@@ -91,8 +93,8 @@ public class RetrofitService {
     /**
      * 扫码查询接口
      */
-    public Call<ScanCode> scanCode(String token, int invoiceid, int productId, String  code){
-        return retrofitInterface.scanCode(token, invoiceid, productId, code);
+    public Call<ScanCode> scanCode(String token, int invoiceid, int productId, String  code, int type){
+        return retrofitInterface.scanCode(token, invoiceid, productId, code, type);
     }
     /**
      * 订单出库接口
@@ -215,5 +217,17 @@ public class RetrofitService {
      */
     public Call<HandOverSacnFinish> handOverSacnFinish(String token, String handoverId){
         return retrofitInterface.handOverSacnFinish(token, handoverId);
+    }
+    /**
+     * 创建新单号
+     */
+    public Call<GetNewNumber> getNewNumber(String token, String type){
+        return retrofitInterface.getNewNumber(token, type);
+    }
+    /**
+     * 出入库筛选
+     */
+    public Call<GetSearchTypeList> getSearchTypeList(String token, String type){
+        return retrofitInterface.getSearchTypeList(token, type);
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="#f6f6f6"
+    android:background="#ffffff"
     android:layout_height="match_parent">
     <RelativeLayout
         android:id="@+id/rl_head"
@@ -44,15 +44,20 @@
         android:layout_height="1dp"
         android:background="#eeeeee"
         ></TextView>
-    <Spinner
-        android:id="@+id/sp_logistics"
+
+    <TextView
+        android:id="@+id/tv_logistics"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_margin="10dp"
-        android:background="@drawable/bg_btn_fffffff_5"
+        android:background="@drawable/bg_btn_f9f9f9_5"
+        android:paddingRight="10dp"
+        android:drawableEnd="@mipmap/sanjiao"
+        android:gravity="center_vertical"
         android:paddingLeft="10dp">
 
-    </Spinner>
+    </TextView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -119,15 +124,15 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/bg_btn_write5"
+        android:background="@drawable/bg_btn_f9f9f9_5"
         android:orientation="vertical">
 
         <ListView
             android:id="@+id/lv_logistics_trackinfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@null"
-            android:layout_margin="10dp"></ListView>
+            android:layout_margin="10dp"
+            android:divider="@null"></ListView>
     </LinearLayout>
     <TextView
         android:layout_width="wrap_content"

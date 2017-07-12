@@ -1,5 +1,7 @@
 package com.bbld.warehouse.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +34,8 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 /**
- * Created by dell on 2017/5/24.
+ * Created by zzy on 2017/5/24.
+ * 物流编号录入
  */
 
 public class LogisticsNumberActivity extends BaseActivity {
@@ -54,8 +57,8 @@ public class LogisticsNumberActivity extends BaseActivity {
     EditText edLogisticsID;
     @BindView(R.id.btn_add)
     Button btnAdd;
-    @BindView(R.id.sp_logistics)
-    Spinner spLogistics;
+    @BindView(R.id.tv_logistics)
+    TextView tvLogistics;
     @BindView(R.id.tv_yincangid)
     TextView tvYincangID;
     @BindView(R.id.tv_yincangname)
@@ -65,13 +68,13 @@ public class LogisticsNumberActivity extends BaseActivity {
     private  int  invoiceid;
     private int logisticsId;
     private String number;
+    private String[] items;
     private  String OrderID;
     private  String ChannelName;
     private  String DealerName;
     private  String Count;
     private  String ProductCount;
     private  String Date;
-    private GetLogisticsListAdapter getLogisticsListAdapter;
     private List<GetLogisticsList.GetLogisticsListList> getLogisticsList;
     private List<GetOrderLogisticsInfo.GetOrderLogisticsInfoList> logisticsInfoList;
     private GetOrderLogisticsInfoAdapter getOrderLogisticsInfoAdapter;
@@ -84,52 +87,45 @@ public class LogisticsNumberActivity extends BaseActivity {
         tvProductCount.setText(ProductCount);
         tvOrderCount.setText(Count);
         loadData();
-
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                setData();
-            }
-        });
-        spLogistics.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {//选择item的选择点击监听事件
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                tvYincangName.setText(getLogisticsList.get(i).getLogisticsName() + "");
-                tvYincangID.setText(getLogisticsList.get(i).getLogisticsID() + "");
-                logisticsId=Integer.parseInt(tvYincangID.getText().toString());
-
-            }
-
-            public void onNothingSelected(AdapterView<?> arg0) {
-
-            }
-        });
+        setListeners();
+    }
+    private void setListeners() {
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityManagerUtil.getInstance().finishActivity(LogisticsNumberActivity.this);
+                finish();
+            }
+        });
+        tvLogistics.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chooseTypeIdDialog();
+            }
+        });
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setData();
+                edLogisticsID.setText("");
+                edLogisticsID.clearFocus();
+                hideInputMethod();
             }
         });
     }
-
     @Override
     protected void getBundleExtras(Bundle extras) {
-        OrderID= extras.getString("OrderID()");
-        ChannelName=  extras.getString("ChannelName()");
-        DealerName=   extras.getString("DealerName()");
-        Count=  extras.getString("Count()");
-        ProductCount= extras.getString("ProductCount()");
-        Date=  extras.getString("Date()");
-        invoiceid = Integer.parseInt(extras.getString("OrderID()"));
+        OrderID= extras.getString("OrderNumber");
+        ChannelName=  extras.getString("ChannelName");
+        DealerName=   extras.getString("DealerName");
+        Count=  extras.getString("Count");
+        ProductCount= extras.getString("ProductCount");
+        Date=  extras.getString("Date");
+        invoiceid = Integer.parseInt(extras.getString("OrderID"));
     }
     private void loadData() {
-
-
-        /*
-  物流信息查询接口
- */
+        /**
+         * 物流信息查询接口
+         */
         Call<GetOrderLogisticsInfo> call1 = RetrofitService.getInstance().getOrderLogisticsInfo(new MyToken(LogisticsNumberActivity.this).getToken() + "",  invoiceid);
         call1.enqueue(new Callback<GetOrderLogisticsInfo>() {
             @Override
@@ -140,35 +136,42 @@ public class LogisticsNumberActivity extends BaseActivity {
                 }
                 if (response.body().getStatus() == 0) {
                     logisticsInfoList=response.body().getList();
-                    Collections.reverse(logisticsInfoList);
-                    setAdapter2();
+                    setAdapter();
+
+                }else {
+                    showToast(""+response.body().getMes());
                 }
-
             }
-
             @Override
             public void onFailure(Throwable throwable) {
             }
         });
-  /*
-    获取物流公司字典接口
-   */
+        /**
+         * 获取物流公司字典接口
+         */
         Call<GetLogisticsList> call2 = RetrofitService.getInstance().getLogisticsList(new MyToken(LogisticsNumberActivity.this).getToken()+"");
         call2.enqueue(new Callback<GetLogisticsList>() {
             @Override
             public void onResponse(Response<GetLogisticsList> response, Retrofit retrofit) {
                 if (response.body() == null) {
-                    showToast("服务器出错");
+                    showToast("出入库类型列表获取失败");
                     return;
                 }
                 if (response.body().getStatus() == 0) {
                     getLogisticsList = response.body().getList();
-
-                    setAdapter1();
+                    if (!getLogisticsList.isEmpty()){
+                        logisticsId=getLogisticsList.get(0).getLogisticsID();
+                        tvLogistics.setText(getLogisticsList.get(0).getLogisticsName()+"");
+                    }
+                    items = new String[getLogisticsList.size()];
+                    for (int t=0;t<getLogisticsList.size();t++){
+                        items[t]=getLogisticsList.get(t).getLogisticsName();
+                    }
+                }else {
+                    showToast(""+response.body().getMes());
                 }
 
             }
-
             @Override
             public void onFailure(Throwable throwable) {
             }
@@ -177,17 +180,15 @@ public class LogisticsNumberActivity extends BaseActivity {
 
     }
     private void setData(){
-     /*
-     * 增加物流信息接口
-     */
-
+        /**
+         * 增加物流信息接口
+         */
         number=edLogisticsID.getText().toString();
         if(number==null||number.trim().equals("")){
             showToast("请添加物流编号");
         }else{
             Call<AddOrderLogisticsInfo> call3 = RetrofitService.getInstance().addOrderLogisticsInfo(new MyToken(LogisticsNumberActivity.this).getToken() + "",invoiceid,logisticsId,number);
-            showToast("货号"+invoiceid+"物流id"+logisticsId+"物流单号："+number+"");
-
+//            showToast("货号"+invoiceid+"物流id"+logisticsId+"物流单号："+number+"");
             call3.enqueue(new Callback<AddOrderLogisticsInfo>() {
                 @Override
                 public void onResponse(Response<AddOrderLogisticsInfo> response, Retrofit retrofit) {
@@ -213,51 +214,12 @@ public class LogisticsNumberActivity extends BaseActivity {
         }
 
     }
-    private void setAdapter1() {
-        getLogisticsListAdapter = new GetLogisticsListAdapter();
-        spLogistics.setAdapter(getLogisticsListAdapter);
 
-    }
-    private void setAdapter2() {
+    private void setAdapter() {
         getOrderLogisticsInfoAdapter = new GetOrderLogisticsInfoAdapter();
         lvAddLogistics.setAdapter(getOrderLogisticsInfoAdapter);
     }
-    class GetLogisticsListAdapter extends BaseAdapter {
-        GetLogisticsListHolder holder = null;
-        @Override
-        public int getCount() {
-            return getLogisticsList.size();
-        }
 
-        @Override
-        public GetLogisticsList.GetLogisticsListList getItem(int i) {
-            return getLogisticsList.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_sp_logistics_tracking, null);
-                holder=new  GetLogisticsListHolder();
-                holder.tvInfo = (TextView) view.findViewById(R.id.tv_info);
-                view.setTag(holder);
-            }
-            holder = (GetLogisticsListHolder) view.getTag();
-            final GetLogisticsList.GetLogisticsListList list = getItem(i);
-            holder.tvInfo.setText(list.getLogisticsName()+ "");
-
-            return view;
-        }
-
-        class GetLogisticsListHolder {
-            TextView tvInfo;
-        }
-    }
     class GetOrderLogisticsInfoAdapter extends BaseAdapter {
         GetOrderLogisticsInfoHolder holder = null;
 
@@ -301,5 +263,18 @@ public class LogisticsNumberActivity extends BaseActivity {
     @Override
     public int getContentView() {
         return R.layout.activity_logistics_number;
+    }
+    private void chooseTypeIdDialog() {
+        AlertDialog alertDialog=new AlertDialog.Builder(LogisticsNumberActivity.this)
+                .setTitle("请选择物流")
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        logisticsId=getLogisticsList.get(i).getLogisticsID();
+                        tvLogistics.setText(getLogisticsList.get(i).getLogisticsName());
+                        dialogInterface.dismiss();
+                    }
+                }).create();
+        alertDialog.show();
     }
 }

@@ -241,7 +241,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="产品入库"
+                            android:text="入库单"
                             android:textSize="14sp"
                             android:layout_marginTop="15dp"
                             android:textColor="#666666" />
@@ -274,7 +274,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="产品出库"
+                            android:text="出库单"
                             android:textSize="14sp"
                             android:layout_marginTop="15dp"
                             android:textColor="#666666"  />

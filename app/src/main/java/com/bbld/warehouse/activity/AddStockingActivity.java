@@ -28,6 +28,7 @@ import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.AddOutBoundProduct;
 import com.bbld.warehouse.bean.CartSQLBean;
 import com.bbld.warehouse.bean.CodeJson;
+import com.bbld.warehouse.bean.GetNewNumber;
 import com.bbld.warehouse.bean.InventoryEdit;
 import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
@@ -105,7 +106,32 @@ public class AddStockingActivity extends BaseActivity{
         if (!InventoryId.equals("0")){
             loadData();
         }
+        setNewNumber();
         setListeners();
+    }
+
+    private void setNewNumber() {
+        etNumber.setFocusable(false);
+        Call<GetNewNumber> call=RetrofitService.getInstance().getNewNumber(new MyToken(AddStockingActivity.this).getToken(),3+"");
+        call.enqueue(new Callback<GetNewNumber>() {
+            @Override
+            public void onResponse(Response<GetNewNumber> response, Retrofit retrofit) {
+                if (response==null){
+                    showToast(getResources().getString(R.string.get_data_fail));
+                    return;
+                }
+                if (response.body().getStatus()==0){
+                    etNumber.setText(response.body().getNumber()+"");
+                }else{
+                    showToast(response.body().getMes()+"");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
     }
 
     private void setListeners() {
@@ -312,7 +338,7 @@ public class AddStockingActivity extends BaseActivity{
                 @Override
                 public void onClick(View view) {
 //                    showToast("扫码"+product.getId());
-                    toScan(product.getId(),product.getName(),1,10000);
+                    toScan(product.getId(),product.getName(),3,10000);
                 }
 
                 private void toScan(String productID, String productName, int type, int productCount) {

@@ -161,7 +161,9 @@ public class BackOrderActivity extends BaseActivity{
                         orderlist = response.body().getList();
                         if(orderlist.isEmpty()){
                             llKong.setBackgroundResource(R.mipmap.kong);
+                            setAdapter();
                         }else{
+                            llKong.setBackgroundColor(Color.WHITE);
                             setAdapter();
                         }
                     }
@@ -244,7 +246,7 @@ public class BackOrderActivity extends BaseActivity{
             holder= (BackOrderHolder) view.getTag();
             final OrderList.OrderListList order = getItem(i);
             holder.tv_item_orderid.setText("订单号:"+order.getOrderNumber()+"");
-            holder.tv_item_order_state.setText("待发货");
+            holder.tv_item_order_state.setText(getState());
             holder.tv_channelName.setText(order.getChannelName()+"");
             holder.tv_dealerName.setText(order.getDealerName()+"");
             holder.tv_product.setText(order.getProductTypeCount()+"");
@@ -305,12 +307,13 @@ public class BackOrderActivity extends BaseActivity{
                     public void onClick(View view) {
 //                        showToast("录入物流信息");
                         Bundle bundle=new Bundle();
-                        bundle.putString("OrderID()",order.getOrderID()+"");
-                        bundle.putString("ChannelName()",order.getChannelName()+"");
-                        bundle.putString("DealerName()",order.getDealerName()+"");
-                        bundle.putString("Count()",getCount()+"");
-                        bundle.putString("ProductCount()","类"+order.getProductCount()+"盒");
-                        bundle.putString("Date()",order.getDate()+"");
+                        bundle.putString("OrderID",order.getOrderID()+"");
+                        bundle.putString("OrderNumber",order.getOrderNumber()+"");
+                        bundle.putString("ChannelName",order.getChannelName()+"");
+                        bundle.putString("DealerName",order.getDealerName()+"");
+                        bundle.putString("Count",order.getProductTypeCount()+"");
+                        bundle.putString("ProductCount","类"+order.getProductCount()+"盒");
+                        bundle.putString("Date",order.getDate()+"");
                         readyGo(LogisticsNumberActivity.class,bundle);
 
                     }
@@ -326,6 +329,17 @@ public class BackOrderActivity extends BaseActivity{
                         bundle.putString("OrderCount",getCount()+"");
                         bundle.putString("doType","sure");
                         readyGo(OrderDeliveryActivity.class,bundle);
+
+                    }
+                });
+                holder.btn_track.setVisibility(View.VISIBLE);
+                holder.btn_track.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        showToast("物流跟踪");
+                        Bundle bundle=new Bundle();
+                        bundle.putString("OrderID()",order.getOrderID()+"");
+                        readyGo(LogisticsTrackingActivity.class,bundle);
 
                     }
                 });
@@ -358,6 +372,16 @@ public class BackOrderActivity extends BaseActivity{
             holder.rv_item_order.setAdapter(new BackOrderRecAdapter(order.getProductList()));
 
             return view;
+        }
+
+        private String getState() {
+            if (status==1){
+                return "待出库";
+            }else if (status==2){
+                return "已出库";
+            }else{
+                return "待收货";
+            }
         }
 
         class BackOrderHolder{
@@ -423,5 +447,11 @@ public class BackOrderActivity extends BaseActivity{
                 img = (ImageView) view.findViewById(R.id.iv_img);
             }
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        loadData(false);
     }
 }

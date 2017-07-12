@@ -46,7 +46,16 @@ public class InventoryInfo {
         private String InventoryRemark;
         private String InventoryStatus;
         private String ProductCount;
+        private int CanOperation;
         private List<InventoryInfoProductList> ProductList;
+
+        public int getCanOperation() {
+            return CanOperation;
+        }
+
+        public void setCanOperation(int canOperation) {
+            CanOperation = canOperation;
+        }
 
         public String getInventoryID() {
             return InventoryID;

@@ -1,5 +1,6 @@
 package com.bbld.warehouse.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -112,8 +113,11 @@ public class StockingActivity extends BaseActivity{
                     inventoryList = response.body().getList();
                     if (inventoryList.isEmpty()) {
                         llKong.setBackgroundResource(R.mipmap.kong);
+                        setAdapter();
+                    }else{
+                        llKong.setBackgroundColor(Color.WHITE);
+                        setAdapter();
                     }
-                    setAdapter();
                 }else {
                         showToast("" + response.body().getMes());
                     }

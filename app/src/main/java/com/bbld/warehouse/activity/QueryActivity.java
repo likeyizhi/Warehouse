@@ -1,5 +1,6 @@
 package com.bbld.warehouse.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -47,7 +48,7 @@ public class QueryActivity extends BaseActivity{
     @BindView(R.id.ll_kong)
     LinearLayout llKong;
     private int page=1;
-    private int pagesize=10;
+    private int pagesize=10000;
     private List<ProductCountList.ProductCountListList> products;
     private QueryAdapter adapter;
     private Handler mHandler=new Handler(){
@@ -141,8 +142,11 @@ public class QueryActivity extends BaseActivity{
                         products = response.body().getList();
                         if( products .isEmpty()){
                             llKong.setBackgroundResource(R.mipmap.kong);
-                        }
                             setAdapter();
+                        }else{
+                            llKong.setBackgroundColor(Color.WHITE);
+                            setAdapter();
+                        }
                     }
                 }else{
                     showToast(response.body().getMes()+"");
