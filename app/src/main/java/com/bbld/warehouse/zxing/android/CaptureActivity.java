@@ -3,13 +3,17 @@ package com.bbld.warehouse.zxing.android;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -24,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -94,7 +99,7 @@ public final class CaptureActivity extends Activity implements
     private String storage;
     private Call<ScanCode> call;
     private int isNeedBatch;
-    private String batchNumber;
+    public static String batchNumber="";
     private TextView tvBatchNumber;
 
     public ViewfinderView getViewfinderView() {
@@ -210,7 +215,10 @@ public final class CaptureActivity extends Activity implements
 
     private void showBatchDialog() {
         final EditText et = new EditText(this);
-        new AlertDialog.Builder(this).setTitle("请设置批号")
+        et.setBackgroundResource(R.drawable.bg_batch);
+        et.setText(batchNumber);
+        et.setMaxLines(1);
+        AlertDialog batchDialog = new AlertDialog.Builder(this).setTitle("请设置批号")
                 .setView(et)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -218,9 +226,9 @@ public final class CaptureActivity extends Activity implements
                         if (input.equals("")) {
                             Toast.makeText(getApplicationContext(), "还未设置批号！" + input, Toast.LENGTH_LONG).show();
                             showBatchDialog();
-                        }else {
-                            batchNumber=input;
-                            tvBatchNumber.setText("批号:"+batchNumber);
+                        } else {
+                            batchNumber = input;
+                            tvBatchNumber.setText("批号:" + batchNumber);
                             tvBatchNumber.setVisibility(View.VISIBLE);
                             dialog.dismiss();
                         }
@@ -234,6 +242,20 @@ public final class CaptureActivity extends Activity implements
                 })
                 .setCancelable(false)
                 .show();
+        setDialogWindowAttr(batchDialog);
+    }
+    //在dialog.show()之后调用
+    public void setDialogWindowAttr(Dialog dlg){
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int height = dm.heightPixels;
+        int width = dm.widthPixels;
+        Window window = dlg.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.gravity = Gravity.CENTER;
+        lp.width = 4*(width/5);//宽高可设置具体大小
+        lp.height = 2*(height/7);
+        dlg.getWindow().setAttributes(lp);
     }
 
     @Override
@@ -578,13 +600,14 @@ public final class CaptureActivity extends Activity implements
                 holder.tv_count=(TextView)view.findViewById(R.id.tv_count);
                 holder.tv_serialNumber=(TextView)view.findViewById(R.id.tv_serialNumber);
                 holder.iv_del=(ImageView) view.findViewById(R.id.iv_del);
+                holder.rl_serialNumber=(RelativeLayout) view.findViewById(R.id.rl_serialNumber);
                 view.setTag(holder);
             }
             holder= (ScanHolder) view.getTag();
             final CartSQLBean product = getItem(i);
-            holder.tv_code.setText(product.getProductCode()+"");
+            holder.tv_code.setText(product.getProductCode()+"  ");
             holder.tv_type.setText(getType(product.getProductType())+"");
-            holder.tv_count.setText(product.getProCount()+"(盒)");
+            holder.tv_count.setText("【"+product.getProCount()+"盒】");
             if (storage.equals("no")){
                 holder.tv_serialNumber.setVisibility(View.VISIBLE);
                 if (product.getSerialNumber().trim().equals("")){
@@ -595,11 +618,12 @@ public final class CaptureActivity extends Activity implements
                 holder.tv_serialNumber.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showSerialNumberDialog(product.getProductCode());
+                        showSerialNumberDialog(product.getProductCode(),product.getSerialNumber());
                     }
                 });
             }else{
                 holder.tv_serialNumber.setVisibility(View.GONE);
+                holder.rl_serialNumber.setVisibility(View.GONE);
             }
             holder.iv_del.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -613,9 +637,9 @@ public final class CaptureActivity extends Activity implements
         private String getType(String productType) {
             //type=1=箱码;type=2=盒码
             if (productType.equals("1")){
-                return "箱码";
+                return "【箱码】";
             }else{
-                return "盒码";
+                return "【盒码】";
             }
         }
 
@@ -625,19 +649,23 @@ public final class CaptureActivity extends Activity implements
             TextView tv_count;
             TextView tv_serialNumber;
             ImageView iv_del;
+            RelativeLayout rl_serialNumber;
         }
     }
 
-    private void showSerialNumberDialog(final String productCode) {
+    private void showSerialNumberDialog(final String productCode, final String serialNumber) {
         final EditText et = new EditText(this);
-        new AlertDialog.Builder(this).setTitle("请设置序列号")
+        et.setBackgroundResource(R.drawable.bg_batch);
+        et.setText(serialNumber);
+        et.setMaxLines(1);
+        AlertDialog serialDialog = new AlertDialog.Builder(this).setTitle("请设置序列号")
                 .setView(et)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String input = et.getText().toString();
                         if (input.equals("")) {
                             Toast.makeText(getApplicationContext(), "还未设置序列号！" + input, Toast.LENGTH_LONG).show();
-                        }else {
+                        } else {
                             List<CartSQLBean> bean = mUserDataBaseOperate.findUserByName(productCode);
                             CartSQLBean one = bean.get(0);
                             one.setSerialNumber(input);
@@ -652,11 +680,12 @@ public final class CaptureActivity extends Activity implements
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                       dialogInterface.dismiss();
+                        dialogInterface.dismiss();
                     }
                 })
                 .setCancelable(false)
                 .show();
+        setDialogWindowAttr(serialDialog);
     }
 
     /**
