@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
@@ -24,7 +23,6 @@ import android.widget.TextView;
 
 import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
-import com.bbld.warehouse.base.Constants;
 import com.bbld.warehouse.bean.CartSQLBean;
 import com.bbld.warehouse.bean.CodeJson;
 import com.bbld.warehouse.bean.OrderDetails;
@@ -33,23 +31,14 @@ import com.bbld.warehouse.db.UserSQLiteOpenHelper;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
 import com.bbld.warehouse.utils.UploadUserInformationByPostService;
-import com.bbld.warehouse.utils.UploadUtil;
-import com.bbld.warehouse.zxing.android.CaptureActivity;
+import com.bbld.warehouse.scancodenew.scan.CaptureActivity;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import butterknife.BindView;
 import retrofit.Call;

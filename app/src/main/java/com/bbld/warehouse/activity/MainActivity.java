@@ -10,7 +10,7 @@ import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.VersionAndroid;
 import com.bbld.warehouse.network.RetrofitService;
-import com.bbld.warehouse.zxing.android.CaptureActivity;
+import com.bbld.warehouse.scancodenew.scan.CaptureActivity;
 
 import butterknife.BindView;
 import retrofit.Call;

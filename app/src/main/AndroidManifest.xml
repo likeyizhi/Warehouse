@@ -137,6 +137,11 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
+        <!--新扫码页-->
+        <activity android:name=".scancodenew.scan.CaptureActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

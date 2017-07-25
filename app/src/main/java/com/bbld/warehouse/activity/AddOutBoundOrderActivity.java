@@ -35,7 +35,7 @@ import com.bbld.warehouse.db.UserSQLiteOpenHelper;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
 import com.bbld.warehouse.utils.UploadUserInformationByPostService;
-import com.bbld.warehouse.zxing.android.CaptureActivity;
+import com.bbld.warehouse.scancodenew.scan.CaptureActivity;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
