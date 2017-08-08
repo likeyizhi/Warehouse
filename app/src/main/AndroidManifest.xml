@@ -142,6 +142,11 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
+        <!--库存详情-->
+        <activity android:name=".activity.QueryDetailsActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

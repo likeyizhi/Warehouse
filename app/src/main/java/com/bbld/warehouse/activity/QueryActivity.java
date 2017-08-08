@@ -252,6 +252,20 @@ public class QueryActivity extends BaseActivity{
                             showToast("条码明细"+product.getProductID());
                         }
                     });
+                    if (view!=null){
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Bundle bundle=new Bundle();
+                                bundle.putString("img",product.getProductImg()+"");
+                                bundle.putString("name",product.getProductName()+"");
+                                bundle.putString("spec",product.getProductSpec()+"");
+                                bundle.putString("count",product.getCount()+"");
+                                bundle.putString("proid",product.getProductID());
+                                readyGo(QueryDetailsActivity.class,bundle);
+                            }
+                        });
+                    }
                     break;
                 case TYPE_PRODUCT:
                     Glide.with(getApplicationContext()).load(product.getProductImg()).error(R.mipmap.xiuzhneg).into(holder.iv_productImg);
@@ -264,6 +278,20 @@ public class QueryActivity extends BaseActivity{
                             showToast("条码明细"+product.getProductID());
                         }
                     });
+                    if (view!=null){
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Bundle bundle=new Bundle();
+                                bundle.putString("img",product.getProductImg()+"");
+                                bundle.putString("name",product.getProductName()+"");
+                                bundle.putString("spec",product.getProductSpec()+"");
+                                bundle.putString("count",product.getCount()+"");
+                                bundle.putString("proid",product.getProductID());
+                                readyGo(QueryDetailsActivity.class,bundle);
+                            }
+                        });
+                    }
                     break;
             }
 

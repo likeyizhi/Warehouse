@@ -162,6 +162,7 @@ public final class CaptureActivity extends Activity implements
 	private int scanCount;
 	private TextView tv_scanCount;
 	private Call<ScanCode> call;
+	private TextView tvInput;
 
 	static class MyHandler extends Handler {
 
@@ -235,23 +236,6 @@ public final class CaptureActivity extends Activity implements
 		mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
 
 		tv_needCount=(TextView)findViewById(R.id.tv_needCount);
-//		imageButton_back = (ImageButton) findViewById(R.id.capture_imageview_back);
-//		imageButton_back.setOnClickListener(new View.OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
-//				scanCount=0;
-//				for (int i=0;i<products.size();i++){
-//					scanCount=scanCount+products.get(i).getProCount();
-//				}
-//				if (Integer.parseInt(needCount+"")<Integer.parseInt(scanCount+"")){
-//					showBiggerDialog("扫码数量不能大于发货数量");
-//				}else{
-//					finish();
-//				}
-//			}
-//		});
 
 		tvBatchNumber=(TextView)findViewById(R.id.tvBatchNumber);
 		Intent intent=getIntent();
@@ -308,6 +292,15 @@ public final class CaptureActivity extends Activity implements
 			scanCount=scanCount+products.get(i).getProCount();
 		}
 		tv_scanCount.setText(scanCount+"(盒)");
+
+		tvInput=(TextView)findViewById(R.id.tvInput);
+		tvInput.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				//手动输入条形码
+				showInputDialog();
+			}
+		});
 	}
 	/**
 	 * 扫码下部分的listview的adapter
@@ -446,6 +439,32 @@ public final class CaptureActivity extends Activity implements
 							Collections.reverse(products);
 							lvScan.setAdapter(new ScanAdapter(products));
 							dialog.dismiss();
+						}
+					}
+				})
+				.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						dialogInterface.dismiss();
+					}
+				})
+				.setCancelable(false)
+				.show();
+		setDialogWindowAttr(serialDialog);
+	}
+	private void showInputDialog() {
+		final EditText et = new EditText(this);
+		et.setBackgroundResource(R.drawable.bg_batch);
+		et.setMaxLines(1);
+		AlertDialog serialDialog = new AlertDialog.Builder(this).setTitle("请输入条形码")
+				.setView(et)
+				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						String input = et.getText().toString();
+						if (input.equals("")) {
+							Toast.makeText(getApplicationContext(), "还未设置序列号！" + input, Toast.LENGTH_LONG).show();
+						} else {
+							getScanCode(input);
 						}
 					}
 				})

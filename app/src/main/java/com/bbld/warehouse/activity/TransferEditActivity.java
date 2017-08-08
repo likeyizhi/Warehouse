@@ -2,6 +2,7 @@ package com.bbld.warehouse.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,6 +32,7 @@ import com.bbld.warehouse.bean.HandOverSacnFinish;
 import com.bbld.warehouse.bean.HandoverEdit;
 import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
+import com.bbld.warehouse.loading.WeiboDialogUtils;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
 import com.bbld.warehouse.utils.UploadUserInformationByPostService;
@@ -84,23 +86,28 @@ public class TransferEditActivity extends BaseActivity{
     private TransferEditAdapter adapter;
     private boolean isInit=false;
     private String request;
+    private Dialog loadDialog;
+    private Dialog loadDialog02;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
                 case 111:
+                    WeiboDialogUtils.closeDialog(loadDialog);
                     showToast(""+request);
                     //出库成功清空数据库，释放当前acticity
                     mUserDataBaseOperate.deleteAll();
                     ActivityManagerUtil.getInstance().finishActivity(TransferEditActivity.this);
                     break;
                 case 222:
+                    WeiboDialogUtils.closeDialog(loadDialog);
                     showToast(""+request);
                     break;
             }
         }
     };
+
     @Override
     protected void initViewsAndEvents() {
         mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(TransferEditActivity.this);
@@ -126,6 +133,7 @@ public class TransferEditActivity extends BaseActivity{
         btnKeep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loadDialog= WeiboDialogUtils.createLoadingDialog(TransferEditActivity.this,getString(R.string.caozuo_ing));
                 List<CartSQLBean> sqlProducts = mUserDataBaseOperate.findAll();
                 List<CodeJson.CodeJsonList> A = new ArrayList<CodeJson.CodeJsonList>();
                 CodeJson B=new CodeJson();
@@ -180,26 +188,30 @@ public class TransferEditActivity extends BaseActivity{
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loadDialog02=WeiboDialogUtils.createLoadingDialog(TransferEditActivity.this,getString(R.string.caozuo_ing));
                 Call<HandOverSacnFinish> call=RetrofitService.getInstance().handOverSacnFinish(new MyToken(TransferEditActivity.this).getToken(), handoverId);
                 call.enqueue(new Callback<HandOverSacnFinish>() {
                     @Override
                     public void onResponse(Response<HandOverSacnFinish> response, Retrofit retrofit) {
                         if (response==null){
                             showToast(getResources().getString(R.string.get_data_fail));
+                            WeiboDialogUtils.closeDialog(loadDialog02);
                             return;
                         }
                         if (response.body().getStatus()==0){
                             showToast("操作成功");
+                            WeiboDialogUtils.closeDialog(loadDialog02);
                             mUserDataBaseOperate.deleteAll();
                             ActivityManagerUtil.getInstance().finishActivity(TransferEditActivity.this);
                         }else{
                             showToast(response.body().getMes());
+                            WeiboDialogUtils.closeDialog(loadDialog02);
                         }
                     }
 
                     @Override
                     public void onFailure(Throwable throwable) {
-
+                        WeiboDialogUtils.closeDialog(loadDialog02);
                     }
                 });
             }

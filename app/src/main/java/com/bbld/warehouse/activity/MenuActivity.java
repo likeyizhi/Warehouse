@@ -1,6 +1,7 @@
 package com.bbld.warehouse.activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,6 +33,7 @@ import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.IndexInfo;
 import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
+import com.bbld.warehouse.loading.WeiboDialogUtils;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
@@ -72,8 +74,8 @@ public class MenuActivity extends BaseActivity{
     LinearLayout llToOthers;
     @BindView(R.id.tv_type)
     TextView tvType;
-    @BindView(R.id.srl_menu)
-    SwipeRefreshLayout srlMenu;
+//    @BindView(R.id.srl_menu)
+//    SwipeRefreshLayout srlMenu;
     @BindView(R.id.iv_head)
     ImageView ivHead;
     @BindView(R.id.tv_dck)
@@ -91,19 +93,19 @@ public class MenuActivity extends BaseActivity{
     @BindView(R.id.ll_menu)
     LinearLayout llMenu;
 
-    private Handler mHandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case 1:
-                    srlMenu.setRefreshing(false);
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
+//    private Handler mHandler=new Handler(){
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what){
+//                case 1:
+//                    srlMenu.setRefreshing(false);
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+//    };
     private String name;
     private String dealerName;
     private String warehouseName;
@@ -115,6 +117,7 @@ public class MenuActivity extends BaseActivity{
     private View view;
     private ListView lv_group;
     private ArrayList<String> groups;
+    private Dialog loadDialog;
 
     @Override
     protected void initViewsAndEvents() {
@@ -195,23 +198,23 @@ public class MenuActivity extends BaseActivity{
                 readyGo(PendingOutActivity.class);
             }
         });
-        srlMenu.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            loadData();
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        mHandler.sendEmptyMessage(1);
-                    }
-                }).start();
-            }
-        });
+//        srlMenu.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            loadData();
+//                            Thread.sleep(1000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        mHandler.sendEmptyMessage(1);
+//                    }
+//                }).start();
+//            }
+//        });
         tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -313,12 +316,14 @@ public class MenuActivity extends BaseActivity{
     }
 
     private void loadData() {
+        loadDialog=WeiboDialogUtils.createLoadingDialog(MenuActivity.this,getString(R.string.caozuo_ing));
         Call<IndexInfo> call= RetrofitService.getInstance().indexinfo(new MyToken(MenuActivity.this).getToken()+"");
         call.enqueue(new Callback<IndexInfo>() {
             @Override
             public void onResponse(Response<IndexInfo> response, Retrofit retrofit) {
                 if (response.body()==null){
                     showToast("服务器错误");
+                    WeiboDialogUtils.closeDialog(loadDialog);
                     return;
                 }
                 if (response.body().getStatus()==0){
@@ -345,12 +350,13 @@ public class MenuActivity extends BaseActivity{
                     }else{
                         tvQtckdck.setText("其他出库");
                     }
+                    WeiboDialogUtils.closeDialog(loadDialog);
                 }
             }
 
             @Override
             public void onFailure(Throwable throwable) {
-
+                WeiboDialogUtils.closeDialog(loadDialog);
             }
         });
     }

@@ -2,6 +2,7 @@ package com.bbld.warehouse.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -28,6 +29,7 @@ import com.bbld.warehouse.bean.CodeJson;
 import com.bbld.warehouse.bean.StorageDetails;
 import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
+import com.bbld.warehouse.loading.WeiboDialogUtils;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
 import com.bbld.warehouse.utils.UploadUserInformationByPostService;
@@ -76,18 +78,21 @@ public class CommitOutStorageActivity extends BaseActivity{
     private String storageID;
     private CommitOutAdapter adapter;
     private String request;
+    private Dialog loadDialog;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
                 case 111:
+                    WeiboDialogUtils.closeDialog(loadDialog);
                     showToast(""+request);
                     //出库成功清空数据库，释放当前acticity
                     mUserDataBaseOperate.deleteAll();
                     ActivityManagerUtil.getInstance().finishActivity(CommitOutStorageActivity.this);
                     break;
                 case 222:
+                    WeiboDialogUtils.closeDialog(loadDialog);
                     showToast(""+request);
                     break;
             }
@@ -112,6 +117,7 @@ public class CommitOutStorageActivity extends BaseActivity{
         btnOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loadDialog= WeiboDialogUtils.createLoadingDialog(CommitOutStorageActivity.this,getString(R.string.caozuo_ing));
                 List<CartSQLBean> sqlProducts = mUserDataBaseOperate.findAll();
                 List<CodeJson.CodeJsonList> A = new ArrayList<CodeJson.CodeJsonList>();
                 CodeJson B=new CodeJson();

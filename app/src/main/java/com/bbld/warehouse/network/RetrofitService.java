@@ -23,6 +23,7 @@ import com.bbld.warehouse.bean.OrderDetails;
 import com.bbld.warehouse.bean.OrderList;
 import com.bbld.warehouse.bean.OrderSend;
 import com.bbld.warehouse.bean.PendingOutStorageList;
+import com.bbld.warehouse.bean.ProductCountDetails;
 import com.bbld.warehouse.bean.ProductCountList;
 import com.bbld.warehouse.bean.ProductList;
 import com.bbld.warehouse.bean.ScanCode;
@@ -236,5 +237,11 @@ public class RetrofitService {
      */
     public Call<PendingOutStorageList> getPendingOutStorageList(String token, int page, int pagesize){
         return retrofitInterface.getPendingOutStorageList(token, page, pagesize);
+    }
+    /**
+     * 库存盘点详情
+     */
+    public Call<ProductCountDetails> getProductCountDetails(String token, String productId){
+        return retrofitInterface.getProductCountDetails(token, productId);
     }
 }

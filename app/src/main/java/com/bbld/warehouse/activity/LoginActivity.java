@@ -1,5 +1,6 @@
 package com.bbld.warehouse.activity;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.Login;
+import com.bbld.warehouse.loading.WeiboDialogUtils;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
@@ -35,6 +37,7 @@ public class LoginActivity extends BaseActivity{
     private String acc="";
     private String pwd="";
     private SharedPreferences.Editor editorAP;
+    private Dialog loadDialog;
 
     @Override
     protected void initViewsAndEvents() {
@@ -66,12 +69,14 @@ public class LoginActivity extends BaseActivity{
     }
 
     private void login() {
+        loadDialog= WeiboDialogUtils.createLoadingDialog(LoginActivity.this,getString(R.string.caozuo_ing));
         Call<Login> call= RetrofitService.getInstance().login(/*"xz","123456"*/acc,pwd);
         call.enqueue(new Callback<Login>() {
             @Override
             public void onResponse(Response<Login> response, Retrofit retrofit) {
                 if (response==null){
                     showToast("服务器错误");
+                    WeiboDialogUtils.closeDialog(loadDialog);
                     return;
                 }
                 if (response.body().getStatus()==0){
@@ -93,16 +98,18 @@ public class LoginActivity extends BaseActivity{
                     bundle.putString("warehouseName", response.body().getWarehouseName());
                     bundle.putInt("type", response.body().getType());
                     bundle.putInt("ishandover", response.body().getIshandover());
+                    WeiboDialogUtils.closeDialog(loadDialog);
                     readyGo(MenuActivity.class, bundle);
                     ActivityManagerUtil.getInstance().finishActivity(LoginActivity.this);
                 }else{
                     showToast(response.body().getMes()+"");
+                    WeiboDialogUtils.closeDialog(loadDialog);
                 }
             }
 
             @Override
             public void onFailure(Throwable throwable) {
-
+                WeiboDialogUtils.closeDialog(loadDialog);
             }
         });
 
