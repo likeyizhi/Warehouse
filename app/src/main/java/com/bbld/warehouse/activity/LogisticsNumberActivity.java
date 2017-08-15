@@ -1,10 +1,13 @@
 package com.bbld.warehouse.activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +20,22 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
+import com.bbld.warehouse.loading.WeiboDialogUtils;
 import com.bbld.warehouse.network.RetrofitService;
+import com.bbld.warehouse.utils.ApkTool;
+import com.bbld.warehouse.utils.MyAppInfo;
 import com.bbld.warehouse.utils.MyToken;
 import com.bbld.warehouse.zxinglogistics.android.CaptureActivity;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 
@@ -88,6 +96,25 @@ public class LogisticsNumberActivity extends BaseActivity {
     private static final String DECODED_CONTENT_KEY = "codedContent";
     private static final String DECODED_BITMAP_KEY = "codedBitmap";
     private static final int REQUEST_CODE_SCAN = 0x0000;
+    private List<MyAppInfo> appInfos;
+    private Dialog loading;
+    private boolean is_iData;
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 1101:
+                    for (int i=0;i<appInfos.size();i++) {
+                        if (appInfos.get(i).getAppName().equals("com.android.auto.iscan")) {
+                            is_iData=true;
+                            WeiboDialogUtils.closeDialog(loading);
+                        }
+                    }
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void initViewsAndEvents() {
@@ -99,6 +126,7 @@ public class LogisticsNumberActivity extends BaseActivity {
         tvOrderCount.setText(Count);
         loadData();
         setListeners();
+        initAppList();
     }
     private void setListeners() {
         ibBack.setOnClickListener(new View.OnClickListener() {
@@ -125,10 +153,28 @@ public class LogisticsNumberActivity extends BaseActivity {
         ivScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                readyGoForResult(CaptureActivity.class,REQUEST_CODE_SCAN);
+                if (is_iData){
+                    showToast("iData终端，可直接扫取");
+                }else{
+                    readyGoForResult(CaptureActivity.class,REQUEST_CODE_SCAN);
+                }
             }
         });
     }
+
+    private void initAppList(){
+        loading=WeiboDialogUtils.createLoadingDialog(LogisticsNumberActivity.this,"加载中...");
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                //扫描得到APP列表
+                appInfos = ApkTool.scanLocalInstallAppList(LogisticsNumberActivity.this.getPackageManager());
+                handler.sendEmptyMessage(1101);
+            }
+        }.start();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -289,10 +335,6 @@ public class LogisticsNumberActivity extends BaseActivity {
             TextView tvLogisticsNumber;
         }
     }
-    @Override
-    public int getContentView() {
-        return R.layout.activity_logistics_number;
-    }
     private void chooseTypeIdDialog() {
         AlertDialog alertDialog=new AlertDialog.Builder(LogisticsNumberActivity.this)
                 .setTitle("请选择物流")
@@ -305,5 +347,9 @@ public class LogisticsNumberActivity extends BaseActivity {
                     }
                 }).create();
         alertDialog.show();
+    }
+    @Override
+    public int getContentView() {
+        return R.layout.activity_logistics_number;
     }
 }

@@ -2,6 +2,10 @@ package com.bbld.warehouse.network;
 
 import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
 import com.bbld.warehouse.bean.CancelInventory;
+import com.bbld.warehouse.bean.CusInvoiceConfirm;
+import com.bbld.warehouse.bean.CusInvoiceInfo;
+import com.bbld.warehouse.bean.CusInvoiceReceiptList;
+import com.bbld.warehouse.bean.CusInvoiceSendList;
 import com.bbld.warehouse.bean.FinishInventory;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
@@ -25,6 +29,7 @@ import com.bbld.warehouse.bean.PendingOutStorageList;
 import com.bbld.warehouse.bean.ProductCountDetails;
 import com.bbld.warehouse.bean.ProductCountList;
 import com.bbld.warehouse.bean.ProductList;
+import com.bbld.warehouse.bean.SaleScanCode;
 import com.bbld.warehouse.bean.ScanCode;
 import com.bbld.warehouse.bean.StorageDetails;
 import com.bbld.warehouse.bean.StorageList;
@@ -224,4 +229,29 @@ public interface RetrofitInterface {
      */
     @GET("Storage/ProductCountDetails")
     Call<ProductCountDetails> getProductCountDetails(@Query("token") String token, @Query("productId") String productId);
+    /**
+     * 终端配送
+     */
+    @GET("Storage/GetCusInvoiceSendList")
+    Call<CusInvoiceSendList> getCusInvoiceSendList(@Query("token") String token);
+    /**
+     * 终端配送详情/到货确认详情
+     */
+    @GET("Storage/GetCusInvoiceInfo")
+    Call<CusInvoiceInfo> getCusInvoiceInfo(@Query("token") String token, @Query("CustomerInvoiceId") String CustomerInvoiceId);
+    /**
+     * 到货确认
+     */
+    @GET("Storage/GetCusInvoiceReceiptList")
+    Call<CusInvoiceReceiptList> getCusInvoiceReceiptList(@Query("token") String token);
+    /**
+     * 到货确认详情-到货确认
+     */
+    @GET("Storage/CusInvoiceConfirm")
+    Call<CusInvoiceConfirm> cusInvoiceConfirm(@Query("token") String token, @Query("CustomerInvoiceId") String CustomerInvoiceId);
+    /**
+     * 销售出库-扫码
+     */
+    @GET("Storage/SaleScanCode")
+    Call<SaleScanCode> saleScanCode(@Query("token") String token, @Query("code") String code);
 }

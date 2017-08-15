@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@drawable/bg_btn_write5"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivProductImg"
+            android:layout_width="40dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="40dp"
+            android:padding="1dp"
+            android:background="@drawable/bg_border"
+            android:src="@mipmap/ic_launcher"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="1dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvProductName"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:text="商品名"
+                android:layout_weight="1"
+                android:lines="2"
+                android:textColor="#333333"
+                android:textSize="14sp" />
+            <ImageView
+                android:id="@+id/ivDel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/cha"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="应发数量："
+                    android:textSize="13sp"
+                    android:textColor="#333333" />
+
+                <TextView
+                    android:id="@+id/tvShouldCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10000"
+                    android:textSize="13sp"
+                    android:textColor="#e14258" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="扫码数量："
+                    android:textSize="13sp"
+                    android:textColor="#333333" />
+
+                <TextView
+                    android:id="@+id/tvSacnCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10000"
+                    android:textSize="13sp"
+                    android:textColor="#abdc15" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/tvProductSpec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#999999"
+            android:textSize="13sp"
+            android:text="0个"/>
+        <Button
+            android:id="@+id/btnInfo"
+            android:layout_width="65dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/bg_btn_write"
+            android:text="明细"
+            style="?android:attr/borderlessButtonStyle"
+            android:textColor="#999999"
+            />
+
+        <Button
+            android:id="@+id/btn_scan"
+            android:layout_width="65dp"
+            android:layout_height="30dp"
+            android:background="@drawable/bg_btn_bule"
+            android:text="扫码"
+            android:visibility="gone"
+            style="?android:attr/borderlessButtonStyle"
+            android:textColor="#ffffff"
+            />
+    </LinearLayout>
+</LinearLayout>

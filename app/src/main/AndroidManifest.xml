@@ -147,6 +147,46 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
+        <!--iData扫码-->
+        <activity android:name=".activity.IDataScanActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--终端配送-->
+        <activity android:name=".activity.ZDPSActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--终端配送详情-->
+        <activity android:name=".activity.ZDPSInfoActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--终端配送出库-->
+        <activity android:name=".activity.ZDPSOutActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--到货确认-->
+        <activity android:name=".activity.DHQRActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--到货确认详情-->
+        <activity android:name=".activity.DHQRInfoActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--销售出库-->
+        <activity android:name=".activity.XSCKActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--销售出库-扫码-->
+        <activity android:name=".scancodenew_xsck.scan.CaptureActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

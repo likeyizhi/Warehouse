@@ -95,6 +95,28 @@ public class UploadUserInformationByPostService {
         params.put("codejson", codejson);
         return sendPOSTRequest(path, params, "UTF-8");
     }
+    //http://mapi.xiuzheng.cc:83/Api/Storage/CusInvoiceSend?token=a81d296a00c7465f8f391d23c4a38bf2&codejson=
+    public static String cusInvoiceSend(String token, String codejson, String customerInvoiceId) throws Exception{
+        String path = Constants.BASE_URL + "Storage/CusInvoiceSend?token="+token+
+                "&CustomerInvoiceId="+customerInvoiceId+
+                "&codejson="+codejson;
+        Log.i("cusInvoiceSend", "cusInvoiceSend="+path);
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("CustomerInvoiceId", customerInvoiceId);
+        params.put("codejson", codejson);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    //http://mapi.xiuzheng.cc:83/Api/Storage/CusInvoiceConfirm?token=a81d296a00c7465f8f391d23c4a38bf2&CustomerInvoiceId=1
+    public static String cusInvoiceConfirm(String token, String customerInvoiceId) throws Exception{
+        String path = Constants.BASE_URL + "Storage/CusInvoiceConfirm?token="+token+
+                "&CustomerInvoiceId="+customerInvoiceId;
+        Log.i("cusInvoiceConfirm", "cusInvoiceConfirm="+path);
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("CustomerInvoiceId", customerInvoiceId);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
 
     /**
      * 发送POST请求
@@ -146,6 +168,7 @@ public class UploadUserInformationByPostService {
                 return ress;
             }
         }
+        Log.i("ResponseCode","ResponseCode="+conn.getResponseCode());
         return "发生错误,操作失败";
     }
 }

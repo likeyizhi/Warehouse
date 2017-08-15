@@ -12,6 +12,7 @@ import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.Login;
 import com.bbld.warehouse.loading.WeiboDialogUtils;
 import com.bbld.warehouse.network.RetrofitService;
+import com.bbld.warehouse.scancodenew.scan.CaptureActivity;
 import com.bbld.warehouse.utils.MyToken;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
@@ -100,6 +101,15 @@ public class LoginActivity extends BaseActivity{
                     bundle.putInt("ishandover", response.body().getIshandover());
                     WeiboDialogUtils.closeDialog(loadDialog);
                     readyGo(MenuActivity.class, bundle);
+//                    Bundle bundle=new Bundle();
+//                    bundle.putString("productId", "1000");
+//                    bundle.putString("productName","测试");
+//                    bundle.putString("orderId", "256452522");
+//                    bundle.putString("needCount", "1020");
+//                    bundle.putString("storage", "no");
+//                    bundle.putString("type", "1");
+//                    bundle.putInt("NeedBatch", 1);
+//                    readyGo(IDataScanActivity.class, bundle);
                     ActivityManagerUtil.getInstance().finishActivity(LoginActivity.this);
                 }else{
                     showToast(response.body().getMes()+"");

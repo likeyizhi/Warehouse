@@ -59,6 +59,10 @@ public class UserDataBaseOperate {
 		
 		return mDB.delete("warehouse_info", "productcode=?", new String[]{productcode});
 	}
+	public long deleteUserById(String productid){
+
+		return mDB.delete("warehouse_info", "productid=?", new String[]{productid});
+	}
 
 	public long getCount(String conditions, String[] args) {
 		long count = 0;

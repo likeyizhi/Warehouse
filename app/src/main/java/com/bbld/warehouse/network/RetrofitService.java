@@ -3,6 +3,10 @@ package com.bbld.warehouse.network;
 import com.bbld.warehouse.base.Constants;
 import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
 import com.bbld.warehouse.bean.CancelInventory;
+import com.bbld.warehouse.bean.CusInvoiceConfirm;
+import com.bbld.warehouse.bean.CusInvoiceInfo;
+import com.bbld.warehouse.bean.CusInvoiceReceiptList;
+import com.bbld.warehouse.bean.CusInvoiceSendList;
 import com.bbld.warehouse.bean.FinishInventory;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
@@ -26,6 +30,7 @@ import com.bbld.warehouse.bean.PendingOutStorageList;
 import com.bbld.warehouse.bean.ProductCountDetails;
 import com.bbld.warehouse.bean.ProductCountList;
 import com.bbld.warehouse.bean.ProductList;
+import com.bbld.warehouse.bean.SaleScanCode;
 import com.bbld.warehouse.bean.ScanCode;
 import com.bbld.warehouse.bean.StorageDetails;
 import com.bbld.warehouse.bean.StorageList;
@@ -243,5 +248,35 @@ public class RetrofitService {
      */
     public Call<ProductCountDetails> getProductCountDetails(String token, String productId){
         return retrofitInterface.getProductCountDetails(token, productId);
+    }
+    /**
+     * 终端配送
+     */
+    public Call<CusInvoiceSendList> getCusInvoiceSendList(String token){
+        return retrofitInterface.getCusInvoiceSendList(token);
+    }
+    /**
+     * 终端配送详情
+     */
+    public Call<CusInvoiceInfo> getCusInvoiceInfo(String token, String CustomerInvoiceId){
+        return retrofitInterface.getCusInvoiceInfo(token, CustomerInvoiceId);
+    }
+    /**
+     * 到货确认
+     */
+    public Call<CusInvoiceReceiptList> getCusInvoiceReceiptList(String token){
+        return retrofitInterface.getCusInvoiceReceiptList(token);
+    }
+    /**
+     * 到货确认详情-到货确认
+     */
+    public Call<CusInvoiceConfirm> cusInvoiceConfirm(String token, String CustomerInvoiceId){
+        return retrofitInterface.cusInvoiceConfirm(token,CustomerInvoiceId);
+    }
+    /**
+     * 销售出库-扫码
+     */
+    public Call<SaleScanCode> saleScanCode(String token, String code){
+        return retrofitInterface.saleScanCode(token,code);
     }
 }

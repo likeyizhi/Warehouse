@@ -390,11 +390,6 @@ public class AddOutBoundOrderActivity extends BaseActivity{
     }
 
     @Override
-    public int getContentView() {
-        return R.layout.activity_add_outbound_order;
-    }
-
-    @Override
     protected void onRestart() {
         super.onRestart();
         if (!productList.isEmpty()){
@@ -412,6 +407,7 @@ public class AddOutBoundOrderActivity extends BaseActivity{
         }
         adapter.notifyDataSetChanged();
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
@@ -438,7 +434,6 @@ public class AddOutBoundOrderActivity extends BaseActivity{
         });
         builder.create().show();
     }
-
     private void chooseTypeIdDialog() {
         AlertDialog alertDialog=new AlertDialog.Builder(AddOutBoundOrderActivity.this)
                 .setTitle("请选择类型")
@@ -451,5 +446,10 @@ public class AddOutBoundOrderActivity extends BaseActivity{
                     }
                 }).create();
         alertDialog.show();
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_add_outbound_order;
     }
 }

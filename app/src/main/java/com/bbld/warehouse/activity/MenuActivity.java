@@ -92,6 +92,32 @@ public class MenuActivity extends BaseActivity{
     TextView tvName;
     @BindView(R.id.ll_menu)
     LinearLayout llMenu;
+    @BindView(R.id.ll_toZDPH)
+    LinearLayout llToZDPH;
+    @BindView(R.id.ll_01)
+    LinearLayout ll_01;
+    @BindView(R.id.ll_02)
+    LinearLayout ll_02;
+    @BindView(R.id.ll_03)
+    LinearLayout ll_03;
+    @BindView(R.id.ll_04)
+    LinearLayout ll_04;
+    @BindView(R.id.ll_05)
+    LinearLayout ll_05;
+    @BindView(R.id.ll_06)
+    LinearLayout ll_06;
+    @BindView(R.id.ll_toDHQR)
+    LinearLayout ll_toDHQR;
+    @BindView(R.id.ll_toXSCK)
+    LinearLayout ll_toXSCK;
+    @BindView(R.id.ll_toXSTJ)
+    LinearLayout ll_toXSTJ;
+    @BindView(R.id.ll_toRKD)
+    LinearLayout ll_toRKD;
+    @BindView(R.id.ll_toCKD)
+    LinearLayout ll_toCKD;
+    @BindView(R.id.ll_toKCCX)
+    LinearLayout ll_toKCCX;
 
 //    private Handler mHandler=new Handler(){
 //        @Override
@@ -124,6 +150,37 @@ public class MenuActivity extends BaseActivity{
         loadData();
         setData();
         delDB();
+        setShow();
+        setListeners();
+    }
+
+    private void setShow() {
+        if (type==1 || type==2){
+            ll_01.setVisibility(View.VISIBLE);
+            ll_02.setVisibility(View.VISIBLE);
+            ll_03.setVisibility(View.VISIBLE);
+            ll_04.setVisibility(View.VISIBLE);
+            ll_05.setVisibility(View.GONE);
+            ll_06.setVisibility(View.GONE);
+        }else if (type==3){
+            ll_01.setVisibility(View.GONE);
+            ll_02.setVisibility(View.GONE);
+            ll_03.setVisibility(View.GONE);
+            ll_04.setVisibility(View.GONE);
+            ll_05.setVisibility(View.VISIBLE);
+            ll_06.setVisibility(View.VISIBLE);
+        }else{
+            ll_01.setVisibility(View.GONE);
+            ll_02.setVisibility(View.GONE);
+            ll_03.setVisibility(View.GONE);
+            ll_04.setVisibility(View.GONE);
+            ll_05.setVisibility(View.GONE);
+            ll_06.setVisibility(View.GONE);
+            showToast("数据获取失败，请重试");
+        }
+    }
+
+    private void setListeners() {
         tvSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -198,6 +255,63 @@ public class MenuActivity extends BaseActivity{
                 readyGo(PendingOutActivity.class);
             }
         });
+        llToZDPH.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(ZDPSActivity.class);
+            }
+        });
+        //type==3
+        /** 到货确认 */
+        ll_toDHQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(DHQRActivity.class);
+            }
+        });
+        /** 销售出库 */
+        ll_toXSCK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(XSCKActivity.class);
+            }
+        });
+        /** 销售统计 */
+        ll_toXSTJ.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showToast("销售统计");
+            }
+        });
+        /** 入库单 */
+        ll_toRKD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle=new Bundle();
+                bundle.putString("title","产品入库");
+                bundle.putInt("type",2);
+                bundle.putInt("typeid",0);
+                readyGo(OutBoundOrderActivity.class, bundle);
+            }
+        });
+        /** 出库单 */
+        ll_toCKD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle=new Bundle();
+                bundle.putString("title","产品出库");
+                bundle.putInt("type",1);
+                bundle.putInt("typeid",0);
+                readyGo(OutBoundOrderActivity.class, bundle);
+            }
+        });
+        /** 库存查询 */
+        ll_toKCCX.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(QueryActivity.class);
+            }
+        });
 //        srlMenu.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 //            @Override
 //            public void onRefresh() {
@@ -222,6 +336,7 @@ public class MenuActivity extends BaseActivity{
             }
         });
     }
+
     private void showWindow(View parent) {
 
         if (popupWindow == null) {
