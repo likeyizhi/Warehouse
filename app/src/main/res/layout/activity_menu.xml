@@ -346,6 +346,7 @@
                             android:src="@mipmap/yck" />
 
                         <TextView
+                            android:id="@+id/tvZDPS"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="15dp"
@@ -549,6 +550,7 @@
                             android:src="@mipmap/yck" />
 
                         <TextView
+                            android:id="@+id/tvDHQR"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="15dp"

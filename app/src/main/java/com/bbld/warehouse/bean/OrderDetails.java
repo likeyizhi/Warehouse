@@ -196,13 +196,23 @@ public class OrderDetails {
              "ProductImg": "/UploadFile/758deb95deb74b00a5d8b693400c16af.png",
              "ProductSpec": "规格",
              "ProductCount": "20",
-             "Unit": "箱"*/
+             "Unit": "箱"
+             "CodeList": []*/
             private String ProductID;
             private String ProductName;
             private String ProductImg;
             private String ProductSpec;
             private String ProductCount;
             private String Unit;
+            private List<OrderDetailsCodeList> CodeList;
+
+            public List<OrderDetailsCodeList> getCodeList() {
+                return CodeList;
+            }
+
+            public void setCodeList(List<OrderDetailsCodeList> codeList) {
+                CodeList = codeList;
+            }
 
             public String getProductID() {
                 return ProductID;
@@ -250,6 +260,39 @@ public class OrderDetails {
 
             public void setUnit(String unit) {
                 Unit = unit;
+            }
+
+            public static class OrderDetailsCodeList{
+                /**"Code": "13812020226901",
+                 "CodeType": "2",
+                 "Count": "1"*/
+                private String Code;
+                private String CodeType;
+                private String Count;
+
+                public String getCode() {
+                    return Code;
+                }
+
+                public void setCode(String code) {
+                    Code = code;
+                }
+
+                public String getCodeType() {
+                    return CodeType;
+                }
+
+                public void setCodeType(String codeType) {
+                    CodeType = codeType;
+                }
+
+                public String getCount() {
+                    return Count;
+                }
+
+                public void setCount(String count) {
+                    Count = count;
+                }
             }
         }
     }

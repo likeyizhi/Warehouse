@@ -108,9 +108,9 @@ public class LogisticsNumberActivity extends BaseActivity {
                     for (int i=0;i<appInfos.size();i++) {
                         if (appInfos.get(i).getAppName().equals("com.android.auto.iscan")) {
                             is_iData=true;
-                            WeiboDialogUtils.closeDialog(loading);
                         }
                     }
+                    WeiboDialogUtils.closeDialog(loading);
                     break;
             }
         }

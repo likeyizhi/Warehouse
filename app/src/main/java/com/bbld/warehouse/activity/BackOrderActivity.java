@@ -240,6 +240,7 @@ public class BackOrderActivity extends BaseActivity{
                 holder.btn_track=(Button)view.findViewById(R.id.btn_track);
                 holder.btn_writTrack=(Button)view.findViewById(R.id.btn_writTrack);
                 holder.btn_sure=(Button)view.findViewById(R.id.btn_sure);
+                holder.btn_peosure=(Button)view.findViewById(R.id.btn_peosure);
                 holder.iv_open=(ImageView)view.findViewById(R.id.iv_open);
                 view.setTag(holder);
             }
@@ -323,12 +324,25 @@ public class BackOrderActivity extends BaseActivity{
                 holder.btn_sure.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        showToast("确认收货");
+//                        showToast("扫码收货");
                         Bundle bundle=new Bundle();
                         bundle.putString("OrderID",order.getOrderID()+"");
                         bundle.putString("OrderCount",getCount()+"");
                         bundle.putString("doType","sure");
                         readyGo(OrderDeliveryActivity.class,bundle);
+
+                    }
+                });
+                holder.btn_peosure.setVisibility(View.VISIBLE);
+                holder.btn_peosure.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        showToast("人工收货");
+                        Bundle bundle=new Bundle();
+                        bundle.putString("OrderID",order.getOrderID()+"");
+                        bundle.putString("OrderCount",getCount()+"");
+                        bundle.putString("doType","sure");
+                        readyGo(OrderDeliveryPeoActivity.class,bundle);
 
                     }
                 });
@@ -398,6 +412,7 @@ public class BackOrderActivity extends BaseActivity{
             Button btn_track;
             Button btn_writTrack;
             Button btn_sure;
+            Button btn_peosure;
             ImageView iv_open;
         }
 

@@ -1,8 +1,14 @@
 package com.bbld.warehouse.activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -122,7 +128,6 @@ public class LoginActivity extends BaseActivity{
                 WeiboDialogUtils.closeDialog(loadDialog);
             }
         });
-
     }
 
     @Override

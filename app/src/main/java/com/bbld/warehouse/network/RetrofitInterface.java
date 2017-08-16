@@ -48,9 +48,9 @@ import retrofit.http.Query;
 
 public interface RetrofitInterface {
     /**
-     * 测试
+     * 自动升级
      */
-    @GET("GetVersionAndroid.aspx")
+    @GET("Admin/GetVersionAndroid")
     Call<VersionAndroid> getVersionAndroid();
     /**
      * 登录

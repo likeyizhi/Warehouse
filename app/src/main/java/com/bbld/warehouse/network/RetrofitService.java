@@ -68,7 +68,7 @@ public class RetrofitService {
     }
 
     /**
-     * 测试
+     * 自动升级
      */
     public Call<VersionAndroid> getVersionAndroid(){
         return retrofitInterface.getVersionAndroid();

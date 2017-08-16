@@ -31,12 +31,15 @@ import com.bbld.warehouse.R;
 import com.bbld.warehouse.adapter.GroupAdapter;
 import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.IndexInfo;
+import com.bbld.warehouse.bean.VersionAndroid;
 import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
 import com.bbld.warehouse.loading.WeiboDialogUtils;
 import com.bbld.warehouse.network.RetrofitService;
+import com.bbld.warehouse.update.UpdateService;
 import com.bbld.warehouse.utils.MyToken;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
+import com.wuxiaolong.androidutils.library.VersionUtil;
 
 import java.util.ArrayList;
 
@@ -118,6 +121,10 @@ public class MenuActivity extends BaseActivity{
     LinearLayout ll_toCKD;
     @BindView(R.id.ll_toKCCX)
     LinearLayout ll_toKCCX;
+    @BindView(R.id.tvZDPS)
+    TextView tvZDPS;
+    @BindView(R.id.tvDHQR)
+    TextView tvDHQR;
 
 //    private Handler mHandler=new Handler(){
 //        @Override
@@ -152,6 +159,51 @@ public class MenuActivity extends BaseActivity{
         delDB();
         setShow();
         setListeners();
+        getUpdateMsg();
+    }
+
+    private void getUpdateMsg() {
+        Call<VersionAndroid> call=RetrofitService.getInstance().getVersionAndroid();
+        call.enqueue(new Callback<VersionAndroid>() {
+            @Override
+            public void onResponse(Response<VersionAndroid> response, Retrofit retrofit) {
+                if (response==null){
+                    return;
+                }
+                if (response.body().getStatus()==0){
+                    String newVersionName = response.body().getVersion();
+                    final String updateUrl = response.body().getUrl();
+                    final String versionName= VersionUtil.getVersionName(getApplicationContext());
+                    // TODO 判断网络VersionName和当前app的VersionName
+                    if (!newVersionName.equals(versionName)){
+                        AlertDialog.Builder builder=new AlertDialog.Builder(MenuActivity.this);
+                        builder.setTitle("更新").setMessage("是否下载新版本").setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(MenuActivity.this, UpdateService.class);
+                                intent.putExtra("Key_App_Name",getResources().getString(R.string.app_name));//app名
+                                intent.putExtra("Key_Down_Url",updateUrl);//网络获取的下载链接
+                                startService(intent);
+                                showToast("正在后台下载，不会影响您的正常使用");
+                                dialogInterface.dismiss();
+                            }
+                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).setCancelable(false).show();
+                    }
+                }else{
+                    showToast(response.body().getMes());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
     }
 
     private void setShow() {
@@ -464,6 +516,16 @@ public class MenuActivity extends BaseActivity{
                         tvQtckdck.setText(Html.fromHtml("其他出库"+"<font color=\"#00A3D9\">"+response.body().getQtckdck()+"</font>"));//#00A3D9
                     }else{
                         tvQtckdck.setText("其他出库");
+                    }
+                    if (response.body().getZdps()!=0){
+                        tvZDPS.setText(Html.fromHtml("终端配送"+"<font color=\"#00A3D9\">"+response.body().getZdps()+"</font>"));//#00A3D9
+                    }else{
+                        tvZDPS.setText("终端配送");
+                    }
+                    if (response.body().getZdps()!=0){
+                        tvDHQR.setText(Html.fromHtml("到货确认"+"<font color=\"#00A3D9\">"+response.body().getZdsh()+"</font>"));//#00A3D9
+                    }else{
+                        tvDHQR.setText("到货确认");
                     }
                     WeiboDialogUtils.closeDialog(loadDialog);
                 }

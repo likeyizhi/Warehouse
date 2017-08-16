@@ -423,6 +423,7 @@ public final class CaptureActivity extends Activity implements
 		et.setBackgroundResource(R.drawable.bg_batch);
 		et.setText(serialNumber);
 		et.setMaxLines(1);
+		et.setSingleLine(true);
 		AlertDialog serialDialog = new AlertDialog.Builder(this).setTitle("请设置序列号")
 				.setView(et)
 				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -502,6 +503,7 @@ public final class CaptureActivity extends Activity implements
 		et.setBackgroundResource(R.drawable.bg_batch);
 		et.setText(batchNumber);
 		et.setMaxLines(1);
+		et.setSingleLine(true);
 		AlertDialog batchDialog = new AlertDialog.Builder(this).setTitle("请设置批号")
 				.setView(et)
 				.setPositiveButton("确定", new DialogInterface.OnClickListener() {

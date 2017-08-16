@@ -15,6 +15,8 @@ public class IndexInfo {
      "yck": 1,
      "dsh": 0
      "qtckdck": 1
+     "zdps": 1,
+     "zdsh": 1
      }*/
     private int status;
     private String mes;
@@ -24,6 +26,24 @@ public class IndexInfo {
     private int yck;
     private int dsh;
     private int qtckdck;
+    private int zdps;
+    private int zdsh;
+
+    public int getZdps() {
+        return zdps;
+    }
+
+    public void setZdps(int zdps) {
+        this.zdps = zdps;
+    }
+
+    public int getZdsh() {
+        return zdsh;
+    }
+
+    public void setZdsh(int zdsh) {
+        this.zdsh = zdsh;
+    }
 
     public int getQtckdck() {
         return qtckdck;
