@@ -15,4 +15,9 @@
         <!-- 指定消失的动画xml -->
         <item name="android:windowExitAnimation">@anim/anim_popupwindow_hide</item>
     </style>
+    <style name="myTransparent">
+        <item name="android:windowBackground">@color/my_transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 </resources>

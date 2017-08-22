@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.OrderDetails;
+import com.bbld.warehouse.bean.StorageCodeList;
 import com.bbld.warehouse.bean.StorageDetails;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
@@ -64,14 +65,22 @@ public class OutBoundOrderInfoActivity extends BaseActivity{
     ImageButton ibBack;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.lvOther)
+    ListView lvOther;
+
 
     private int type;
     private String storageId;
     private String orderCount;
+    private String token;
+    private List<StorageCodeList.StorageCodeListInfo.StorageCodeListCodeList> codeList;
+    private OtherAdapter otherAdapter;
 
     @Override
     protected void initViewsAndEvents() {
+        token=new MyToken(this).getToken();
         loadData();
+        loadOtherData();
         setTitle();
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +88,77 @@ public class OutBoundOrderInfoActivity extends BaseActivity{
                 ActivityManagerUtil.getInstance().finishActivity(OutBoundOrderInfoActivity.this);
             }
         });
+    }
+
+    private void loadOtherData() {
+        Call<StorageCodeList> call=RetrofitService.getInstance().storageCodeList(token,type+"",storageId);
+        call.enqueue(new Callback<StorageCodeList>() {
+            @Override
+            public void onResponse(Response<StorageCodeList> response, Retrofit retrofit) {
+                if (response==null){
+                    return;
+                }
+                if (response.body().getStatus()==0){
+                    codeList=response.body().getInfo().getCodeList();
+                    setOtherAdapter();
+                }else{
+                    showToast(response.body().getMes());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
+    }
+
+    private void setOtherAdapter() {
+        otherAdapter=new OtherAdapter();
+        lvOther.setAdapter(otherAdapter);
+    }
+
+    class OtherAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return codeList.size();
+        }
+
+        @Override
+        public StorageCodeList.StorageCodeListInfo.StorageCodeListCodeList getItem(int i) {
+            return codeList.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            OtherHolder holder=null;
+            if (view==null){
+                view=LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_other_info,null);
+                holder=new OtherHolder();
+                holder.tvSPName=(TextView)view.findViewById(R.id.tvSPName);
+                holder.tvSPCode=(TextView)view.findViewById(R.id.tvSPCode);
+                holder.tvSPSerialNumber=(TextView)view.findViewById(R.id.tvSPSerialNumber);
+                holder.tvSPBatchNumber=(TextView)view.findViewById(R.id.tvSPBatchNumber);
+                view.setTag(holder);
+            }
+            holder= (OtherHolder) view.getTag();
+            StorageCodeList.StorageCodeListInfo.StorageCodeListCodeList item = getItem(i);
+            holder.tvSPName.setText(item.getName()+"");
+            holder.tvSPCode.setText(item.getBarCode()+"");
+            holder.tvSPSerialNumber.setText(item.getSerialNumber()+"");
+            holder.tvSPBatchNumber.setText(item.getBatchNumber()+"");
+            return view;
+        }
+
+        class OtherHolder{
+            TextView tvSPName,tvSPCode,tvSPSerialNumber,tvSPBatchNumber;
+        }
     }
 
     private void setTitle() {

@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#eeeeee" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -43,16 +44,17 @@
             android:layout_height="match_parent"
 
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:padding="3dp"
-                android:gravity="center_vertical"
                 android:background="@drawable/bg_btn_write5"
-                android:orientation="vertical">
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="3dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -75,18 +77,18 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:text="和爱佳儿"
-                        android:textSize="14sp"
-                        android:textColor="#999999" />
+                        android:textColor="#999999"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#ffffff"
-                    android:visibility="gone"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="10dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -101,8 +103,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:text="和爱佳儿-吉林一部"
-                        android:textSize="14sp"
-                        android:textColor="#999999" />
+                        android:textColor="#999999"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -127,12 +129,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:gravity="center"
-                        android:drawablePadding="5dp"
                         android:drawableLeft="@mipmap/dianhua"
+                        android:drawablePadding="5dp"
+                        android:gravity="center"
                         android:text="和爱佳儿"
-                        android:textSize="14sp"
-                        android:textColor="#ff4d4d" />
+                        android:textColor="#ff4d4d"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -141,8 +143,8 @@
                     android:background="#ffffff"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:padding="10dp">
+                    android:padding="10dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -156,9 +158,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:textSize="14sp"
                         android:text="中央绿地广场B10B1627室"
-                        android:textColor="#ff4d4d" />
+                        android:textColor="#ff4d4d"
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -223,8 +225,7 @@
                 <com.bbld.warehouse.widget.ZListview
                     android:id="@+id/lv_backOrderInfo"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </com.bbld.warehouse.widget.ZListview>
+                    android:layout_height="wrap_content"></com.bbld.warehouse.widget.ZListview>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -238,10 +239,10 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:textSize="14sp"
-                    android:visibility="gone"
                     android:text="发货商品共x类x盒，查看更多"
-                    android:textColor="#66ccff" />
+                    android:textColor="#66ccff"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
@@ -268,8 +269,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="订货日期："
-                        android:textColor="#999999"
-                        />
+                        android:textColor="#999999" />
 
                     <TextView
                         android:id="@+id/tv_date"
@@ -283,11 +283,11 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
                     android:background="#ffffff"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="10dp"
                     android:paddingLeft="10dp">
 
                     <TextView
@@ -295,8 +295,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="单  据  号："
-                        android:textColor="#999999"
-                        />
+                        android:textColor="#999999" />
 
                     <TextView
                         android:id="@+id/tv_orderNumber"
@@ -313,10 +312,10 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
                     android:background="#ffffff"
-                    android:visibility="gone"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="10dp">
+                    android:paddingLeft="10dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -332,6 +331,23 @@
                         android:text="000000000000000"
                         android:textColor="#999999" />
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_btn_write5"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <com.bbld.warehouse.widget.ZListview
+                    android:id="@+id/lvOther"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </com.bbld.warehouse.widget.ZListview>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

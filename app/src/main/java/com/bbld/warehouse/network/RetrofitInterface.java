@@ -30,7 +30,9 @@ import com.bbld.warehouse.bean.ProductCountDetails;
 import com.bbld.warehouse.bean.ProductCountList;
 import com.bbld.warehouse.bean.ProductList;
 import com.bbld.warehouse.bean.SaleScanCode;
+import com.bbld.warehouse.bean.SaleStatistics;
 import com.bbld.warehouse.bean.ScanCode;
+import com.bbld.warehouse.bean.StorageCodeList;
 import com.bbld.warehouse.bean.StorageDetails;
 import com.bbld.warehouse.bean.StorageList;
 import com.bbld.warehouse.bean.VersionAndroid;
@@ -254,4 +256,14 @@ public interface RetrofitInterface {
      */
     @GET("Storage/SaleScanCode")
     Call<SaleScanCode> saleScanCode(@Query("token") String token, @Query("code") String code);
+    /**
+     *
+     */
+    @GET("Storage/StorageCodeList")
+    Call<StorageCodeList> storageCodeList(@Query("token") String token, @Query("type") String type, @Query("storageId") String storageId);
+    /**
+     * 销售统计
+     */
+    @GET("Storage/SaleStatistics")
+    Call<SaleStatistics> saleStatistics(@Query("token") String token, @Query("start") String start, @Query("end") String end);
 }

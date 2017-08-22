@@ -31,7 +31,9 @@ import com.bbld.warehouse.bean.ProductCountDetails;
 import com.bbld.warehouse.bean.ProductCountList;
 import com.bbld.warehouse.bean.ProductList;
 import com.bbld.warehouse.bean.SaleScanCode;
+import com.bbld.warehouse.bean.SaleStatistics;
 import com.bbld.warehouse.bean.ScanCode;
+import com.bbld.warehouse.bean.StorageCodeList;
 import com.bbld.warehouse.bean.StorageDetails;
 import com.bbld.warehouse.bean.StorageList;
 import com.bbld.warehouse.bean.VersionAndroid;
@@ -278,5 +280,17 @@ public class RetrofitService {
      */
     public Call<SaleScanCode> saleScanCode(String token, String code){
         return retrofitInterface.saleScanCode(token,code);
+    }
+    /**
+     *
+     */
+    public Call<StorageCodeList> storageCodeList(String token, String type, String storageId){
+        return retrofitInterface.storageCodeList(token,type,storageId);
+    }
+    /**
+     * 销售统计
+     */
+    public Call<SaleStatistics> saleStatistics(String token, String start, String end){
+        return retrofitInterface.saleStatistics(token,start,end);
     }
 }

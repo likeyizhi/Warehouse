@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bbld.warehouse.R;
+import com.bbld.warehouse.activity.XSCKMXActivity;
 import com.bbld.warehouse.bean.CartSQLBean;
 import com.bbld.warehouse.bean.SaleScanCode;
 import com.bbld.warehouse.bean.ScanCode;
@@ -493,17 +494,6 @@ public final class CaptureActivity extends Activity implements
 					if (info.getIsRight()==0){
 						Toast.makeText(CaptureActivity.this,"条码不存在",Toast.LENGTH_SHORT).show();
 					}else{
-//						List<CartSQLBean> pros = mUserDataBaseOperate.findUserById(info.getProductInfo().getProductID()+"");
-//						if ((!pros.isEmpty()) || pros.size()!=0){
-//							int scanCount = pros.get(0).getProCount();
-//							for (int a=0;a<pros.size();a++){
-//								scanCount=scanCount+pros.get(a).getProCount();
-//							}
-//							CartSQLBean sqlBeanUp = pros.get(0);
-//							sqlBeanUp.setProCount(scanCount);
-//							mUserDataBaseOperate.updateUser(sqlBeanUp);
-//							Toast.makeText(CaptureActivity.this,""+scanCount,Toast.LENGTH_SHORT).show();
-//						}else{
 							CartSQLBean sqlBean=new CartSQLBean();
 							sqlBean.setProductId(info.getProductInfo().getProductID()+"");
 							sqlBean.setProductCode(thisCode+"");
@@ -542,7 +532,7 @@ public final class CaptureActivity extends Activity implements
 				sqlBean.setProductType(sqlBeanList.get(s).getProductType());
 				sqlBean.setSerialNumber(sqlBeanList.get(s).getSerialNumber());
 				sqlBean.setBatchNumber(sqlBeanList.get(s).getBatchNumber());
-				sqlBean.setProductCode("");
+				sqlBean.setProductCode(sqlBeanList.get(s).getProductCode());
 				sqlBean.setProCount(0);
 				afters.add(sqlBean);
 			}
@@ -610,7 +600,10 @@ public final class CaptureActivity extends Activity implements
 			holder.btnInfo.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					Toast.makeText(CaptureActivity.this,"明细"+item.getProductId(),Toast.LENGTH_SHORT).show();
+//					Toast.makeText(CaptureActivity.this,"明细"+item.getProductId(),Toast.LENGTH_SHORT).show();
+					Intent intent=new Intent(CaptureActivity.this, XSCKMXActivity.class);
+					intent.putExtra("code", item.getProductCode());
+					startActivity(intent);
 				}
 			});
 			return view;

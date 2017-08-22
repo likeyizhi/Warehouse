@@ -193,6 +193,17 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
+        <!--销售统计-->
+        <activity android:name=".activity.XSTJActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--销售出库-明细-->
+        <activity android:name=".activity.XSCKMXActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:theme="@style/myTransparent"
+            android:screenOrientation="portrait">
+        </activity>
         <!--更新相关-->
         <service android:name=".update.UpdateService" >
             <intent-filter>

@@ -114,13 +114,15 @@ public class CusInvoiceInfo {
              "ProductImg": "http://manager.xiuzheng.cc:81//UploadFile/241cc8bff7c6495fb3692ad29c9621bd.jpg",
              "ProductSpec": "500mg/粒*30粒/盒*48盒/件",
              "ProductCount": "2",
-             "Unit": "盒"*/
+             "Unit": "盒"
+             "CodeList": "[]"*/
             private String ProductID;
             private String ProductName;
             private String ProductImg;
             private String ProductSpec;
             private String ProductCount;
             private String Unit;
+            private List<CusInvoiceInfoCodeList> CodeList;
 
             public String getProductID() {
                 return ProductID;
@@ -168,6 +170,47 @@ public class CusInvoiceInfo {
 
             public void setUnit(String unit) {
                 Unit = unit;
+            }
+
+            public List<CusInvoiceInfoCodeList> getCodeList() {
+                return CodeList;
+            }
+
+            public void setCodeList(List<CusInvoiceInfoCodeList> codeList) {
+                CodeList = codeList;
+            }
+
+            public static class CusInvoiceInfoCodeList{
+                /**"Code": "10812020170841",
+                 "SerialNumber": "30-3",
+                 "BatchNumber": "1-1"*/
+                private String Code;
+                private String SerialNumber;
+                private String BatchNumber;
+
+                public String getCode() {
+                    return Code;
+                }
+
+                public void setCode(String code) {
+                    Code = code;
+                }
+
+                public String getSerialNumber() {
+                    return SerialNumber;
+                }
+
+                public void setSerialNumber(String serialNumber) {
+                    SerialNumber = serialNumber;
+                }
+
+                public String getBatchNumber() {
+                    return BatchNumber;
+                }
+
+                public void setBatchNumber(String batchNumber) {
+                    BatchNumber = batchNumber;
+                }
             }
         }
     }

@@ -191,6 +191,7 @@ public class DHQRInfoActivity extends BaseActivity{
                 holder.tv_ProductSpec=(TextView)view.findViewById(R.id.tv_ProductSpec);
                 holder.tv_Unit=(TextView)view.findViewById(R.id.tv_Unit);
                 holder.tv_ProductCount=(TextView)view.findViewById(R.id.tv_ProductCount);
+                holder.lvCodes=(ListView) view.findViewById(R.id.lvCodes);
                 view.setTag(holder);
             }
             holder= (CusProsHolder) view.getTag();
@@ -200,6 +201,7 @@ public class DHQRInfoActivity extends BaseActivity{
             holder.tv_ProductSpec.setText(product.getProductSpec()+"");
             holder.tv_Unit.setText(product.getUnit()+"");
             holder.tv_ProductCount.setText(product.getProductCount()+"");
+            holder.lvCodes.setAdapter(new CodesAdapter(product.getCodeList()));
             return view;
         }
         class CusProsHolder{
@@ -208,6 +210,53 @@ public class DHQRInfoActivity extends BaseActivity{
             TextView tv_ProductSpec;
             TextView tv_Unit;
             TextView tv_ProductCount;
+            ListView lvCodes;
+        }
+    }
+
+    class CodesAdapter extends BaseAdapter{
+        private List<CusInvoiceInfo.CusInvoiceInfoInfo.CusInvoiceInfoProductList.CusInvoiceInfoCodeList> codeList;
+        public CodesAdapter(List<CusInvoiceInfo.CusInvoiceInfoInfo.CusInvoiceInfoProductList.CusInvoiceInfoCodeList> codeList) {
+            super();
+            this.codeList=codeList;
+        }
+
+        @Override
+        public int getCount() {
+            return codeList.size();
+        }
+
+        @Override
+        public CusInvoiceInfo.CusInvoiceInfoInfo.CusInvoiceInfoProductList.CusInvoiceInfoCodeList getItem(int i) {
+            return codeList.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            CodesHolder holder=null;
+            if (view==null){
+                view=LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_dhqr_info_codes,null);
+                holder=new CodesHolder();
+                holder.tvCode=(TextView)view.findViewById(R.id.tvCode);
+                holder.tvSerialNumber=(TextView)view.findViewById(R.id.tvSerialNumber);
+                holder.tvBatchNumber=(TextView)view.findViewById(R.id.tvBatchNumber);
+                view.setTag(holder);
+            }
+            CusInvoiceInfo.CusInvoiceInfoInfo.CusInvoiceInfoProductList.CusInvoiceInfoCodeList item = getItem(i);
+            holder= (CodesHolder) view.getTag();
+            holder.tvCode.setText("条码："+item.getCode());
+            holder.tvSerialNumber.setText("序列号："+item.getSerialNumber());
+            holder.tvBatchNumber.setText("批次号："+item.getBatchNumber());
+            return view;
+        }
+
+        class CodesHolder{
+            TextView tvCode,tvSerialNumber,tvBatchNumber;
         }
     }
 

@@ -3,6 +3,7 @@ package com.bbld.warehouse.activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -185,7 +186,7 @@ public class XSCKActivity extends BaseActivity{
                 sqlBean.setProductType(sqlBeanList.get(s).getProductType());
                 sqlBean.setSerialNumber(sqlBeanList.get(s).getSerialNumber());
                 sqlBean.setBatchNumber(sqlBeanList.get(s).getBatchNumber());
-                sqlBean.setProductCode("");
+                sqlBean.setProductCode(sqlBeanList.get(s).getProductCode());
                 sqlBean.setProCount(0);
                 afters.add(sqlBean);
             }
@@ -252,7 +253,9 @@ public class XSCKActivity extends BaseActivity{
             holder.btnInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(XSCKActivity.this,"明细"+item.getProductId(),Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(XSCKActivity.this, XSCKMXActivity.class);
+                    intent.putExtra("code", item.getProductCode());
+                    startActivity(intent);
                 }
             });
             return view;

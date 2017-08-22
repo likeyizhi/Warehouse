@@ -444,41 +444,39 @@ public class OrderDeliveryActivity extends BaseActivity{
     }
 
     private void uploadImg(String codejson) {
-        if (file_imgPath01.equals("") || file_imgPath01==null){
-            showToast("请上传异常");
-        }else{
+        if (llSaoMaSH.getVisibility()==View.GONE){
             final Map<String, String> params = new HashMap<String, String>();
             params.put("token", new MyToken(OrderDeliveryActivity.this).getToken());
             params.put("invoiceid", invoiceid);
             params.put("codejson", codejson);
             final Map<String, File> files = new TreeMap<String, File>();
-            if (!file_imgPath01.equals("")){
-                files.put("image01",new File(file_imgPath01));
-            }
-            if (!file_imgPath02.equals("")){
-                files.put("image02",new File(file_imgPath02));
-            }
-            if (!file_imgPath03.equals("")){
-                files.put("image03",new File(file_imgPath03));
-            }
-            if (!file_imgPath04.equals("")){
-                files.put("image04",new File(file_imgPath04));
-            }
-            if (!file_imgPath05.equals("")){
-                files.put("image05",new File(file_imgPath05));
-            }
-            if (!file_imgPath06.equals("")){
-                files.put("image06",new File(file_imgPath06));
-            }
-            if (!file_imgPath07.equals("")){
-                files.put("image07",new File(file_imgPath07));
-            }
-            if (!file_imgPath08.equals("")){
-                files.put("image08",new File(file_imgPath08));
-            }
-            if (!file_imgPath09.equals("")){
-                files.put("image09",new File(file_imgPath09));
-            }
+//            if (!file_imgPath01.equals("")){
+//                files.put("image01",new File(file_imgPath01));
+//            }
+//            if (!file_imgPath02.equals("")){
+//                files.put("image02",new File(file_imgPath02));
+//            }
+//            if (!file_imgPath03.equals("")){
+//                files.put("image03",new File(file_imgPath03));
+//            }
+//            if (!file_imgPath04.equals("")){
+//                files.put("image04",new File(file_imgPath04));
+//            }
+//            if (!file_imgPath05.equals("")){
+//                files.put("image05",new File(file_imgPath05));
+//            }
+//            if (!file_imgPath06.equals("")){
+//                files.put("image06",new File(file_imgPath06));
+//            }
+//            if (!file_imgPath07.equals("")){
+//                files.put("image07",new File(file_imgPath07));
+//            }
+//            if (!file_imgPath08.equals("")){
+//                files.put("image08",new File(file_imgPath08));
+//            }
+//            if (!file_imgPath09.equals("")){
+//                files.put("image09",new File(file_imgPath09));
+//            }
             Log.i("params", "params="+params);
             Log.i("files", "files="+files);
             final String requestURL = Constants.BASE_URL + "Order/OrderReceipt";
@@ -502,6 +500,66 @@ public class OrderDeliveryActivity extends BaseActivity{
                     }
                 }
             }).start();
+        }else{
+            if (file_imgPath01.equals("") || file_imgPath01==null){
+                showToast("请上传异常条码产品");
+            }else{
+                final Map<String, String> params = new HashMap<String, String>();
+                params.put("token", new MyToken(OrderDeliveryActivity.this).getToken());
+                params.put("invoiceid", invoiceid);
+                params.put("codejson", codejson);
+                final Map<String, File> files = new TreeMap<String, File>();
+                if (!file_imgPath01.equals("")){
+                    files.put("image01",new File(file_imgPath01));
+                }
+                if (!file_imgPath02.equals("")){
+                    files.put("image02",new File(file_imgPath02));
+                }
+                if (!file_imgPath03.equals("")){
+                    files.put("image03",new File(file_imgPath03));
+                }
+                if (!file_imgPath04.equals("")){
+                    files.put("image04",new File(file_imgPath04));
+                }
+                if (!file_imgPath05.equals("")){
+                    files.put("image05",new File(file_imgPath05));
+                }
+                if (!file_imgPath06.equals("")){
+                    files.put("image06",new File(file_imgPath06));
+                }
+                if (!file_imgPath07.equals("")){
+                    files.put("image07",new File(file_imgPath07));
+                }
+                if (!file_imgPath08.equals("")){
+                    files.put("image08",new File(file_imgPath08));
+                }
+                if (!file_imgPath09.equals("")){
+                    files.put("image09",new File(file_imgPath09));
+                }
+                Log.i("params", "params="+params);
+                Log.i("files", "files="+files);
+                final String requestURL = Constants.BASE_URL + "Order/OrderReceipt";
+                Log.i("requestURL", "requestURL="+requestURL);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            request = UploadUtil.post(requestURL, params, files);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if ((request+"").contains("成功")) { // 请求成功
+                            Message message=new Message();
+                            message.what=111;
+                            handler.sendMessage(message);
+                        } else { // 请求失败
+                            Message message=new Message();
+                            message.what=222;
+                            handler.sendMessage(message);
+                        }
+                    }
+                }).start();
+            }
         }
     }
 

@@ -597,6 +597,7 @@ public final class CaptureActivity extends Activity implements
 							sqlBean.setProductType(response.body().getInfo().getType()+"");
 							sqlBean.setSerialNumber(response.body().getInfo().getSerialNumber()+"");
 							sqlBean.setBatchNumber(batchNumber+"");
+							Toast.makeText(CaptureActivity.this,""+response.body().getInfo().getSerialNumber()+","+response.body().getInfo().getBatchNumber(),Toast.LENGTH_SHORT).show();
 							sqlBean.setProCount(response.body().getInfo().getCount());
 							mUserDataBaseOperate.insertToUser(sqlBean);
 							List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");

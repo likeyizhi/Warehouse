@@ -332,7 +332,7 @@ public class MenuActivity extends BaseActivity{
         ll_toXSTJ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast("销售统计");
+                readyGo(XSTJActivity.class);
             }
         });
         /** 入库单 */
@@ -522,7 +522,7 @@ public class MenuActivity extends BaseActivity{
                     }else{
                         tvZDPS.setText("终端配送");
                     }
-                    if (response.body().getZdps()!=0){
+                    if (response.body().getZdsh()!=0){
                         tvDHQR.setText(Html.fromHtml("到货确认"+"<font color=\"#00A3D9\">"+response.body().getZdsh()+"</font>"));//#00A3D9
                     }else{
                         tvDHQR.setText("到货确认");

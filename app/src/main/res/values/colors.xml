@@ -21,4 +21,6 @@
 
     <color name="capture_text_cover_bg">#99535353</color>
     <color name="seek_bar_text">#fff6f6f6</color>
+
+    <color name="my_transparent">#98000000</color>
 </resources>
