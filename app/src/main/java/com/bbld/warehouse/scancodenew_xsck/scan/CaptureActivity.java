@@ -493,6 +493,7 @@ public final class CaptureActivity extends Activity implements
 					SaleScanCode.SaleScanCodeInfo info = response.body().getInfo();
 					if (info.getIsRight()==0){
 						Toast.makeText(CaptureActivity.this,"条码不存在",Toast.LENGTH_SHORT).show();
+						continuePreview();
 					}else{
 							CartSQLBean sqlBean=new CartSQLBean();
 							sqlBean.setProductId(info.getProductInfo().getProductID()+"");

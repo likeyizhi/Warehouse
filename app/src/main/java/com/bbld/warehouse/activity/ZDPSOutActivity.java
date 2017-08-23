@@ -33,6 +33,8 @@ import com.bbld.warehouse.db.UserSQLiteOpenHelper;
 import com.bbld.warehouse.loading.WeiboDialogUtils;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.scancodenew.scan.CaptureActivity;
+import com.bbld.warehouse.utils.ApkTool;
+import com.bbld.warehouse.utils.MyAppInfo;
 import com.bbld.warehouse.utils.MyToken;
 import com.bbld.warehouse.utils.UploadUserInformationByPostService;
 import com.bumptech.glide.Glide;
@@ -77,6 +79,9 @@ public class ZDPSOutActivity extends BaseActivity{
     private UserDataBaseOperate mUserDataBaseOperate;
     private Dialog loadDialog;
     private String request;
+    private Dialog loading;
+    private List<MyAppInfo> appInfos;
+    private boolean is_iData;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -93,6 +98,14 @@ public class ZDPSOutActivity extends BaseActivity{
                     WeiboDialogUtils.closeDialog(loadDialog);
                     showToast(""+request);
                     break;
+                case 1101:
+                    for (int i=0;i<appInfos.size();i++) {
+                        if (appInfos.get(i).getAppName().equals("com.android.auto.iscan")) {
+                            is_iData=true;
+                        }
+                    }
+                    WeiboDialogUtils.closeDialog(loading);
+                    break;
             }
         }
     };
@@ -104,6 +117,20 @@ public class ZDPSOutActivity extends BaseActivity{
         token=new MyToken(this).getToken();
         loadData();
         setListeners();
+        initAppList();
+    }
+
+    private void initAppList(){
+        loading=WeiboDialogUtils.createLoadingDialog(ZDPSOutActivity.this,"加载中...");
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                //扫描得到APP列表
+                appInfos = ApkTool.scanLocalInstallAppList(ZDPSOutActivity.this.getPackageManager());
+                handler.sendEmptyMessage(1101);
+            }
+        }.start();
     }
 
     private void setListeners() {
@@ -254,7 +281,20 @@ public class ZDPSOutActivity extends BaseActivity{
             holder.btn_scan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    toScan(product.getProductID(), product.getProductName(), cusInfo.getStorageID(), product.getProductCount(), "1");
+                    if (is_iData){
+                        Bundle bundle=new Bundle();
+                        bundle.putString("productId", product.getProductID());
+                        bundle.putString("productName",product.getProductName());
+                        bundle.putString("orderId", cusInfo.getStorageID());
+                        bundle.putString("needCount", product.getProductCount());
+                        bundle.putString("storage", "yes");
+                        bundle.putString("other", "yes");
+                        bundle.putString("type", 1+"");
+                        bundle.putInt("NeedBatch", 2);
+                        readyGo(IDataScanActivity.class, bundle);
+                    }else{
+                        toScan(product.getProductID(), product.getProductName(), cusInfo.getStorageID(), product.getProductCount(), "1");
+                    }
                 }
 
                 private void toScan(String productID, String productName, String orderId, String productCount,String type) {

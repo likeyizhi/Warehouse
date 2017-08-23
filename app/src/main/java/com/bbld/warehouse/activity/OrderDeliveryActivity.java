@@ -621,7 +621,16 @@ public class OrderDeliveryActivity extends BaseActivity{
                 @Override
                 public void onClick(View view) {
                     if (is_iData){
-                        showToast("iData终端");
+//                        showToast("iData终端");
+                        Bundle bundle=new Bundle();
+                        bundle.putString("productId", product.getProductID());
+                        bundle.putString("productName",product.getProductName());
+                        bundle.putString("orderId", orderId);
+                        bundle.putString("needCount", product.getProductCount());
+                        bundle.putString("storage", "no");
+                        bundle.putString("type", type+"");
+                        bundle.putInt("NeedBatch", isNeedBatch);
+                        readyGo(IDataScanActivity.class, bundle);
                     }else{
                         toScan(product.getProductID(),product.getProductName(),orderId,product.getProductCount(),type);
                     }

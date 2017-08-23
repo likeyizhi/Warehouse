@@ -208,7 +208,7 @@ public class IDataScanActivity extends BaseActivity{
         public View getView(int i, View view, ViewGroup viewGroup) {
             ScanHolder holder=null;
             if (view==null){
-                view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_lv_capture,null);
+                view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_lv_idata,null);
                 holder=new ScanHolder();
                 holder.tv_code=(TextView)view.findViewById(R.id.tv_code);
                 holder.tv_type=(TextView)view.findViewById(R.id.tv_type);

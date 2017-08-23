@@ -31,6 +31,8 @@ import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
 import com.bbld.warehouse.loading.WeiboDialogUtils;
 import com.bbld.warehouse.network.RetrofitService;
+import com.bbld.warehouse.utils.ApkTool;
+import com.bbld.warehouse.utils.MyAppInfo;
 import com.bbld.warehouse.utils.MyToken;
 import com.bbld.warehouse.utils.UploadUserInformationByPostService;
 import com.bbld.warehouse.scancodenew.scan.CaptureActivity;
@@ -79,6 +81,9 @@ public class CommitOutStorageActivity extends BaseActivity{
     private CommitOutAdapter adapter;
     private String request;
     private Dialog loadDialog;
+    private Dialog loading;
+    private List<MyAppInfo> appInfos;
+    private boolean is_iData;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -95,6 +100,14 @@ public class CommitOutStorageActivity extends BaseActivity{
                     WeiboDialogUtils.closeDialog(loadDialog);
                     showToast(""+request);
                     break;
+                case 1101:
+                    for (int i=0;i<appInfos.size();i++) {
+                        if (appInfos.get(i).getAppName().equals("com.android.auto.iscan")) {
+                            is_iData=true;
+                        }
+                    }
+                    WeiboDialogUtils.closeDialog(loading);
+                    break;
             }
         }
     };
@@ -105,6 +118,20 @@ public class CommitOutStorageActivity extends BaseActivity{
         mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
         loadData();
         setListeners();
+        initAppList();
+    }
+
+    private void initAppList(){
+        loading=WeiboDialogUtils.createLoadingDialog(CommitOutStorageActivity.this,"加载中...");
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                //扫描得到APP列表
+                appInfos = ApkTool.scanLocalInstallAppList(CommitOutStorageActivity.this.getPackageManager());
+                handler.sendEmptyMessage(1101);
+            }
+        }.start();
     }
 
     private void setListeners() {
@@ -263,7 +290,18 @@ public class CommitOutStorageActivity extends BaseActivity{
             holder.btn_scan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    toScan(product.getProductID(),product.getProductName(),product.getProductCount(),type+"");
+                    if (is_iData){
+                        Bundle bundle=new Bundle();
+                        bundle.putString("productId", product.getProductID());
+                        bundle.putString("productName",product.getProductName());
+                        bundle.putString("type", type+"");
+                        bundle.putString("needCount", product.getProductCount()+"");
+                        bundle.putString("storage", "yes");
+                        bundle.putString("other", "yes");
+                        readyGo(IDataScanActivity.class, bundle);
+                    }else{
+                        toScan(product.getProductID(),product.getProductName(),product.getProductCount(),type+"");
+                    }
                 }
 
                 private void toScan(String productID, String productName, String productCount,String type) {

@@ -35,6 +35,8 @@ import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
 import com.bbld.warehouse.loading.WeiboDialogUtils;
 import com.bbld.warehouse.network.RetrofitService;
+import com.bbld.warehouse.utils.ApkTool;
+import com.bbld.warehouse.utils.MyAppInfo;
 import com.bbld.warehouse.utils.MyToken;
 import com.bbld.warehouse.utils.UploadUserInformationByPostService;
 import com.bbld.warehouse.scancodenew.scan.CaptureActivity;
@@ -83,6 +85,9 @@ public class AddStockingActivity extends BaseActivity{
     private String number;
     private String remark;
     private Dialog baocunDialog;
+    private Dialog loading;
+    private List<MyAppInfo> appInfos;
+    private boolean is_iData;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -99,6 +104,14 @@ public class AddStockingActivity extends BaseActivity{
                     WeiboDialogUtils.closeDialog(baocunDialog);
                     showToast(""+request);
                     break;
+                case 1101:
+                    for (int i=0;i<appInfos.size();i++) {
+                        if (appInfos.get(i).getAppName().equals("com.android.auto.iscan")) {
+                            is_iData=true;
+                        }
+                    }
+                    WeiboDialogUtils.closeDialog(loading);
+                    break;
             }
         }
     };
@@ -113,6 +126,20 @@ public class AddStockingActivity extends BaseActivity{
         }
         setNewNumber();
         setListeners();
+        initAppList();
+    }
+
+    private void initAppList(){
+        loading=WeiboDialogUtils.createLoadingDialog(AddStockingActivity.this,"加载中...");
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                //扫描得到APP列表
+                appInfos = ApkTool.scanLocalInstallAppList(AddStockingActivity.this.getPackageManager());
+                handler.sendEmptyMessage(1101);
+            }
+        }.start();
     }
 
     private void setNewNumber() {
@@ -344,7 +371,18 @@ public class AddStockingActivity extends BaseActivity{
                 @Override
                 public void onClick(View view) {
 //                    showToast("扫码"+product.getId());
-                    toScan(product.getId(),product.getName(),3,10000);
+                    if (is_iData){
+                        Bundle bundle=new Bundle();
+                        bundle.putString("productId", product.getId());
+                        bundle.putString("productName",product.getName());
+                        bundle.putString("type", 3+"");
+                        bundle.putString("needCount", 10000+"");
+                        bundle.putString("storage", "yes");
+                        bundle.putString("other", "no");
+                        readyGo(IDataScanActivity.class, bundle);
+                    }else{
+                        toScan(product.getId(),product.getName(),3,10000);
+                    }
                 }
 
                 private void toScan(String productID, String productName, int type, int productCount) {
@@ -382,7 +420,7 @@ public class AddStockingActivity extends BaseActivity{
                     Bundle bundle=new Bundle();
                     bundle.putString("productId", product.getId()+"");
                     bundle.putString("productName",product.getName()+"");
-                    bundle.putString("needCount", 100+"");
+                    bundle.putString("needCount", "");
                     readyGo(CaptureFinishActivity.class, bundle);
                 }
             });
