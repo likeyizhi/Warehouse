@@ -332,7 +332,7 @@ public class AddOutBoundOrderActivity extends BaseActivity{
                 @Override
                 public void onClick(View view) {
 //                    showToast("扫码"+product.getId());
-                    toScan(product.getId(),product.getName(),Integer.parseInt(type),10000);
+                    toScan(product.getId(),product.getName(),Integer.parseInt(type),100000);
                 }
 
                 private void toScan(String productID, String productName, int type, int productCount) {

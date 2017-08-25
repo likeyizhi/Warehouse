@@ -29,6 +29,7 @@ import com.bbld.warehouse.bean.PendingOutStorageList;
 import com.bbld.warehouse.bean.ProductCountDetails;
 import com.bbld.warehouse.bean.ProductCountList;
 import com.bbld.warehouse.bean.ProductList;
+import com.bbld.warehouse.bean.QTInStorageList;
 import com.bbld.warehouse.bean.SaleScanCode;
 import com.bbld.warehouse.bean.SaleStatistics;
 import com.bbld.warehouse.bean.ScanCode;
@@ -226,6 +227,11 @@ public interface RetrofitInterface {
      */
     @GET("Storage/GetPendingOutStorageList")
     Call<PendingOutStorageList> getPendingOutStorageList(@Query("token") String token, @Query("page") int type, @Query("pagesize") int pagesize);
+    /**
+     * 其他入库
+     */
+    @GET("Storage/GetQTInStorageList")
+    Call<QTInStorageList> getQTInStorageList(@Query("token") String token, @Query("page") int type, @Query("pagesize") int pagesize);
     /**
      * 库存盘点详情
      */

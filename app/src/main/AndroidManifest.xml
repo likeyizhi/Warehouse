@@ -198,6 +198,11 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
+        <!--其他入库-->
+        <activity android:name=".activity.PendingInActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
         <!--销售出库-明细-->
         <activity android:name=".activity.XSCKMXActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"

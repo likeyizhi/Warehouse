@@ -376,12 +376,12 @@ public class AddStockingActivity extends BaseActivity{
                         bundle.putString("productId", product.getId());
                         bundle.putString("productName",product.getName());
                         bundle.putString("type", 3+"");
-                        bundle.putString("needCount", 10000+"");
+                        bundle.putString("needCount", 100000+"");
                         bundle.putString("storage", "yes");
                         bundle.putString("other", "no");
                         readyGo(IDataScanActivity.class, bundle);
                     }else{
-                        toScan(product.getId(),product.getName(),3,10000);
+                        toScan(product.getId(),product.getName(),3,100000);
                     }
                 }
 
@@ -420,7 +420,7 @@ public class AddStockingActivity extends BaseActivity{
                     Bundle bundle=new Bundle();
                     bundle.putString("productId", product.getId()+"");
                     bundle.putString("productName",product.getName()+"");
-                    bundle.putString("needCount", "");
+                    bundle.putString("needCount", 100000+"");
                     readyGo(CaptureFinishActivity.class, bundle);
                 }
             });

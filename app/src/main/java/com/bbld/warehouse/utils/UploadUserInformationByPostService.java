@@ -19,25 +19,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UploadUserInformationByPostService {
-    public static String save(String token, String orderId, String codejson) throws Exception{
-        String path = Constants.BASE_URL + "Order/OrderSend?token="+token+"&invoiceid="+orderId+"&codejson="+codejson;
-        Log.i("save", "save="+path);
+    public static String save(String token, String invoiceid, String codejson) throws Exception{
+//        String path = Constants.BASE_URL + "Order/OrderSend?token="+token+"&invoiceid="+orderId+"&codejson="+codejson;
+        String path = Constants.BASE_URL + "Order/OrderSend";
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", token);
-        params.put("orderId", orderId);
+        params.put("invoiceid", invoiceid);
         params.put("codejson", codejson);
+        Log.i("save", "save="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
     public static String saveStorage(String token, String type, String typeId, String number, String linkName, String linkPhone, String remark, String codejson) throws Exception{
-        String path = Constants.BASE_URL + "Storage/CommitStorage?token="+token+
-                "&type="+type+
-                "&typeId="+typeId+
-                "&number="+number+
-                "&linkName="+linkName+
-                "&linkPhone="+linkPhone+
-                "&remark="+remark+
-                "&codejson="+codejson;
-        Log.i("saveStorage", "saveStorage="+path);
+//        String path = Constants.BASE_URL + "Storage/CommitStorage?token="+token+
+//                "&type="+type+
+//                "&typeId="+typeId+
+//                "&number="+number+
+//                "&linkName="+linkName+
+//                "&linkPhone="+linkPhone+
+//                "&remark="+remark+
+//                "&codejson="+codejson;
+        String path = Constants.BASE_URL + "Storage/CommitStorage";
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", token);
         params.put("type", type);
@@ -47,74 +48,95 @@ public class UploadUserInformationByPostService {
         params.put("linkPhone", linkPhone);
         params.put("remark", remark);
         params.put("codejson", codejson);
+        Log.i("saveStorage", "saveStorage="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
     public static String saveStocking(String token,String number, String remark, String codejson) throws Exception{
-        String path = Constants.BASE_URL + "Storage/CommitInventory?token="+token+
-                "&number="+number+
-                "&remark="+remark+
-                "&codejson="+codejson;
-        Log.i("saveStocking", "saveStocking="+path);
+//        String path = Constants.BASE_URL + "Storage/CommitInventory?token="+token+
+//                "&number="+number+
+//                "&remark="+remark+
+//                "&codejson="+codejson;
+        String path = Constants.BASE_URL + "Storage/CommitInventory";
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", token);
         params.put("number", number);
         params.put("remark", remark);
         params.put("codejson", codejson);
+        Log.i("saveStocking", "saveStocking="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
     public static String commitHandOver(String token,String handoverId, String codejson) throws Exception{
-        String path = Constants.BASE_URL + "Storage/CommitHandOver?token="+token+
-                "&handoverId="+handoverId+
-                "&codejson="+codejson;
-        Log.i("commitHandOver", "commitHandOver="+path);
+//        String path = Constants.BASE_URL + "Storage/CommitHandOver?token="+token+
+//                "&handoverId="+handoverId+
+//                "&codejson="+codejson;
+        String path = Constants.BASE_URL + "Storage/CommitHandOver";
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", token);
         params.put("handoverId", handoverId);
         params.put("codejson", codejson);
+        Log.i("commitHandOver", "commitHandOver="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
     public static String orderReceipt(String token,String invoiceid, String codejson) throws Exception{
-        String path = Constants.BASE_URL + "Order/OrderReceipt?token="+token+
-                "&invoiceid="+invoiceid+
-                "&codejson="+codejson;
-        Log.i("saveStocking", "saveStocking="+path);
+//        String path = Constants.BASE_URL + "Order/OrderReceipt?token="+token+
+//                "&invoiceid="+invoiceid+
+//                "&codejson="+codejson;
+        String path = Constants.BASE_URL + "Order/OrderReceipt";
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", token);
         params.put("invoiceid", invoiceid);
         params.put("codejson", codejson);
+        Log.i("orderReceipt", "orderReceipt="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
+    /**其他出库*/
     public static String commitOutStorage(String token,String storageId, String codejson) throws Exception{
-        String path = Constants.BASE_URL + "Storage/CommitOutStorage?token="+token+
-                "&storageId="+storageId+
-                "&codejson="+codejson;
-        Log.i("commitOutStorage", "commitOutStorage="+path);
+//        String path = Constants.BASE_URL + "Storage/CommitOutStorage?token="+token+
+//                "&storageId="+storageId+
+//                "&codejson="+codejson;
+        String path = Constants.BASE_URL + "Storage/CommitOutStorage";
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", token);
         params.put("storageId", storageId);
         params.put("codejson", codejson);
+        Log.i("commitOutStorage", "commitOutStorage="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    /**其他入库*/
+    public static String commitInStorage(String token,String storageId, String codejson) throws Exception{
+//        String path = Constants.BASE_URL + "Storage/CommitInStorage?token="+token+
+//                "&storageId="+storageId+
+//                "&codejson="+codejson;
+        String path = Constants.BASE_URL + "Storage/CommitInStorage";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("storageId", storageId);
+        params.put("codejson", codejson);
+        Log.i("commitInStorage", "commitInStorage="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
     //http://mapi.xiuzheng.cc:83/Api/Storage/CusInvoiceSend?token=a81d296a00c7465f8f391d23c4a38bf2&codejson=
     public static String cusInvoiceSend(String token, String codejson, String customerInvoiceId) throws Exception{
-        String path = Constants.BASE_URL + "Storage/CusInvoiceSend?token="+token+
-                "&CustomerInvoiceId="+customerInvoiceId+
-                "&codejson="+codejson;
-        Log.i("cusInvoiceSend", "cusInvoiceSend="+path);
+//        String path = Constants.BASE_URL + "Storage/CusInvoiceSend?token="+token+
+//                "&CustomerInvoiceId="+customerInvoiceId+
+//                "&codejson="+codejson;
+        String path = Constants.BASE_URL + "Storage/CusInvoiceSend";
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", token);
         params.put("CustomerInvoiceId", customerInvoiceId);
         params.put("codejson", codejson);
+        Log.i("cusInvoiceSend", "cusInvoiceSend="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
     //http://mapi.xiuzheng.cc:83/Api/Storage/CusInvoiceConfirm?token=a81d296a00c7465f8f391d23c4a38bf2&CustomerInvoiceId=1
     public static String cusInvoiceConfirm(String token, String customerInvoiceId) throws Exception{
-        String path = Constants.BASE_URL + "Storage/CusInvoiceConfirm?token="+token+
-                "&CustomerInvoiceId="+customerInvoiceId;
-        Log.i("cusInvoiceConfirm", "cusInvoiceConfirm="+path);
+//        String path = Constants.BASE_URL + "Storage/CusInvoiceConfirm?token="+token+
+//                "&CustomerInvoiceId="+customerInvoiceId;
+        String path = Constants.BASE_URL + "Storage/CusInvoiceConfirm";
         Map<String, String> params = new HashMap<String, String>();
         params.put("token", token);
         params.put("CustomerInvoiceId", customerInvoiceId);
+        Log.i("cusInvoiceConfirm", "cusInvoiceConfirm="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
 

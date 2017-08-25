@@ -125,6 +125,10 @@ public class MenuActivity extends BaseActivity{
     TextView tvZDPS;
     @BindView(R.id.tvDHQR)
     TextView tvDHQR;
+    @BindView(R.id.llQTRK)
+    LinearLayout llQTRK;
+    @BindView(R.id.tvQTRK)
+    TextView tvQTRK;
 
 //    private Handler mHandler=new Handler(){
 //        @Override
@@ -364,6 +368,13 @@ public class MenuActivity extends BaseActivity{
                 readyGo(QueryActivity.class);
             }
         });
+        /** 其他入库 */
+        llQTRK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(PendingInActivity.class);
+            }
+        });
 //        srlMenu.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 //            @Override
 //            public void onRefresh() {
@@ -526,6 +537,11 @@ public class MenuActivity extends BaseActivity{
                         tvDHQR.setText(Html.fromHtml("到货确认"+"<font color=\"#00A3D9\">"+response.body().getZdsh()+"</font>"));//#00A3D9
                     }else{
                         tvDHQR.setText("到货确认");
+                    }
+                    if (response.body().getQtrk()!=0){
+                        tvQTRK.setText(Html.fromHtml("其他入库"+"<font color=\"#00A3D9\">"+response.body().getQtrk()+"</font>"));//#00A3D9
+                    }else{
+                        tvQTRK.setText("其他入库");
                     }
                     WeiboDialogUtils.closeDialog(loadDialog);
                 }

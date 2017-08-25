@@ -17,6 +17,7 @@ public class IndexInfo {
      "qtckdck": 1
      "zdps": 1,
      "zdsh": 1
+     "qtrk": 1
      }*/
     private int status;
     private String mes;
@@ -28,6 +29,15 @@ public class IndexInfo {
     private int qtckdck;
     private int zdps;
     private int zdsh;
+    private int qtrk;
+
+    public int getQtrk() {
+        return qtrk;
+    }
+
+    public void setQtrk(int qtrk) {
+        this.qtrk = qtrk;
+    }
 
     public int getZdps() {
         return zdps;

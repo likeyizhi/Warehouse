@@ -30,6 +30,7 @@ import com.bbld.warehouse.bean.PendingOutStorageList;
 import com.bbld.warehouse.bean.ProductCountDetails;
 import com.bbld.warehouse.bean.ProductCountList;
 import com.bbld.warehouse.bean.ProductList;
+import com.bbld.warehouse.bean.QTInStorageList;
 import com.bbld.warehouse.bean.SaleScanCode;
 import com.bbld.warehouse.bean.SaleStatistics;
 import com.bbld.warehouse.bean.ScanCode;
@@ -244,6 +245,12 @@ public class RetrofitService {
      */
     public Call<PendingOutStorageList> getPendingOutStorageList(String token, int page, int pagesize){
         return retrofitInterface.getPendingOutStorageList(token, page, pagesize);
+    }
+    /**
+     * 其他入库
+     */
+    public Call<QTInStorageList> getQTInStorageList(String token, int page, int pagesize){
+        return retrofitInterface.getQTInStorageList(token, page, pagesize);
     }
     /**
      * 库存盘点详情

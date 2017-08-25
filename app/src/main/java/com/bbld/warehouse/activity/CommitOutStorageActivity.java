@@ -51,7 +51,7 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 /**
- * 其他订单出库
+ * 其他订单出库/其他订单出库
  * Created by likey on 2017/7/12.
  */
 
@@ -70,6 +70,8 @@ public class CommitOutStorageActivity extends BaseActivity{
     TextView tvRemark;
     @BindView(R.id.btn_out)
     Button btnOut;
+    @BindView(R.id.tvTitle)
+    TextView tvTitle;
 
     private String orderCount;
     private int type;
@@ -116,9 +118,20 @@ public class CommitOutStorageActivity extends BaseActivity{
     protected void initViewsAndEvents() {
         mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(CommitOutStorageActivity.this);
         mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
+        setTitle();
         loadData();
         setListeners();
         initAppList();
+    }
+
+    private void setTitle() {
+        if (type==1){
+            tvTitle.setText("其他出库");
+            btnOut.setText("发货出库");
+        }else {//type==2
+            tvTitle.setText("其他入库");
+            btnOut.setText("确认入库");
+        }
     }
 
     private void initAppList(){
@@ -179,8 +192,13 @@ public class CommitOutStorageActivity extends BaseActivity{
                     @Override
                     public void run() {
                         try {
+                            if (type==1){
                                 request= UploadUserInformationByPostService.commitOutStorage(new MyToken(CommitOutStorageActivity.this).getToken()+""
                                         ,storageId+"",codejson);
+                            }else{
+                                request= UploadUserInformationByPostService.commitInStorage(new MyToken(CommitOutStorageActivity.this).getToken()+""
+                                        ,storageId+"",codejson);
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

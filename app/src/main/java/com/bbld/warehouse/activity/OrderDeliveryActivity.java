@@ -419,7 +419,7 @@ public class OrderDeliveryActivity extends BaseActivity{
                         public void run() {
                             try {
                                 request= UploadUserInformationByPostService.save(new MyToken(OrderDeliveryActivity.this).getToken()+""
-                                        ,orderId+"",codejson);
+                                        ,invoiceid+"",codejson);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
