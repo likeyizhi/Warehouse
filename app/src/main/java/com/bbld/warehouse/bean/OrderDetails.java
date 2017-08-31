@@ -265,10 +265,30 @@ public class OrderDetails {
             public static class OrderDetailsCodeList{
                 /**"Code": "13812020226901",
                  "CodeType": "2",
+                 "SerialNumber": "252525",
+                 "BatchNumber": "2525252",
                  "Count": "1"*/
                 private String Code;
                 private String CodeType;
                 private String Count;
+                private String SerialNumber;
+                private String BatchNumber;
+
+                public String getSerialNumber() {
+                    return SerialNumber;
+                }
+
+                public void setSerialNumber(String serialNumber) {
+                    SerialNumber = serialNumber;
+                }
+
+                public String getBatchNumber() {
+                    return BatchNumber;
+                }
+
+                public void setBatchNumber(String batchNumber) {
+                    BatchNumber = batchNumber;
+                }
 
                 public String getCode() {
                     return Code;

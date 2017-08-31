@@ -97,6 +97,7 @@ public class AddOutBoundOrderActivity extends BaseActivity{
             switch (msg.what){
                 case 111:
                     WeiboDialogUtils.closeDialog(loadDialog);
+                    btnSubmit.setClickable(true);
                     showToast(""+request);
                     //出库成功清空数据库，释放当前acticity
                     mUserDataBaseOperate.deleteAll();
@@ -104,6 +105,7 @@ public class AddOutBoundOrderActivity extends BaseActivity{
                     break;
                 case 222:
                     WeiboDialogUtils.closeDialog(loadDialog);
+                    btnSubmit.setClickable(true);
                     showToast(""+request);
                     break;
             }
@@ -198,6 +200,7 @@ public class AddOutBoundOrderActivity extends BaseActivity{
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnSubmit.setClickable(false);
                 loadDialog= WeiboDialogUtils.createLoadingDialog(AddOutBoundOrderActivity.this,getString(R.string.caozuo_ing));
                 List<CartSQLBean> sqlProducts = mUserDataBaseOperate.findAll();
                 List<CodeJson.CodeJsonList> A = new ArrayList<CodeJson.CodeJsonList>();
@@ -368,7 +371,7 @@ public class AddOutBoundOrderActivity extends BaseActivity{
                     Bundle bundle=new Bundle();
                     bundle.putString("productId", product.getId()+"");
                     bundle.putString("productName",product.getName()+"");
-                    bundle.putString("needCount", 100+"");
+                    bundle.putString("needCount", 1000000+"");
                     readyGo(CaptureFinishActivity.class, bundle);
                 }
             });

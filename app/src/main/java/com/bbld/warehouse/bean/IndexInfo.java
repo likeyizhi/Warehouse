@@ -18,6 +18,7 @@ public class IndexInfo {
      "zdps": 1,
      "zdsh": 1
      "qtrk": 1
+     "thd": 1
      }*/
     private int status;
     private String mes;
@@ -30,6 +31,15 @@ public class IndexInfo {
     private int zdps;
     private int zdsh;
     private int qtrk;
+    private int thd;
+
+    public int getThd() {
+        return thd;
+    }
+
+    public void setThd(int thd) {
+        this.thd = thd;
+    }
 
     public int getQtrk() {
         return qtrk;

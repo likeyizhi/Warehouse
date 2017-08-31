@@ -95,6 +95,7 @@ public class AddStockingActivity extends BaseActivity{
             switch (msg.what){
                 case 111:
                     WeiboDialogUtils.closeDialog(baocunDialog);
+                    btnSubmit.setClickable(true);
                     showToast(""+request);
                     //出库成功清空数据库，释放当前acticity
                     mUserDataBaseOperate.deleteAll();
@@ -102,6 +103,7 @@ public class AddStockingActivity extends BaseActivity{
                     break;
                 case 222:
                     WeiboDialogUtils.closeDialog(baocunDialog);
+                    btnSubmit.setClickable(true);
                     showToast(""+request);
                     break;
                 case 1101:
@@ -182,6 +184,7 @@ public class AddStockingActivity extends BaseActivity{
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnSubmit.setClickable(true);
                 baocunDialog=WeiboDialogUtils.createLoadingDialog(AddStockingActivity.this,getString(R.string.caozuo_ing));
                 List<CartSQLBean> sqlProducts = mUserDataBaseOperate.findAll();
                 List<CodeJson.CodeJsonList> A = new ArrayList<CodeJson.CodeJsonList>();
@@ -376,7 +379,7 @@ public class AddStockingActivity extends BaseActivity{
                         bundle.putString("productId", product.getId());
                         bundle.putString("productName",product.getName());
                         bundle.putString("type", 3+"");
-                        bundle.putString("needCount", 100000+"");
+                        bundle.putString("needCount", 1000000+"");
                         bundle.putString("storage", "yes");
                         bundle.putString("other", "no");
                         readyGo(IDataScanActivity.class, bundle);
@@ -420,7 +423,7 @@ public class AddStockingActivity extends BaseActivity{
                     Bundle bundle=new Bundle();
                     bundle.putString("productId", product.getId()+"");
                     bundle.putString("productName",product.getName()+"");
-                    bundle.putString("needCount", 100000+"");
+                    bundle.putString("needCount", 1000000+"");
                     readyGo(CaptureFinishActivity.class, bundle);
                 }
             });

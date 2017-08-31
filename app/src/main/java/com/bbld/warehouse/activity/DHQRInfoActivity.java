@@ -105,25 +105,49 @@ public class DHQRInfoActivity extends BaseActivity{
     }
 
     private void sure() {
-        new Thread(new Runnable() {
+        Call<CusInvoiceConfirm> call=RetrofitService.getInstance().cusInvoiceConfirm(token,customerInvoiceId);
+        call.enqueue(new Callback<CusInvoiceConfirm>() {
             @Override
-            public void run() {
-                try {
-                    request= UploadUserInformationByPostService.cusInvoiceConfirm(token,customerInvoiceId);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            public void onResponse(Response<CusInvoiceConfirm> response, Retrofit retrofit) {
+                if (response==null){
+                    showToast("数据获取失败");
+                    return;
                 }
-                if (request.contains("成功")) { // 请求成功
-                    Message message=new Message();
-                    message.what=111;
-                    handler.sendMessage(message);
-                } else { // 请求失败
-                    Message message=new Message();
-                    message.what=222;
-                    handler.sendMessage(message);
+                if (response.body().getStatus()==0){
+                    WeiboDialogUtils.closeDialog(loading);
+                    showToast("操作成功");
+                    finish();
+                }else{
+                    WeiboDialogUtils.closeDialog(loading);
+                    showToast(response.body().getMes());
+                    finish();
                 }
             }
-        }).start();
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    request= UploadUserInformationByPostService.cusInvoiceConfirm(token,customerInvoiceId);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                if (request.contains("成功")) { // 请求成功
+//                    Message message=new Message();
+//                    message.what=111;
+//                    handler.sendMessage(message);
+//                } else { // 请求失败
+//                    Message message=new Message();
+//                    message.what=222;
+//                    handler.sendMessage(message);
+//                }
+//            }
+//        }).start();
     }
 
     private void loadData() {

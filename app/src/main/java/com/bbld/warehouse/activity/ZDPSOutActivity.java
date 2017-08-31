@@ -89,6 +89,7 @@ public class ZDPSOutActivity extends BaseActivity{
             switch (msg.what){
                 case 111:
                     WeiboDialogUtils.closeDialog(loadDialog);
+                    btnOut.setClickable(true);
                     showToast(""+request);
                     //出库成功清空数据库，释放当前acticity
                     mUserDataBaseOperate.deleteAll();
@@ -96,6 +97,7 @@ public class ZDPSOutActivity extends BaseActivity{
                     break;
                 case 222:
                     WeiboDialogUtils.closeDialog(loadDialog);
+                    btnOut.setClickable(true);
                     showToast(""+request);
                     break;
                 case 1101:
@@ -175,6 +177,7 @@ public class ZDPSOutActivity extends BaseActivity{
         btnOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnOut.setClickable(false);
                 loadDialog= WeiboDialogUtils.createLoadingDialog(ZDPSOutActivity.this,getString(R.string.caozuo_ing));
                 List<CartSQLBean> sqlProducts = mUserDataBaseOperate.findAll();
                 List<CodeJson.CodeJsonList> A = new ArrayList<CodeJson.CodeJsonList>();

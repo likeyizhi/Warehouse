@@ -258,7 +258,7 @@ public final class CaptureActivity extends Activity implements
 				needCount=intent.getExtras().getString("needCount");
 			}else{
 				type=intent.getExtras().getString("type");
-				needCount=10000+"";
+				needCount=1000000+"";
 				tv_needCount.setVisibility(View.INVISIBLE);
 			}
 		}
@@ -463,7 +463,7 @@ public final class CaptureActivity extends Activity implements
 					public void onClick(DialogInterface dialog, int which) {
 						String input = et.getText().toString();
 						if (input.equals("")) {
-							Toast.makeText(getApplicationContext(), "还未设置序列号！" + input, Toast.LENGTH_LONG).show();
+							Toast.makeText(getApplicationContext(), "还未输入!!!" + input, Toast.LENGTH_LONG).show();
 						} else {
 							getScanCode(input);
 						}
@@ -596,7 +596,11 @@ public final class CaptureActivity extends Activity implements
 							sqlBean.setProductCode(code+"");
 							sqlBean.setProductType(response.body().getInfo().getType()+"");
 							sqlBean.setSerialNumber(response.body().getInfo().getSerialNumber()+"");
-							sqlBean.setBatchNumber(batchNumber+"");
+							if (batchNumber.equals("") || batchNumber==null){
+								sqlBean.setBatchNumber(response.body().getInfo().getBatchNumber()+"");
+							}else{
+								sqlBean.setBatchNumber(batchNumber+"");
+							}
 //							Toast.makeText(CaptureActivity.this,""+response.body().getInfo().getSerialNumber()+","+response.body().getInfo().getBatchNumber(),Toast.LENGTH_SHORT).show();
 							sqlBean.setProCount(response.body().getInfo().getCount());
 							mUserDataBaseOperate.insertToUser(sqlBean);

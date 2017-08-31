@@ -30,6 +30,10 @@
         <activity android:name=".zxinglogistics.android.CaptureActivity"
             android:screenOrientation="portrait">
         </activity>
+        <!--退货单-扫码-->
+        <activity android:name=".scancodenew_thd.scan.CaptureActivity"
+            android:screenOrientation="portrait">
+        </activity>
         <!--登录-->
         <activity android:name=".activity.LoginActivity"
             android:screenOrientation="portrait">
@@ -207,6 +211,21 @@
         <activity android:name=".activity.XSCKMXActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:theme="@style/myTransparent"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--退货单-->
+        <activity android:name=".activity.THDActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--退货单-详情-->
+        <activity android:name=".activity.THDInfoActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--退货单-退货-->
+        <activity android:name=".activity.THDSureActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
         <!--更新相关-->

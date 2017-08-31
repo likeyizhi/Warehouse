@@ -31,9 +31,12 @@ import com.bbld.warehouse.bean.ProductCountDetails;
 import com.bbld.warehouse.bean.ProductCountList;
 import com.bbld.warehouse.bean.ProductList;
 import com.bbld.warehouse.bean.QTInStorageList;
+import com.bbld.warehouse.bean.RefundDetail;
+import com.bbld.warehouse.bean.RefundList;
 import com.bbld.warehouse.bean.SaleScanCode;
 import com.bbld.warehouse.bean.SaleStatistics;
 import com.bbld.warehouse.bean.ScanCode;
+import com.bbld.warehouse.bean.ScanCodeRefund;
 import com.bbld.warehouse.bean.StorageCodeList;
 import com.bbld.warehouse.bean.StorageDetails;
 import com.bbld.warehouse.bean.StorageList;
@@ -289,6 +292,12 @@ public class RetrofitService {
         return retrofitInterface.saleScanCode(token,code);
     }
     /**
+     * 退货单-扫码
+     */
+    public Call<ScanCodeRefund> scanCodeRefund(String token, String code, String refundId, String productId){
+        return retrofitInterface.scanCodeRefund(token,code,refundId,productId);
+    }
+    /**
      *
      */
     public Call<StorageCodeList> storageCodeList(String token, String type, String storageId){
@@ -299,5 +308,17 @@ public class RetrofitService {
      */
     public Call<SaleStatistics> saleStatistics(String token, String start, String end){
         return retrofitInterface.saleStatistics(token,start,end);
+    }
+    /**
+     * 退货单
+     */
+    public Call<RefundList> getRefundList(String token, int page, int pagesize){
+        return retrofitInterface.getRefundList(token,page,pagesize);
+    }
+    /**
+     * 退货单-详情
+     */
+    public Call<RefundDetail> getRefundDetail(String token, String id){
+        return retrofitInterface.getRefundDetail(token,id);
     }
 }

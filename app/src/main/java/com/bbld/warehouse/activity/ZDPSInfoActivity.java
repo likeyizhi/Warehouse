@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,6 +41,8 @@ public class ZDPSInfoActivity extends BaseActivity{
     TextView tvOrderNumber;
     @BindView(R.id.lv_backOrderInfo)
     ListView lvInfo;
+    @BindView(R.id.ib_back)
+    ImageButton ibBack;
 
 
     private String customerInvoiceId;
@@ -52,6 +55,16 @@ public class ZDPSInfoActivity extends BaseActivity{
     protected void initViewsAndEvents() {
         token=new MyToken(this).getToken();
         loadData();
+        setListeners();
+    }
+
+    private void setListeners() {
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private void loadData() {

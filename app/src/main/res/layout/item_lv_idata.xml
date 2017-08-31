@@ -58,6 +58,7 @@
                 android:background="#ffffff"
                 android:gravity="center_horizontal"
                 android:layout_centerInParent="true"
+                android:padding="10dp"
                 android:text="请输入序列号"/>
         </RelativeLayout>
 

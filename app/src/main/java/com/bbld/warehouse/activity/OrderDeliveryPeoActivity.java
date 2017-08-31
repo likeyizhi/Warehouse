@@ -97,6 +97,7 @@ public class OrderDeliveryPeoActivity extends BaseActivity{
             switch (msg.what){
                 case 111:
                     WeiboDialogUtils.closeDialog(loadDialog);
+                    btnOut.setClickable(true);
                     showToast(""+request);
                     //出库成功清空数据库，释放当前acticity
                     mUserDataBaseOperate.deleteAll();
@@ -110,6 +111,7 @@ public class OrderDeliveryPeoActivity extends BaseActivity{
                     break;
                 case 222:
                     WeiboDialogUtils.closeDialog(loadDialog);
+                    btnOut.setClickable(true);
                     showToast(""+request);
                     break;
                 case 1101:
@@ -218,8 +220,8 @@ public class OrderDeliveryPeoActivity extends BaseActivity{
                             sqlBean.setProductId(products.get(i).getProductID()+"");
                             sqlBean.setProductCode(products.get(i).getCodeList().get(c).getCode()+"");
                             sqlBean.setProductType(products.get(i).getCodeList().get(c).getCodeType()+"");
-                            sqlBean.setSerialNumber("");
-                            sqlBean.setBatchNumber("");
+                            sqlBean.setSerialNumber(products.get(i).getCodeList().get(c).getSerialNumber()+"");
+                            sqlBean.setBatchNumber(products.get(i).getCodeList().get(c).getBatchNumber()+"");
                             sqlBean.setProCount(Integer.parseInt(products.get(i).getCodeList().get(c).getCount()));
                             mUserDataBaseOperate.insertToUser(sqlBean);
                         }
@@ -249,6 +251,7 @@ public class OrderDeliveryPeoActivity extends BaseActivity{
         btnOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnOut.setClickable(false);
                 loadDialog=WeiboDialogUtils.createLoadingDialog(OrderDeliveryPeoActivity.this,getString(R.string.caozuo_ing));
                 List<CartSQLBean> sqlProducts = mUserDataBaseOperate.findAll();
                 List<CodeJson.CodeJsonList> A = new ArrayList<CodeJson.CodeJsonList>();
@@ -286,10 +289,10 @@ public class OrderDeliveryPeoActivity extends BaseActivity{
                         try {
                             if (doType.equals("sure")){
                                 request= UploadUserInformationByPostService.orderReceipt(new MyToken(OrderDeliveryPeoActivity.this).getToken()+""
-                                        ,orderId+"",codejson);
+                                        ,invoiceid+"",codejson);
                             }else{
                                 request= UploadUserInformationByPostService.save(new MyToken(OrderDeliveryPeoActivity.this).getToken()+""
-                                        ,orderId+"",codejson);
+                                        ,invoiceid+"",codejson);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -360,50 +363,11 @@ public class OrderDeliveryPeoActivity extends BaseActivity{
                     bundle.putString("productId", product.getProductID()+"");
                     bundle.putString("productName",product.getProductName()+"");
                     bundle.putString("needCount", product.getProductCount()+"");
+                    bundle.putString("showBS", "yes");
                     readyGo(CaptureFinishActivity.class, bundle);
                 }
             });
             holder.btn_scan.setVisibility(View.GONE);
-//            holder.btn_scan.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (is_iData){
-//                        showToast("iData终端");
-//                    }else{
-//                        toScan(product.getProductID(),product.getProductName(),orderId,product.getProductCount(),type);
-//                    }
-//                }
-//
-//                private void toScan(String productID, String productName, String orderId, String productCount,String type) {
-//                    if (Build.VERSION.SDK_INT >= 23){
-//                        int cameraPermission= ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA);
-//                        if (cameraPermission != PackageManager.PERMISSION_GRANTED){
-//                            ActivityCompat.requestPermissions(OrderDeliveryPeoActivity.this, new String[]{Manifest.permission.CAMERA}, 123);
-//                            return;
-//                        }else{
-//                            Bundle bundle=new Bundle();
-//                            bundle.putString("productId", productID);
-//                            bundle.putString("productName",productName);
-//                            bundle.putString("orderId", orderId);
-//                            bundle.putString("needCount", productCount);
-//                            bundle.putString("storage", "no");
-//                            bundle.putString("type", type+"");
-//                            bundle.putInt("NeedBatch", isNeedBatch);
-//                            readyGo(CaptureActivity.class, bundle);
-//                        }
-//                    }else{
-//                        Bundle bundle=new Bundle();
-//                        bundle.putString("productId", productID);
-//                        bundle.putString("productName",productName);
-//                        bundle.putString("orderId", orderId);
-//                        bundle.putString("needCount", productCount);
-//                        bundle.putString("storage", "no");
-//                        bundle.putString("type", type+"");
-//                        bundle.putInt("NeedBatch", isNeedBatch);
-//                        readyGo(CaptureActivity.class, bundle);
-//                    }
-//                }
-//            });
             return view;
         }
 

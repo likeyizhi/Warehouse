@@ -168,6 +168,7 @@ public class OrderDeliveryActivity extends BaseActivity{
             switch (msg.what){
                 case 111:
                     WeiboDialogUtils.closeDialog(loadDialog);
+                    btnOut.setClickable(true);
                     showToast(""+request);
                     //出库成功清空数据库，释放当前acticity
                     mUserDataBaseOperate.deleteAll();
@@ -181,6 +182,7 @@ public class OrderDeliveryActivity extends BaseActivity{
                     break;
                 case 222:
                     WeiboDialogUtils.closeDialog(loadDialog);
+                    btnOut.setClickable(true);
                     showToast(""+request);
                     break;
                 case 1101:
@@ -207,6 +209,8 @@ public class OrderDeliveryActivity extends BaseActivity{
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE };
+
+    private String requestImg;
 
     @Override
     protected void initViewsAndEvents() {
@@ -382,6 +386,7 @@ public class OrderDeliveryActivity extends BaseActivity{
         btnOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnOut.setClickable(false);
                 loadDialog=WeiboDialogUtils.createLoadingDialog(OrderDeliveryActivity.this,getString(R.string.caozuo_ing));
                 List<CartSQLBean> sqlProducts = mUserDataBaseOperate.findAll();
                 List<CodeJson.CodeJsonList> A = new ArrayList<CodeJson.CodeJsonList>();
@@ -443,53 +448,18 @@ public class OrderDeliveryActivity extends BaseActivity{
         lvFahuo.setAdapter(new OrderDelAdapter(info.getProductList()));
     }
 
-    private void uploadImg(String codejson) {
+    private void uploadImg(final String codejson) {
         if (llSaoMaSH.getVisibility()==View.GONE){
-            final Map<String, String> params = new HashMap<String, String>();
-            params.put("token", new MyToken(OrderDeliveryActivity.this).getToken());
-            params.put("invoiceid", invoiceid);
-            params.put("codejson", codejson);
-            final Map<String, File> files = new TreeMap<String, File>();
-//            if (!file_imgPath01.equals("")){
-//                files.put("image01",new File(file_imgPath01));
-//            }
-//            if (!file_imgPath02.equals("")){
-//                files.put("image02",new File(file_imgPath02));
-//            }
-//            if (!file_imgPath03.equals("")){
-//                files.put("image03",new File(file_imgPath03));
-//            }
-//            if (!file_imgPath04.equals("")){
-//                files.put("image04",new File(file_imgPath04));
-//            }
-//            if (!file_imgPath05.equals("")){
-//                files.put("image05",new File(file_imgPath05));
-//            }
-//            if (!file_imgPath06.equals("")){
-//                files.put("image06",new File(file_imgPath06));
-//            }
-//            if (!file_imgPath07.equals("")){
-//                files.put("image07",new File(file_imgPath07));
-//            }
-//            if (!file_imgPath08.equals("")){
-//                files.put("image08",new File(file_imgPath08));
-//            }
-//            if (!file_imgPath09.equals("")){
-//                files.put("image09",new File(file_imgPath09));
-//            }
-            Log.i("params", "params="+params);
-            Log.i("files", "files="+files);
-            final String requestURL = Constants.BASE_URL + "Order/OrderReceipt";
-            Log.i("requestURL", "requestURL="+requestURL);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        request = UploadUtil.post(requestURL, params, files);
+                        request= UploadUserInformationByPostService.orderReceipt(new MyToken(OrderDeliveryActivity.this).getToken()+""
+                                ,invoiceid+"",codejson);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if ((request+"").contains("成功")) { // 请求成功
+                    if (request.contains("成功")) { // 请求成功
                         Message message=new Message();
                         message.what=111;
                         handler.sendMessage(message);
@@ -500,14 +470,65 @@ public class OrderDeliveryActivity extends BaseActivity{
                     }
                 }
             }).start();
+
+//            final Map<String, String> params = new HashMap<String, String>();
+//            params.put("token", new MyToken(OrderDeliveryActivity.this).getToken());
+//            params.put("invoiceid", invoiceid);
+//            params.put("codejson", codejson);
+//            final Map<String, File> files = new TreeMap<String, File>();
+//            Log.i("params", "params="+params);
+//            Log.i("files", "files="+files);
+//            final String requestURL = Constants.BASE_URL + "Order/OrderReceipt";
+//            Log.i("requestURL", "requestURL="+requestURL);
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        request = UploadUtil.post(requestURL, params, files);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    if ((request+"").contains("成功")) { // 请求成功
+//                        Message message=new Message();
+//                        message.what=111;
+//                        handler.sendMessage(message);
+//                    } else { // 请求失败
+//                        Message message=new Message();
+//                        message.what=222;
+//                        handler.sendMessage(message);
+//                    }
+//                }
+//            }).start();
         }else{
-            if (file_imgPath01.equals("") || file_imgPath01==null){
-                showToast("请上传异常条码产品");
-            }else{
+//            if (file_imgPath01.equals("") || file_imgPath01==null){
+//                showToast("请上传异常条码产品");
+//                WeiboDialogUtils.closeDialog(loadDialog);
+//            }else{
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            request= UploadUserInformationByPostService.orderReceipt(new MyToken(OrderDeliveryActivity.this).getToken()+""
+                                    ,invoiceid+"",codejson);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (request.contains("成功")) { // 请求成功
+                            Message message=new Message();
+                            message.what=111;
+                            handler.sendMessage(message);
+                        } else { // 请求失败
+                            Message message=new Message();
+                            message.what=222;
+                            handler.sendMessage(message);
+                        }
+                    }
+                }).start();
+
                 final Map<String, String> params = new HashMap<String, String>();
                 params.put("token", new MyToken(OrderDeliveryActivity.this).getToken());
-                params.put("invoiceid", invoiceid);
-                params.put("codejson", codejson);
+//                params.put("invoiceid", invoiceid);
+//                params.put("codejson", codejson);
                 final Map<String, File> files = new TreeMap<String, File>();
                 if (!file_imgPath01.equals("")){
                     files.put("image01",new File(file_imgPath01));
@@ -538,28 +559,28 @@ public class OrderDeliveryActivity extends BaseActivity{
                 }
                 Log.i("params", "params="+params);
                 Log.i("files", "files="+files);
-                final String requestURL = Constants.BASE_URL + "Order/OrderReceipt";
+                final String requestURL = Constants.BASE_URL + "Order/OrderCommitError";
                 Log.i("requestURL", "requestURL="+requestURL);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            request = UploadUtil.post(requestURL, params, files);
+                            requestImg = UploadUtil.post(requestURL, params, files);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        if ((request+"").contains("成功")) { // 请求成功
-                            Message message=new Message();
-                            message.what=111;
-                            handler.sendMessage(message);
-                        } else { // 请求失败
-                            Message message=new Message();
-                            message.what=222;
-                            handler.sendMessage(message);
-                        }
+//                        if ((request+"").contains("成功")) { // 请求成功
+//                            Message message=new Message();
+//                            message.what=111;
+//                            handler.sendMessage(message);
+//                        } else { // 请求失败
+//                            Message message=new Message();
+//                            message.what=222;
+//                            handler.sendMessage(message);
+//                        }
                     }
                 }).start();
-            }
+//            }
         }
     }
 
@@ -614,6 +635,9 @@ public class OrderDeliveryActivity extends BaseActivity{
                     bundle.putString("productId", product.getProductID()+"");
                     bundle.putString("productName",product.getProductName()+"");
                     bundle.putString("needCount", product.getProductCount()+"");
+                    if (doType.equals("sure")){
+                        bundle.putString("showBS", "yes");
+                    }
                     readyGo(CaptureFinishActivity.class, bundle);
                 }
             });
@@ -630,6 +654,9 @@ public class OrderDeliveryActivity extends BaseActivity{
                         bundle.putString("storage", "no");
                         bundle.putString("type", type+"");
                         bundle.putInt("NeedBatch", isNeedBatch);
+                        if (doType.equals("sure")){
+                            bundle.putString("showBS", "yes");
+                        }
                         readyGo(IDataScanActivity.class, bundle);
                     }else{
                         toScan(product.getProductID(),product.getProductName(),orderId,product.getProductCount(),type);

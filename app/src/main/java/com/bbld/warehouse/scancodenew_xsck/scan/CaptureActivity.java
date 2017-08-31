@@ -243,6 +243,12 @@ public final class CaptureActivity extends Activity implements
 				finish();
 			}
 		});
+		tvInputBottom.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				showInputDialog();
+			}
+		});
 	}
 
 	/**
@@ -658,6 +664,47 @@ public final class CaptureActivity extends Activity implements
 		});
 		builder.setCancelable(false);
 		builder.create().show();
+	}
+
+	private void showInputDialog() {
+		final EditText et = new EditText(this);
+		et.setBackgroundResource(R.drawable.bg_batch);
+		et.setMaxLines(1);
+		AlertDialog serialDialog = new AlertDialog.Builder(this).setTitle("请输入条形码")
+				.setView(et)
+				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						String input = et.getText().toString();
+						if (input.equals("")) {
+							Toast.makeText(getApplicationContext(), "还未输入!!!" + input, Toast.LENGTH_LONG).show();
+						} else {
+							findThisCode(input);
+						}
+					}
+				})
+				.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						dialogInterface.dismiss();
+					}
+				})
+				.setCancelable(false)
+				.show();
+		setDialogWindowAttr(serialDialog);
+	}
+
+	//在dialog.show()之后调用
+	public void setDialogWindowAttr(Dialog dlg){
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		int height = dm.heightPixels;
+		int width = dm.widthPixels;
+		Window window = dlg.getWindow();
+		WindowManager.LayoutParams lp = window.getAttributes();
+		lp.gravity = Gravity.CENTER;
+		lp.width = 4*(width/5);//宽高可设置具体大小
+		lp.height = 2*(height/7);
+		dlg.getWindow().setAttributes(lp);
 	}
 
 	public void restartPreviewAfterDelay(long delayMS) {

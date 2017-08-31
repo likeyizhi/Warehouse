@@ -77,6 +77,7 @@ public class XSCKActivity extends BaseActivity{
             switch (msg.what){
                 case 111:
                     WeiboDialogUtils.closeDialog(loadDialog);
+                    btnSubmit.setClickable(true);
                     showToast(""+request);
                     //出库成功清空数据库，释放当前acticity
                     mUserDataBaseOperate.deleteAll();
@@ -84,6 +85,7 @@ public class XSCKActivity extends BaseActivity{
                     break;
                 case 222:
                     WeiboDialogUtils.closeDialog(loadDialog);
+                    btnSubmit.setClickable(true);
                     showToast(""+request);
                     break;
             }
@@ -115,6 +117,7 @@ public class XSCKActivity extends BaseActivity{
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnSubmit.setClickable(false);
                 loadDialog= WeiboDialogUtils.createLoadingDialog(XSCKActivity.this,getString(R.string.caozuo_ing));
                 List<CartSQLBean> sqlProducts = mUserDataBaseOperate.findAll();
                 List<CodeJson.CodeJsonList> A = new ArrayList<CodeJson.CodeJsonList>();

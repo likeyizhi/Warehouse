@@ -36,7 +36,7 @@ public class UploadUtil {
 		String CHARSET = "UTF-8";
 		URL uri = new URL(url);
 		HttpURLConnection conn = (HttpURLConnection) uri.openConnection();
-		conn.setReadTimeout(10 * 1000); // 缓存的最长时间
+		conn.setReadTimeout(90 * 1000); // 缓存的最长时间
 		conn.setDoInput(true);// 允许输入
 		conn.setDoOutput(true);// 允许输出
 		conn.setUseCaches(false); // 不允许使用缓存

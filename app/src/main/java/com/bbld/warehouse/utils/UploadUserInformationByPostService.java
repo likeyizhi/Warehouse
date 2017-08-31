@@ -1,13 +1,8 @@
 package com.bbld.warehouse.utils;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.bbld.warehouse.base.Constants;
-
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -139,6 +134,16 @@ public class UploadUserInformationByPostService {
         Log.i("cusInvoiceConfirm", "cusInvoiceConfirm="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
+    /**退货单*/
+    public static String commitRefund(String token, String RefundId, String codejson) throws Exception{
+        String path = Constants.BASE_URL + "Storage/CommitRefund";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("RefundId", RefundId);
+        params.put("codejson", codejson);
+        Log.i("commitRefund", "commitRefund="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
 
     /**
      * 发送POST请求
@@ -160,7 +165,7 @@ public class UploadUserInformationByPostService {
         byte[] data = sb.toString().getBytes();
 
         HttpURLConnection conn = (HttpURLConnection) new URL(path).openConnection();
-        conn.setConnectTimeout(5000);
+        conn.setConnectTimeout(90*1000);
         conn.setRequestMethod("POST");
         conn.setDoOutput(true);//允许对外传输数据
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");

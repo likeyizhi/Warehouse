@@ -504,6 +504,7 @@
                     android:background="#eeeeee" />
 
                 <LinearLayout
+                    android:id="@+id/llTHD"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -511,7 +512,7 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="10dp"
-                    android:visibility="invisible">
+                    >
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -520,10 +521,11 @@
                         android:src="@mipmap/scjj" />
 
                     <TextView
+                        android:id="@+id/tvTHD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:text="市场交接"
+                        android:text="退货单"
                         android:textColor="#666666"
                         android:textSize="14sp" />
 

@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -66,6 +67,7 @@ public class IDataScanActivity extends BaseActivity{
     private Call<ScanCode> call;
     private TextView tvInput;
     private EditText etScan;
+    private ImageButton ibBack;
 
     @Override
     protected void initViewsAndEvents() {
@@ -143,6 +145,13 @@ public class IDataScanActivity extends BaseActivity{
             public void onClick(View view) {
                 //手动输入条形码
                 showInputDialog();
+            }
+        });
+        ibBack=(ImageButton)findViewById(R.id.ib_back);
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
