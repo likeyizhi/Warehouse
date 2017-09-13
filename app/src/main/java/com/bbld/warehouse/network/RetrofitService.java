@@ -445,5 +445,11 @@ public class RetrofitService {
     public Call<GivebackReciveScanCode> givebackReciveScanCode(String token, String id, String productId,String code){
         return retrofitInterface.givebackReciveScanCode(token, id, productId, code);
     }
+    /**
+     * 盘点单-扫码
+     */
+    public Call<ScanCode> storageInventoryScanCode(String token, String productId,String code, String unique){
+        return retrofitInterface.storageInventoryScanCode(token, productId, code, unique);
+    }
 
 }

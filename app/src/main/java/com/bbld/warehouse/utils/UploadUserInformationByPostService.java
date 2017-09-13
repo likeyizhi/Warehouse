@@ -56,7 +56,7 @@ public class UploadUserInformationByPostService {
         Log.i("saveStorage", "saveStorage="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
-    public static String saveStocking(String token,String number, String remark, String codejson) throws Exception{
+    public static String saveStocking(String token,String number, String remark, String codejson, String unique) throws Exception{
 //        String path = Constants.BASE_URL + "Storage/CommitInventory?token="+token+
 //                "&number="+number+
 //                "&remark="+remark+
@@ -67,6 +67,7 @@ public class UploadUserInformationByPostService {
         params.put("number", number);
         params.put("remark", remark);
         params.put("codejson", codejson);
+        params.put("unique", unique);
         Log.i("saveStocking", "saveStocking="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }

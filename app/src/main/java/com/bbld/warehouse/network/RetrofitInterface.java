@@ -396,4 +396,9 @@ public interface RetrofitInterface {
      */
     @GET("Giveback/ReciveScanCode")
     Call<GivebackReciveScanCode> givebackReciveScanCode(@Query("token") String token, @Query("id") String id, @Query("productId") String productId, @Query("code") String code);
+    /**
+     * 盘点单-扫码
+     */
+    @GET("Storage/InventoryScanCode")
+    Call<ScanCode> storageInventoryScanCode(@Query("token") String token, @Query("productId") String productId, @Query("code") String code, @Query("unique") String unique);
 }

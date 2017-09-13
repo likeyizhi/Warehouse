@@ -34,6 +34,10 @@
         <activity android:name=".scancodenew_thd.scan.CaptureActivity"
             android:screenOrientation="portrait">
         </activity>
+        <!--盘点单-扫码-->
+        <activity android:name=".scancodenew_stock.scan.CaptureActivity"
+            android:screenOrientation="portrait">
+        </activity>
         <!--还货出库-扫码-->
         <activity android:name=".scancodenew_hhck.scan.CaptureActivity"
             android:screenOrientation="portrait">

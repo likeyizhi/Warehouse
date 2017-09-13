@@ -28,6 +28,7 @@ import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.AddOutBoundProduct;
 import com.bbld.warehouse.bean.CartSQLBean;
+import com.bbld.warehouse.bean.ClearScanCode;
 import com.bbld.warehouse.bean.CodeJson;
 import com.bbld.warehouse.bean.GetNewNumber;
 import com.bbld.warehouse.bean.InventoryEdit;
@@ -39,7 +40,7 @@ import com.bbld.warehouse.utils.ApkTool;
 import com.bbld.warehouse.utils.MyAppInfo;
 import com.bbld.warehouse.utils.MyToken;
 import com.bbld.warehouse.utils.UploadUserInformationByPostService;
-import com.bbld.warehouse.scancodenew.scan.CaptureActivity;
+import com.bbld.warehouse.scancodenew_stock.scan.CaptureActivity;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
@@ -207,6 +208,10 @@ public class AddStockingActivity extends BaseActivity{
                         if (sqlProducts.get(q).getProductId().toString().equals(A.get(k).getProductID()+"")){
                             CodeJson.CodeJsonList.CodeJsonCodeList x=new CodeJson.CodeJsonList.CodeJsonCodeList();
                             x.setCode(sqlProducts.get(q).getProductCode()+"");
+                            x.setCount(sqlProducts.get(q).getProCount()+"");
+                            x.setType(sqlProducts.get(q).getProductType()+"");
+                            x.setBatchNumber(sqlProducts.get(q).getBatchNumber()+"");
+                            x.setSerialNumber(sqlProducts.get(q).getSerialNumber()+"");
                             A.get(k).getCodeList().add(x);
                             B.setList(A);
                         }
@@ -228,7 +233,8 @@ public class AddStockingActivity extends BaseActivity{
                             request= UploadUserInformationByPostService.saveStocking(new MyToken(AddStockingActivity.this).getToken()+"",
                                     ""+number,
                                     ""+remark,
-                                    codejson);
+                                    codejson,
+                                    uuid);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -386,7 +392,7 @@ public class AddStockingActivity extends BaseActivity{
                         bundle.putString("storage", "yes");
                         bundle.putString("other", "no");
                         bundle.putString("uuid", uuid);
-                        readyGo(IDataScanActivity.class, bundle);
+                        readyGo(IDataScanStockActivity.class, bundle);
                     }else{
                         toScan(product.getId(),product.getName(),3,100000);
                     }
@@ -471,9 +477,8 @@ public class AddStockingActivity extends BaseActivity{
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mUserDataBaseOperate.deleteAll();
+                cleanAll();
                 dialogInterface.dismiss();
-                ActivityManagerUtil.getInstance().finishActivity(AddStockingActivity.this);
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -483,6 +488,29 @@ public class AddStockingActivity extends BaseActivity{
             }
         });
         builder.create().show();
+    }
+    private void cleanAll() {
+        Call<ClearScanCode> clearCall= RetrofitService.getInstance().clearScanCodeRefund(new MyToken(AddStockingActivity.this).getToken(),uuid);
+        clearCall.enqueue(new Callback<ClearScanCode>() {
+            @Override
+            public void onResponse(Response<ClearScanCode> response, Retrofit retrofit) {
+                if (response==null){
+                    showToast("操作失败，请重试");
+                    return;
+                }
+                if (response.body().getStatus()==0){
+                    mUserDataBaseOperate.deleteAll();
+                    ActivityManagerUtil.getInstance().finishActivity(AddStockingActivity.this);
+                }else{
+                    showToast(response.body().getMes());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                showToast("操作失败,请重试");
+            }
+        });
     }
     @Override
     protected void onRestart() {

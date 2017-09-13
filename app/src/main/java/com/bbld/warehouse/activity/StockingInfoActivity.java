@@ -284,7 +284,7 @@ public class StockingInfoActivity extends BaseActivity{
             @Override
             public void run() {
                 try {
-                    request= UploadUserInformationByPostService.givebackReceiveGiveback(new MyToken(StockingInfoActivity.this).getToken()+"", InventoryId);
+                    request= UploadUserInformationByPostService.storageFinishInventory(new MyToken(StockingInfoActivity.this).getToken()+"", InventoryId);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
