@@ -47,6 +47,7 @@ import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import retrofit.Call;
@@ -117,9 +118,11 @@ public class AddStockingActivity extends BaseActivity{
             }
         }
     };
+    private String uuid;
 
     @Override
     protected void initViewsAndEvents() {
+        uuid= UUID.randomUUID().toString();
         mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(AddStockingActivity.this);
         mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
         productList=new ArrayList<AddOutBoundProduct>();
@@ -184,7 +187,7 @@ public class AddStockingActivity extends BaseActivity{
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnSubmit.setClickable(true);
+                btnSubmit.setClickable(false);
                 baocunDialog=WeiboDialogUtils.createLoadingDialog(AddStockingActivity.this,getString(R.string.caozuo_ing));
                 List<CartSQLBean> sqlProducts = mUserDataBaseOperate.findAll();
                 List<CodeJson.CodeJsonList> A = new ArrayList<CodeJson.CodeJsonList>();
@@ -382,6 +385,7 @@ public class AddStockingActivity extends BaseActivity{
                         bundle.putString("needCount", 1000000+"");
                         bundle.putString("storage", "yes");
                         bundle.putString("other", "no");
+                        bundle.putString("uuid", uuid);
                         readyGo(IDataScanActivity.class, bundle);
                     }else{
                         toScan(product.getId(),product.getName(),3,100000);
@@ -402,6 +406,7 @@ public class AddStockingActivity extends BaseActivity{
                             bundle.putString("needCount", productCount+"");
                             bundle.putString("storage", "yes");
                             bundle.putString("other", "no");
+                            bundle.putString("uuid", uuid);
                             readyGo(CaptureActivity.class, bundle);
                         }
                     }else{
@@ -412,6 +417,7 @@ public class AddStockingActivity extends BaseActivity{
                         bundle.putString("needCount", productCount+"");
                         bundle.putString("storage", "yes");
                         bundle.putString("other", "no");
+                        bundle.putString("uuid", uuid);
                         readyGo(CaptureActivity.class, bundle);
                     }
                 }
@@ -424,6 +430,7 @@ public class AddStockingActivity extends BaseActivity{
                     bundle.putString("productId", product.getId()+"");
                     bundle.putString("productName",product.getName()+"");
                     bundle.putString("needCount", 1000000+"");
+                    bundle.putString("showBS", "yes");
                     readyGo(CaptureFinishActivity.class, bundle);
                 }
             });

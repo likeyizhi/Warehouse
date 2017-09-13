@@ -46,8 +46,10 @@ import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.base.Constants;
 import com.bbld.warehouse.bean.CartSQLBean;
+import com.bbld.warehouse.bean.ClearScanCode;
 import com.bbld.warehouse.bean.CodeJson;
 import com.bbld.warehouse.bean.OrderDetails;
+import com.bbld.warehouse.bean.RemoveCommitScanCode;
 import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
 import com.bbld.warehouse.loading.WeiboDialogUtils;
@@ -77,6 +79,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import butterknife.BindView;
 import retrofit.Call;
@@ -181,6 +184,7 @@ public class OrderDeliveryActivity extends BaseActivity{
                     }
                     break;
                 case 222:
+                    cleanNetData();
                     WeiboDialogUtils.closeDialog(loadDialog);
                     btnOut.setClickable(true);
                     showToast(""+request);
@@ -196,6 +200,7 @@ public class OrderDeliveryActivity extends BaseActivity{
             }
         }
     };
+
     private String file_imgPath01="";
     private String file_imgPath02="";
     private String file_imgPath03="";
@@ -211,9 +216,11 @@ public class OrderDeliveryActivity extends BaseActivity{
             Manifest.permission.WRITE_EXTERNAL_STORAGE };
 
     private String requestImg;
+    private String uuid;
 
     @Override
     protected void initViewsAndEvents() {
+        uuid = UUID.randomUUID().toString();
         mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(OrderDeliveryActivity.this);
         mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
         loadData();
@@ -316,9 +323,8 @@ public class OrderDeliveryActivity extends BaseActivity{
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mUserDataBaseOperate.deleteAll();
+                cleanAll();
                 dialogInterface.dismiss();
-                ActivityManagerUtil.getInstance().finishActivity(OrderDeliveryActivity.this);
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -328,6 +334,30 @@ public class OrderDeliveryActivity extends BaseActivity{
             }
         });
         builder.create().show();
+    }
+
+    private void cleanAll() {
+        Call<ClearScanCode> clearCall=RetrofitService.getInstance().clearScanCode(new MyToken(OrderDeliveryActivity.this).getToken(),type+"",invoiceid+"",uuid);
+        clearCall.enqueue(new Callback<ClearScanCode>() {
+            @Override
+            public void onResponse(Response<ClearScanCode> response, Retrofit retrofit) {
+                if (response==null){
+                    showToast("操作失败，请重试");
+                    return;
+                }
+                if (response.body().getStatus()==0){
+                    mUserDataBaseOperate.deleteAll();
+                    ActivityManagerUtil.getInstance().finishActivity(OrderDeliveryActivity.this);
+                }else{
+                    showToast(response.body().getMes());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
     }
 
     @Override
@@ -408,6 +438,8 @@ public class OrderDeliveryActivity extends BaseActivity{
                             x.setCode(sqlProducts.get(q).getProductCode()+"");
                             x.setSerialNumber(sqlProducts.get(q).getSerialNumber()+"");
                             x.setBatchNumber(sqlProducts.get(q).getBatchNumber()+"");
+                            x.setCount(sqlProducts.get(q).getProCount()+"");
+                            x.setType(sqlProducts.get(q).getProductType()+"");
                             A.get(k).getCodeList().add(x);
                             B.setList(A);
                         }
@@ -423,8 +455,8 @@ public class OrderDeliveryActivity extends BaseActivity{
                         @Override
                         public void run() {
                             try {
-                                request= UploadUserInformationByPostService.save(new MyToken(OrderDeliveryActivity.this).getToken()+""
-                                        ,invoiceid+"",codejson);
+                                request= UploadUserInformationByPostService.saveNew(new MyToken(OrderDeliveryActivity.this).getToken()+""
+                                        ,invoiceid+"",codejson, uuid);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -454,8 +486,10 @@ public class OrderDeliveryActivity extends BaseActivity{
                 @Override
                 public void run() {
                     try {
-                        request= UploadUserInformationByPostService.orderReceipt(new MyToken(OrderDeliveryActivity.this).getToken()+""
-                                ,invoiceid+"",codejson);
+//                        request= UploadUserInformationByPostService.orderReceipt(new MyToken(OrderDeliveryActivity.this).getToken()+""
+//                                ,invoiceid+"",codejson);
+                        request= UploadUserInformationByPostService.orderScanCodeDelivery(new MyToken(OrderDeliveryActivity.this).getToken()+""
+                                ,invoiceid+"",codejson, uuid);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -508,8 +542,10 @@ public class OrderDeliveryActivity extends BaseActivity{
                     @Override
                     public void run() {
                         try {
-                            request= UploadUserInformationByPostService.orderReceipt(new MyToken(OrderDeliveryActivity.this).getToken()+""
-                                    ,invoiceid+"",codejson);
+//                            request= UploadUserInformationByPostService.orderReceipt(new MyToken(OrderDeliveryActivity.this).getToken()+""
+//                                    ,invoiceid+"",codejson);
+                            request= UploadUserInformationByPostService.orderScanCodeDelivery(new MyToken(OrderDeliveryActivity.this).getToken()+""
+                                    ,invoiceid+"",codejson,uuid);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -584,6 +620,23 @@ public class OrderDeliveryActivity extends BaseActivity{
         }
     }
 
+    private void cleanNetData() {
+        Call<RemoveCommitScanCode> rcCall=RetrofitService.getInstance().removeCommitScanCode(new MyToken(OrderDeliveryActivity.this).getToken(),uuid);
+        rcCall.enqueue(new Callback<RemoveCommitScanCode>() {
+            @Override
+            public void onResponse(Response<RemoveCommitScanCode> response, Retrofit retrofit) {
+                if (response==null){
+                    return;
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
+    }
+
     class OrderDelAdapter extends BaseAdapter{
         private List<OrderDetails.OrderDetailsInfo.OrderDetailsProductList> orders;
         public OrderDelAdapter(List<OrderDetails.OrderDetailsInfo.OrderDetailsProductList> orders){
@@ -654,6 +707,7 @@ public class OrderDeliveryActivity extends BaseActivity{
                         bundle.putString("storage", "no");
                         bundle.putString("type", type+"");
                         bundle.putInt("NeedBatch", isNeedBatch);
+                        bundle.putString("uuid", uuid);
                         if (doType.equals("sure")){
                             bundle.putString("showBS", "yes");
                         }
@@ -678,6 +732,8 @@ public class OrderDeliveryActivity extends BaseActivity{
                             bundle.putString("storage", "no");
                             bundle.putString("type", type+"");
                             bundle.putInt("NeedBatch", isNeedBatch);
+                            bundle.putString("uuid", uuid);
+                            bundle.putInt("doNet", 1);
                             readyGo(CaptureActivity.class, bundle);
                         }
                     }else{
@@ -689,6 +745,8 @@ public class OrderDeliveryActivity extends BaseActivity{
                         bundle.putString("storage", "no");
                         bundle.putString("type", type+"");
                         bundle.putInt("NeedBatch", isNeedBatch);
+                        bundle.putString("uuid", uuid);
+                        bundle.putInt("doNet", 1);
                         readyGo(CaptureActivity.class, bundle);
                     }
                 }

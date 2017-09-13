@@ -7,8 +7,8 @@ android {
         applicationId "com.bbld.warehouse"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 12
-        versionName "2.1"
+        versionCode 14
+        versionName "2.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

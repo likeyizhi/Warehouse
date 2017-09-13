@@ -79,6 +79,24 @@ public class CodeJson {
             private String Code;
             private String SerialNumber;
             private String BatchNumber;
+            private String Count;
+            private String Type;
+
+            public String getCount() {
+                return Count;
+            }
+
+            public void setCount(String count) {
+                Count = count;
+            }
+
+            public String getType() {
+                return Type;
+            }
+
+            public void setType(String type) {
+                Type = type;
+            }
 
             public String getSerialNumber() {
                 return SerialNumber;

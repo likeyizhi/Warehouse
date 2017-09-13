@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.bbld.warehouse.R;
 import com.bbld.warehouse.bean.CartSQLBean;
+import com.bbld.warehouse.bean.RemoveScanCode;
 import com.bbld.warehouse.bean.ScanCode;
 import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
@@ -141,9 +142,9 @@ public final class CaptureActivity extends Activity implements
 	 * 图片的路径
 	 */
 	private String photoPath;
-	
+
 	private LinearLayout linearLayout_bottom;//底部提示部分
-	
+
 	private Handler mHandler = new MyHandler(this);
 	private TextView tv_needCount;
 	private UserSQLiteOpenHelper mUserSQLiteOpenHelper;
@@ -163,6 +164,7 @@ public final class CaptureActivity extends Activity implements
 	private TextView tv_scanCount;
 	private Call<ScanCode> call;
 	private TextView tvInput;
+	private String uuid;
 
 	static class MyHandler extends Handler {
 
@@ -184,11 +186,11 @@ public final class CaptureActivity extends Activity implements
 					bunble.putString("data", message);
 					intent1.putExtras(bunble);
 					activityReference.get().setResult(100, intent1);
-			        new Handler().postDelayed(new Runnable() {
-			            public void run() {
-			            	activityReference.get().finish();
-			            }
-			        }, 400);
+					new Handler().postDelayed(new Runnable() {
+						public void run() {
+							activityReference.get().finish();
+						}
+					}, 400);
 					break;
 
 				case PARSE_BARCODE_FAIL:// 解析图片失败
@@ -221,9 +223,9 @@ public final class CaptureActivity extends Activity implements
 		findViewById(R.id.capture_scan_photo).setOnClickListener(this);
 
 		findViewById(R.id.capture_flashlight).setOnClickListener(this);
-		
+
 		findViewById(R.id.capture_button_cancel).setOnClickListener(this);
-		
+
 		linearLayout_bottom=(LinearLayout) findViewById(R.id.bottom);
 		//自己写的东西
 		doMyThings();
@@ -239,6 +241,7 @@ public final class CaptureActivity extends Activity implements
 
 		tvBatchNumber=(TextView)findViewById(R.id.tvBatchNumber);
 		Intent intent=getIntent();
+		uuid=intent.getExtras().getString("uuid","");
 		isNeedBatch=intent.getExtras().getInt("NeedBatch", 0);
 		if (isNeedBatch==1){
 			showBatchDialog();
@@ -345,23 +348,18 @@ public final class CaptureActivity extends Activity implements
 			holder.tv_code.setText(product.getProductCode()+"  ");
 			holder.tv_type.setText(getType(product.getProductType())+"");
 			holder.tv_count.setText("【"+product.getProCount()+"盒】");
-			if (storage.equals("no")){
-				holder.tv_serialNumber.setVisibility(View.VISIBLE);
-				if (product.getSerialNumber().trim().equals("")){
-					holder.tv_serialNumber.setText("请输入序列号");
-				}else{
-					holder.tv_serialNumber.setText(product.getSerialNumber()+"");
-				}
-				holder.tv_serialNumber.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						showSerialNumberDialog(product.getProductCode(),product.getSerialNumber());
-					}
-				});
+			holder.tv_serialNumber.setVisibility(View.VISIBLE);
+			if (product.getSerialNumber().trim().equals("")){
+				holder.tv_serialNumber.setText("请输入序列号");
 			}else{
-				holder.tv_serialNumber.setVisibility(View.GONE);
-				holder.rl_serialNumber.setVisibility(View.GONE);
+				holder.tv_serialNumber.setText(product.getSerialNumber()+"");
 			}
+			holder.tv_serialNumber.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					showSerialNumberDialog(product.getProductCode(),product.getSerialNumber());
+				}
+			});
 			holder.iv_del.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -395,17 +393,22 @@ public final class CaptureActivity extends Activity implements
 		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialogInterface, int i) {
-				//连续扫码
-				continuePreview();
-				mUserDataBaseOperate.deleteUserByCode(code);
-				List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
-				Collections.reverse(products);
-				lvScan.setAdapter(new ScanAdapter(products));
-				scanCount=0;
-				for (int a=0;a<products.size();a++){
-					scanCount=scanCount+products.get(a).getProCount();
+				int doNet = getIntent().getExtras().getInt("doNet", 0);
+				if (doNet==0){
+					//连续扫码
+					continuePreview();
+					mUserDataBaseOperate.deleteUserByCode(code);
+					List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
+					Collections.reverse(products);
+					lvScan.setAdapter(new ScanAdapter(products));
+					scanCount=0;
+					for (int a=0;a<products.size();a++){
+						scanCount=scanCount+products.get(a).getProCount();
+					}
+					tv_scanCount.setText(scanCount+"(盒)");
+				}else{
+					delToNet(code);
 				}
-				tv_scanCount.setText(scanCount+"(盒)");
 			}
 		});
 		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -418,6 +421,39 @@ public final class CaptureActivity extends Activity implements
 		});
 		builder.create().show();
 	}
+
+	private void delToNet(final String code) {
+		Call<RemoveScanCode> removeCall=RetrofitService.getInstance().removeScanCode(new MyToken(CaptureActivity.this).getToken(),type+"",invoiceid+"",productId+"",code,uuid);
+		removeCall.enqueue(new Callback<RemoveScanCode>() {
+			@Override
+			public void onResponse(Response<RemoveScanCode> response, Retrofit retrofit) {
+				if (response==null){
+					return;
+				}
+				if (response.body().getStatus()==0){
+					//连续扫码
+					continuePreview();
+					mUserDataBaseOperate.deleteUserByCode(code);
+					List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
+					Collections.reverse(products);
+					lvScan.setAdapter(new ScanAdapter(products));
+					scanCount=0;
+					for (int a=0;a<products.size();a++){
+						scanCount=scanCount+products.get(a).getProCount();
+					}
+					tv_scanCount.setText(scanCount+"(盒)");
+				}else{
+					Toast.makeText(CaptureActivity.this,"操作失败,请重试",Toast.LENGTH_SHORT).show();
+				}
+			}
+
+			@Override
+			public void onFailure(Throwable throwable) {
+
+			}
+		});
+	}
+
 	private void showSerialNumberDialog(final String productCode, final String serialNumber) {
 		final EditText et = new EditText(this);
 		et.setBackgroundResource(R.drawable.bg_batch);
@@ -567,60 +603,74 @@ public final class CaptureActivity extends Activity implements
 		builder.create().show();
 	}
 	private void getScanCode(final String code) {
-//        Toast.makeText(CaptureActivity.this,""+code,Toast.LENGTH_SHORT).show();
-		if (storage.equals("no")){
-			call= RetrofitService.getInstance().scanCode(new MyToken(CaptureActivity.this).getToken()+"",
-					Integer.parseInt(invoiceid),Integer.parseInt(productId),code,Integer.parseInt(type));
-		}else{
-			call=RetrofitService.getInstance().storageScanCode(new MyToken(CaptureActivity.this).getToken()+"",
-					Integer.parseInt(type),Integer.parseInt(productId),code);
-		}
-		call.enqueue(new Callback<ScanCode>() {
-			@Override
-			public void onResponse(Response<ScanCode> response, Retrofit retrofit) {
-				if (response.body()==null){
-					Toast.makeText(CaptureActivity.this,"服务器错误",Toast.LENGTH_SHORT).show();
-					continuePreview();
-					return;
-				}
-				if (response.body().getStatus()==0){
+		List<CartSQLBean> sqlCodeFirst =mUserDataBaseOperate.findUserByName(code+"");
+		if (sqlCodeFirst.isEmpty()||sqlCodeFirst.size()==0){
+			if (storage.equals("no")){
+//			call= RetrofitService.getInstance().scanCode(new MyToken(CaptureActivity.this).getToken()+"",
+//					Integer.parseInt(invoiceid),Integer.parseInt(productId),code,Integer.parseInt(type));
+				call= RetrofitService.getInstance().scanCodeNew(new MyToken(CaptureActivity.this).getToken()+"",
+						Integer.parseInt(invoiceid),Integer.parseInt(productId),code,Integer.parseInt(type), uuid);
+			}else{
+				call=RetrofitService.getInstance().storageScanCode(new MyToken(CaptureActivity.this).getToken()+"",
+						Integer.parseInt(type),Integer.parseInt(productId),code);
+			}
+			call.enqueue(new Callback<ScanCode>() {
+				@Override
+				public void onResponse(Response<ScanCode> response, Retrofit retrofit) {
+					if (response.body()==null){
+						Toast.makeText(CaptureActivity.this,"服务器错误",Toast.LENGTH_SHORT).show();
+						continuePreview();
+						return;
+					}
+					if (response.body().getStatus()==0){
 //                    Toast.makeText(CaptureActivity.this,invoiceid+","+productId+","+code+","+type,Toast.LENGTH_SHORT).show();
-					if (response.body().getInfo().getIsRight()==1){
-						//IsRight--条码是否正确，优先进行判断，如果是 0，则代表条码不存在，
-						//如果是 1，则代表条码存在
-						//成功，添加到数据库（productId,code,type,count）type=1=箱码;type=2=盒码
-						List<CartSQLBean> sqlCode =mUserDataBaseOperate.findUserByName(code+"");
-						if (sqlCode.isEmpty()){
-							CartSQLBean sqlBean=new CartSQLBean();
-							sqlBean.setProductId(productId+"");
-							sqlBean.setProductCode(code+"");
-							sqlBean.setProductType(response.body().getInfo().getType()+"");
-							sqlBean.setSerialNumber(response.body().getInfo().getSerialNumber()+"");
-							if (batchNumber.equals("") || batchNumber==null){
-								sqlBean.setBatchNumber(response.body().getInfo().getBatchNumber()+"");
-							}else{
-								sqlBean.setBatchNumber(batchNumber+"");
-							}
+						if (response.body().getInfo().getIsRight()==1){
+							//IsRight--条码是否正确，优先进行判断，如果是 0，则代表条码不存在，
+							//如果是 1，则代表条码存在
+							//成功，添加到数据库（productId,code,type,count）type=1=箱码;type=2=盒码
+							List<CartSQLBean> sqlCode =mUserDataBaseOperate.findUserByName(code+"");
+							if (sqlCode.isEmpty()){
+								CartSQLBean sqlBean=new CartSQLBean();
+								sqlBean.setProductId(productId+"");
+								sqlBean.setProductCode(code+"");
+								sqlBean.setProductType(response.body().getInfo().getType()+"");
+								sqlBean.setSerialNumber(response.body().getInfo().getSerialNumber()+"");
+								if (batchNumber.equals("") || batchNumber==null){
+									sqlBean.setBatchNumber(response.body().getInfo().getBatchNumber()+"");
+								}else{
+									sqlBean.setBatchNumber(batchNumber+"");
+								}
 //							Toast.makeText(CaptureActivity.this,""+response.body().getInfo().getSerialNumber()+","+response.body().getInfo().getBatchNumber(),Toast.LENGTH_SHORT).show();
-							sqlBean.setProCount(response.body().getInfo().getCount());
-							mUserDataBaseOperate.insertToUser(sqlBean);
-							List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
-							Collections.reverse(products);
-							lvScan.setAdapter(new ScanAdapter(products));
-							scanCount=0;
-							for (int i=0;i<products.size();i++){
-								scanCount=scanCount+products.get(i).getProCount();
-							}
-							tv_scanCount.setText(scanCount+"(盒)");
-							try {
-								Thread.sleep(1000);
-								continuePreview();
-							} catch (InterruptedException e) {
-								e.printStackTrace();
+								sqlBean.setProCount(response.body().getInfo().getCount());
+								mUserDataBaseOperate.insertToUser(sqlBean);
+								List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
+								Collections.reverse(products);
+								lvScan.setAdapter(new ScanAdapter(products));
+								scanCount=0;
+								for (int i=0;i<products.size();i++){
+									scanCount=scanCount+products.get(i).getProCount();
+								}
+								tv_scanCount.setText(scanCount+"(盒)");
+								try {
+									Thread.sleep(1000);
+									continuePreview();
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+							}else{
+//                            Toast.makeText(CaptureActivity.this,"该商品码已经扫过",Toast.LENGTH_SHORT).show();
+								showFailDialog("该商品码已经扫过");
+								try {
+									Thread.sleep(1000);
+									continuePreview();
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
 							}
 						}else{
-//                            Toast.makeText(CaptureActivity.this,"该商品码已经扫过",Toast.LENGTH_SHORT).show();
-							showFailDialog("该商品码已经扫过");
+							//失败
+//                        Toast.makeText(CaptureActivity.this,"不存在该商品,请重试",Toast.LENGTH_SHORT).show();
+							showFailDialog("不存在该商品,请重试");
 							try {
 								Thread.sleep(1000);
 								continuePreview();
@@ -629,9 +679,8 @@ public final class CaptureActivity extends Activity implements
 							}
 						}
 					}else{
-						//失败
-//                        Toast.makeText(CaptureActivity.this,"不存在该商品,请重试",Toast.LENGTH_SHORT).show();
-						showFailDialog("不存在该商品,请重试");
+//                    Toast.makeText(CaptureActivity.this,""+response.body().getMes(),Toast.LENGTH_SHORT).show();
+						showFailDialog(""+response.body().getMes());
 						try {
 							Thread.sleep(1000);
 							continuePreview();
@@ -639,24 +688,17 @@ public final class CaptureActivity extends Activity implements
 							e.printStackTrace();
 						}
 					}
-				}else{
-//                    Toast.makeText(CaptureActivity.this,""+response.body().getMes(),Toast.LENGTH_SHORT).show();
-					showFailDialog(""+response.body().getMes());
-					try {
-						Thread.sleep(1000);
-						continuePreview();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
 				}
-			}
 
-			@Override
-			public void onFailure(Throwable throwable) {
-				Toast.makeText(CaptureActivity.this,""+throwable,Toast.LENGTH_SHORT).show();
-				continuePreview();
-			}
-		});
+				@Override
+				public void onFailure(Throwable throwable) {
+					Toast.makeText(CaptureActivity.this,""+throwable,Toast.LENGTH_SHORT).show();
+					continuePreview();
+				}
+			});
+		}else{
+			showFailDialog("该商品码已经扫过");
+		}
 	}
 	//在dialog.show()之后调用
 	public void setDialogWindowAttr(Dialog dlg){
@@ -847,7 +889,7 @@ public final class CaptureActivity extends Activity implements
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
+							   int height) {
 		/*hasSurface = false;*/
 	}
 
@@ -859,7 +901,7 @@ public final class CaptureActivity extends Activity implements
 	/**
 	 * A valid barcode has been found, so give an indication of success and show
 	 * the results.
-	 * 
+	 *
 	 * @param rawResult
 	 *            The contents of the barcode.
 	 * @param scaleFactor
@@ -978,7 +1020,7 @@ public final class CaptureActivity extends Activity implements
 
 	/**
 	 * 向CaptureActivityHandler中发送消息，并展示扫描到的图像
-	 * 
+	 *
 	 * @param bitmap
 	 * @param result
 	 */
@@ -1031,7 +1073,7 @@ public final class CaptureActivity extends Activity implements
 				break;
 			case R.id.capture_button_cancel:
 				linearLayout_bottom.setVisibility(View.GONE);
-				
+
 			default:
 				break;
 		}

@@ -3,12 +3,12 @@ package com.bbld.warehouse.base;
 import android.os.Environment;
 
 /**
- * Created by young on 2016/11/6.
+ * Created by likey on 2016/11/6.
  */
 
 public class Constants {
-    public final static String BASE_URL = "http://mapi.xiuzheng.cc:83/Api/";//正式
-//    public final static String BASE_URL = "http://182.92.183.143:8061/Api/";//测试
+    public final static String BASE_URL = "http://mapi.xiuzheng.cc/Api/";//正式
+//    public final static String BASE_URL = "http://61.164.140.174:83/Api/";//测试
 
     public final static int STATUS_0 = 0;
     public final static int STATUS_1 = 1;

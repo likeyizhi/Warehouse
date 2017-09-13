@@ -2,9 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_kong"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="#f9f9f9"
     android:layout_height="match_parent">
-
     <RelativeLayout
         android:id="@+id/rl_head"
         android:layout_width="match_parent"
@@ -34,9 +32,11 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#eeeeee" />
+
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/srl_order"
+        android:id="@+id/srl_thd"
         android:scrollbars="none"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ListView
@@ -46,4 +46,15 @@
             android:divider="@null"
             android:layout_height="wrap_content"/>
     </android.support.v4.widget.SwipeRefreshLayout>
+    <Button
+        android:id="@+id/btn_addTHD"
+        android:layout_width="180dp"
+        android:textSize="18sp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_btn_bule50"
+        android:text="添加退货单"
+        android:textColor="#ffffff"
+        android:layout_margin="10dp"
+        style="?android:attr/borderlessButtonStyle"/>
 </LinearLayout>

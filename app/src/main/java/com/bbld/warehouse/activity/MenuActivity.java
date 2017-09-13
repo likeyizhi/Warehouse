@@ -105,6 +105,8 @@ public class MenuActivity extends BaseActivity{
     LinearLayout ll_03;
     @BindView(R.id.ll_04)
     LinearLayout ll_04;
+    @BindView(R.id.ll_07)
+    LinearLayout ll_07;
     @BindView(R.id.ll_05)
     LinearLayout ll_05;
     @BindView(R.id.ll_06)
@@ -133,6 +135,12 @@ public class MenuActivity extends BaseActivity{
     LinearLayout llTHD;
     @BindView(R.id.tvTHD)
     TextView tvTHD;
+    @BindView(R.id.ll_toTHRK)
+    LinearLayout llToTHRK;
+    @BindView(R.id.llToHHCK)
+    LinearLayout llToHHCK;
+    @BindView(R.id.llToHHRK)
+    LinearLayout llToHHRK;
 
 //    private Handler mHandler=new Handler(){
 //        @Override
@@ -220,6 +228,7 @@ public class MenuActivity extends BaseActivity{
             ll_02.setVisibility(View.VISIBLE);
             ll_03.setVisibility(View.VISIBLE);
             ll_04.setVisibility(View.VISIBLE);
+            ll_07.setVisibility(View.VISIBLE);
             ll_05.setVisibility(View.GONE);
             ll_06.setVisibility(View.GONE);
         }else if (type==3){
@@ -227,6 +236,7 @@ public class MenuActivity extends BaseActivity{
             ll_02.setVisibility(View.GONE);
             ll_03.setVisibility(View.GONE);
             ll_04.setVisibility(View.GONE);
+            ll_07.setVisibility(View.GONE);
             ll_05.setVisibility(View.VISIBLE);
             ll_06.setVisibility(View.VISIBLE);
         }else{
@@ -234,6 +244,7 @@ public class MenuActivity extends BaseActivity{
             ll_02.setVisibility(View.GONE);
             ll_03.setVisibility(View.GONE);
             ll_04.setVisibility(View.GONE);
+            ll_07.setVisibility(View.GONE);
             ll_05.setVisibility(View.GONE);
             ll_06.setVisibility(View.GONE);
             showToast("数据获取失败，请重试");
@@ -291,6 +302,7 @@ public class MenuActivity extends BaseActivity{
                 readyGo(OutBoundOrderActivity.class, bundle);
             }
         });
+        /**库存盘点*/
         llToStocking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -379,11 +391,32 @@ public class MenuActivity extends BaseActivity{
                 readyGo(PendingInActivity.class);
             }
         });
-        /** 其他入库 */
+        /** 退货申请 */
         llTHD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 readyGo(THDActivity.class);
+            }
+        });
+        /** 退货入库 */
+        llToTHRK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(THRKActivity.class);
+            }
+        });
+        /** 还货出库 */
+        llToHHCK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(HHCKActivity.class);
+            }
+        });
+        /** 还货入库 */
+        llToHHRK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(HHRKActivity.class);
             }
         });
 //        srlMenu.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -555,9 +588,9 @@ public class MenuActivity extends BaseActivity{
                         tvQTRK.setText("其他入库");
                     }
                     if (response.body().getThd()!=0){
-                        tvTHD.setText(Html.fromHtml("退货单"+"<font color=\"#00A3D9\">"+response.body().getThd()+"</font>"));//#00A3D9
+                        tvTHD.setText(Html.fromHtml("退货申请"+"<font color=\"#00A3D9\">"+response.body().getThd()+"</font>"));//#00A3D9
                     }else {
-                        tvTHD.setText("退货单");
+                        tvTHD.setText("退货申请");
                     }
                     WeiboDialogUtils.closeDialog(loadDialog);
                 }

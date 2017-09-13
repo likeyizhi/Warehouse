@@ -17,9 +17,11 @@ import android.widget.TextView;
 import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.CusInvoiceSendList;
+import com.bbld.warehouse.bean.RefundGetRefundList;
 import com.bbld.warehouse.bean.RefundList;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
+import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
 import java.util.List;
 
@@ -35,25 +37,27 @@ import retrofit.Retrofit;
  */
 
 public class THDActivity extends BaseActivity{
+    @BindView(R.id.btn_addTHD)
+    Button btnAddTHD;
     @BindView(R.id.ib_back)
     ImageButton ibBack;
-    @BindView(R.id.srl_order)
-    SwipeRefreshLayout srl_order;
+    @BindView(R.id.srl_thd)
+    SwipeRefreshLayout srl_thd;
     @BindView(R.id.lv_thd)
     ListView lv_thd;
 
     private String token;
-    private int page = 1;
-    private int pagesize = 10;
-    private List<RefundList.RefundListlist> refundList;
-    private THDAdapter adapter;
+    private int page;
+    private int pagesize;
+    private List<RefundGetRefundList.RefundGetRefundListlist> list;
+    private THSQAdapter adapter;
     private Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
                 case 1:
-                    srl_order.setRefreshing(false);
+                    srl_thd.setRefreshing(false);
                     break;
                 default:
                     break;
@@ -64,26 +68,131 @@ public class THDActivity extends BaseActivity{
     @Override
     protected void initViewsAndEvents() {
         token=new MyToken(this).getToken();
+        page=1;
+        pagesize=10;
         loadData(false);
         setListeners();
     }
 
+    private void loadData(final boolean isLoadMore) {
+        Call<RefundGetRefundList> call=RetrofitService.getInstance().refundGetRefundList(token,page,pagesize);
+        call.enqueue(new Callback<RefundGetRefundList>() {
+            @Override
+            public void onResponse(Response<RefundGetRefundList> response, Retrofit retrofit) {
+                if (response==null){
+                    showToast("数据获取失败,请重试");
+                    return;
+                }
+                if (response.body().getStatus()==0){
+                    if (isLoadMore){
+                        List<RefundGetRefundList.RefundGetRefundListlist> listAdd = response.body().getList();
+                        list.addAll(listAdd);
+                        adapter.notifyDataSetChanged();
+                    }else{
+                        list = response.body().getList();
+                        setAdapter();
+                    }
+                }else{
+                    showToast(response.body().getMes());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                showToast("数据获取失败,请重试");
+            }
+        });
+    }
+
+    private void setAdapter() {
+        adapter=new THSQAdapter();
+        lv_thd.setAdapter(adapter);
+    }
+
+    class THSQAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
+
+        @Override
+        public RefundGetRefundList.RefundGetRefundListlist getItem(int i) {
+            return list.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            THSQHolder holder=null;
+            if (view==null){
+                view=LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_lv_thsq,null);
+                holder=new THSQHolder();
+                holder.tvTHDH=(TextView)view.findViewById(R.id.tvTHDH);
+                holder.tvTHZT=(TextView)view.findViewById(R.id.tvTHZT);
+                holder.tvSQBZ=(TextView)view.findViewById(R.id.tvSQBZ);
+                holder.tvSHBZ=(TextView)view.findViewById(R.id.tvSHBZ);
+                holder.tv_product=(TextView)view.findViewById(R.id.tv_product);
+                holder.tv_productCount=(TextView)view.findViewById(R.id.tv_productCount);
+                holder.tv_date=(TextView)view.findViewById(R.id.tv_date);
+                holder.tvDealer=(TextView)view.findViewById(R.id.tvDealer);
+                holder.btn_info=(Button)view.findViewById(R.id.btn_info);
+                view.setTag(holder);
+            }
+            final RefundGetRefundList.RefundGetRefundListlist item = getItem(i);
+            holder= (THSQHolder) view.getTag();
+            holder.tvTHDH.setText("退货单号："+item.getRefundCode());
+            holder.tvTHZT.setText(""+item.getRefundMessage());
+            holder.tvSQBZ.setText(""+item.getRemark());
+            holder.tvSHBZ.setText(""+item.getAuditRemark());
+            holder.tv_product.setText(""+item.getProductTypeCount());
+            holder.tv_productCount.setText("类"+item.getProductTotal()+"盒");
+            holder.tvDealer.setText(item.getDealerName()+"("+item.getPhone()+")");
+            holder.tv_date.setText(""+item.getDate());
+            holder.btn_info.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle=new Bundle();
+                    bundle.putString("id", item.getId()+"");
+                    readyGo(THSQInfoActivity.class,bundle);
+                }
+            });
+            return view;
+        }
+
+        class THSQHolder {
+            TextView tvTHDH,tvTHZT,tvSQBZ,tvSHBZ,tv_product,tv_productCount,tv_date,tvDealer;
+            Button btn_info;
+        }
+    }
+
     private void setListeners() {
+        btnAddTHD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(AddTHDActivity.class);
+            }
+        });
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                ActivityManagerUtil.getInstance().finishActivity(THDActivity.this);
             }
         });
-        srl_order.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        srl_thd.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        page=1;
                         loadData(false);
                         try {
-                            Thread.sleep(500);
+                            Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -121,119 +230,10 @@ public class THDActivity extends BaseActivity{
         });
     }
 
-    private void loadData(final boolean isLoadMore) {
-        Call<RefundList> call= RetrofitService.getInstance().getRefundList(token,page,pagesize);
-        call.enqueue(new Callback<RefundList>() {
-            @Override
-            public void onResponse(Response<RefundList> response, Retrofit retrofit) {
-                if (response==null){
-                    showToast("获取失败");
-                    return;
-                }
-                if (response.body().getStatus()==0){
-                    if (isLoadMore){
-                        List<RefundList.RefundListlist> addRefundList = response.body().getList();
-                        refundList.addAll(addRefundList);
-                        adapter.notifyDataSetChanged();
-                    }else{
-                        refundList = response.body().getList();
-                        setAdapter();
-                    }
-                }else{
-                    showToast(response.body().getMes());
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-
-            }
-        });
-    }
-
-    private void setAdapter() {
-        adapter=new THDAdapter();
-        lv_thd.setAdapter(adapter);
-    }
-
-    class THDAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return refundList.size();
-        }
-
-        @Override
-        public RefundList.RefundListlist getItem(int i) {
-            return refundList.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return Long.parseLong(refundList.get(i).getId()+"");
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            THDHolder holder=null;
-            if (view==null){
-                view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_thd, null);
-                holder=new THDHolder();
-                holder.tv_item_orderid=(TextView)view.findViewById(R.id.tv_item_orderid);
-                holder.tv_item_order_state=(TextView)view.findViewById(R.id.tv_item_order_state);
-                holder.tv_channelName=(TextView)view.findViewById(R.id.tv_channelName);
-                holder.tv_phone=(TextView)view.findViewById(R.id.tv_phone);
-                holder.tv_product=(TextView)view.findViewById(R.id.tv_product);
-                holder.tv_productCount=(TextView)view.findViewById(R.id.tv_productCount);
-                holder.tv_date=(TextView)view.findViewById(R.id.tv_date);
-                holder.btn_info=(Button) view.findViewById(R.id.btn_info);
-                holder.btn_out=(Button) view.findViewById(R.id.btn_out);
-                view.setTag(holder);
-            }
-            holder= (THDHolder) view.getTag();
-            final RefundList.RefundListlist item = getItem(i);
-            holder.tv_item_orderid.setText("订单号:"+item.getRefundCode());
-            holder.tv_item_order_state.setText("退货单");
-            holder.tv_channelName.setText(item.getLinkName()+"");
-            holder.tv_phone.setText(item.getLinkPhone()+"");
-            holder.tv_product.setText(item.getProductTypeCount()+"");
-            holder.tv_productCount.setText("类"+item.getProductCount()+"盒");
-            holder.tv_date.setText(item.getAddDate()+"");
-            holder.btn_info.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Bundle bundle=new Bundle();
-                    bundle.putString("RefundId",item.getId()+"");
-                    readyGo(THDInfoActivity.class, bundle);
-                }
-            });
-            holder.btn_out.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Bundle bundle=new Bundle();
-                    bundle.putString("RefundId",item.getId());
-                    readyGo(THDSureActivity.class, bundle);
-                }
-            });
-            return view;
-        }
-
-        class THDHolder{
-            TextView tv_item_orderid;
-            TextView tv_item_order_state;
-            TextView tv_channelName;
-            TextView tv_phone;
-            TextView tv_product;
-            TextView tv_productCount;
-            TextView tv_date;
-            Button btn_info;
-            Button btn_out;
-        }
-    }
-
     @Override
     protected void onRestart() {
         super.onRestart();
+        page=1;
         loadData(false);
     }
 

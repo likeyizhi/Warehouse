@@ -27,6 +27,7 @@ import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.CartSQLBean;
 import com.bbld.warehouse.bean.CodeJson;
 import com.bbld.warehouse.bean.OrderDetails;
+import com.bbld.warehouse.bean.OrderManualDelivery;
 import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
 import com.bbld.warehouse.loading.WeiboDialogUtils;
@@ -253,47 +254,43 @@ public class OrderDeliveryPeoActivity extends BaseActivity{
             public void onClick(View view) {
                 btnOut.setClickable(false);
                 loadDialog=WeiboDialogUtils.createLoadingDialog(OrderDeliveryPeoActivity.this,getString(R.string.caozuo_ing));
-                List<CartSQLBean> sqlProducts = mUserDataBaseOperate.findAll();
-                List<CodeJson.CodeJsonList> A = new ArrayList<CodeJson.CodeJsonList>();
-                CodeJson B=new CodeJson();
-                for (int j=0;j<sqlProducts.size();j++){
-                    Gson gson=new Gson();
-                    String AString=gson.toJson(A);
-                    if (!(AString.contains(sqlProducts.get(j).getProductId()))){
-                        CodeJson.CodeJsonList a = new CodeJson.CodeJsonList();
-                        a.setProductID(Integer.parseInt(sqlProducts.get(j).getProductId()));
-                        a.setCodeList(new LinkedList<CodeJson.CodeJsonList.CodeJsonCodeList>());
-                        A.add(a);
-                    }
-                }
-                for(int q=0;q<sqlProducts.size();q++){
-                    for (int k=0;k<A.size();k++){
-                        if (sqlProducts.get(q).getProductId().toString().equals(A.get(k).getProductID()+"")){
-                            CodeJson.CodeJsonList.CodeJsonCodeList x=new CodeJson.CodeJsonList.CodeJsonCodeList();
-                            x.setCode(sqlProducts.get(q).getProductCode()+"");
-                            x.setSerialNumber(sqlProducts.get(q).getSerialNumber()+"");
-                            x.setBatchNumber(sqlProducts.get(q).getBatchNumber()+"");
-                            A.get(k).getCodeList().add(x);
-                            B.setList(A);
-                        }
-                    }
-                }
-                Gson gson=new Gson();
-                String jsonString=gson.toJson(B);
-//                showToast(jsonString);
-                //需要参数：token,invoiceid(orderId),codejson
-                final String codejson = jsonString;
+//                Manual();
+//                List<CartSQLBean> sqlProducts = mUserDataBaseOperate.findAll();
+//                List<CodeJson.CodeJsonList> A = new ArrayList<CodeJson.CodeJsonList>();
+//                CodeJson B=new CodeJson();
+//                for (int j=0;j<sqlProducts.size();j++){
+//                    Gson gson=new Gson();
+//                    String AString=gson.toJson(A);
+//                    if (!(AString.contains(sqlProducts.get(j).getProductId()))){
+//                        CodeJson.CodeJsonList a = new CodeJson.CodeJsonList();
+//                        a.setProductID(Integer.parseInt(sqlProducts.get(j).getProductId()));
+//                        a.setCodeList(new LinkedList<CodeJson.CodeJsonList.CodeJsonCodeList>());
+//                        A.add(a);
+//                    }
+//                }
+//                for(int q=0;q<sqlProducts.size();q++){
+//                    for (int k=0;k<A.size();k++){
+//                        if (sqlProducts.get(q).getProductId().toString().equals(A.get(k).getProductID()+"")){
+//                            CodeJson.CodeJsonList.CodeJsonCodeList x=new CodeJson.CodeJsonList.CodeJsonCodeList();
+//                            x.setCode(sqlProducts.get(q).getProductCode()+"");
+//                            x.setSerialNumber(sqlProducts.get(q).getSerialNumber()+"");
+//                            x.setBatchNumber(sqlProducts.get(q).getBatchNumber()+"");
+//                            A.get(k).getCodeList().add(x);
+//                            B.setList(A);
+//                        }
+//                    }
+//                }
+//                Gson gson=new Gson();
+//                String jsonString=gson.toJson(B);
+////                showToast(jsonString);
+//                //需要参数：token,invoiceid(orderId),codejson
+//                final String codejson = jsonString;
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            if (doType.equals("sure")){
-                                request= UploadUserInformationByPostService.orderReceipt(new MyToken(OrderDeliveryPeoActivity.this).getToken()+""
-                                        ,invoiceid+"",codejson);
-                            }else{
-                                request= UploadUserInformationByPostService.save(new MyToken(OrderDeliveryPeoActivity.this).getToken()+""
-                                        ,invoiceid+"",codejson);
-                            }
+                                request= UploadUserInformationByPostService.orderManualDelivery(new MyToken(OrderDeliveryPeoActivity.this).getToken()+""
+                                        ,invoiceid+"");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -312,6 +309,43 @@ public class OrderDeliveryPeoActivity extends BaseActivity{
         });
         lvFahuo.setAdapter(new OrderDelAdapter(info.getProductList()));
     }
+
+    private void Manual() {
+        Call<OrderManualDelivery> manualCall=RetrofitService.getInstance().orderManualDelivery(new MyToken(OrderDeliveryPeoActivity.this).getToken(),invoiceid+"");
+        manualCall.enqueue(new Callback<OrderManualDelivery>() {
+            @Override
+            public void onResponse(Response<OrderManualDelivery> response, Retrofit retrofit) {
+                if (response==null){
+                    WeiboDialogUtils.closeDialog(loadDialog);
+                    btnOut.setClickable(true);
+                    return;
+                }
+                if (response.body().getStatus()==0){
+                    WeiboDialogUtils.closeDialog(loadDialog);
+                    btnOut.setClickable(true);
+                    //出库成功清空数据库，释放当前acticity
+                    mUserDataBaseOperate.deleteAll();
+                    ActivityManagerUtil.getInstance().finishActivity(OrderDeliveryPeoActivity.this);
+                    if (doType.equals("out")){
+                        BackOrderActivity.boActivity.finish();
+                        Bundle bundle=new Bundle();
+                        bundle.putInt("status", 2);
+                        readyGo(BackOrderActivity.class, bundle);
+                    }
+                }else{
+                    WeiboDialogUtils.closeDialog(loadDialog);
+                    btnOut.setClickable(true);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                WeiboDialogUtils.closeDialog(loadDialog);
+                btnOut.setClickable(true);
+            }
+        });
+    }
+
     class OrderDelAdapter extends BaseAdapter{
         private List<OrderDetails.OrderDetailsInfo.OrderDetailsProductList> orders;
         public OrderDelAdapter(List<OrderDetails.OrderDetailsInfo.OrderDetailsProductList> orders){

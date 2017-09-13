@@ -1,8 +1,11 @@
 package com.bbld.warehouse.activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +22,10 @@ import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.CancelInventory;
 import com.bbld.warehouse.bean.FinishInventory;
 import com.bbld.warehouse.bean.InventoryInfo;
+import com.bbld.warehouse.loading.WeiboDialogUtils;
 import com.bbld.warehouse.network.RetrofitService;
 import com.bbld.warehouse.utils.MyToken;
+import com.bbld.warehouse.utils.UploadUserInformationByPostService;
 import com.bumptech.glide.Glide;
 import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 
@@ -61,6 +66,24 @@ public class StockingInfoActivity extends BaseActivity{
     private String InventoryId;
     private List<InventoryInfo.InventoryInfoInfo.InventoryInfoProductList> productList;
     private StockingInfoAdapter adapter;
+    private String request;
+    private Dialog baocunDialog;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 111:
+                    WeiboDialogUtils.closeDialog(baocunDialog);
+                    showToast(""+request);
+                    break;
+                case 222:
+                    WeiboDialogUtils.closeDialog(baocunDialog);
+                    showToast(""+request);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void initViewsAndEvents() {
@@ -256,26 +279,46 @@ public class StockingInfoActivity extends BaseActivity{
     }
 
     private void decision() {
-        Call<FinishInventory> call=RetrofitService.getInstance().finishInventory(new MyToken(StockingInfoActivity.this).getToken(), InventoryId);
-        call.enqueue(new Callback<FinishInventory>() {
+        baocunDialog= WeiboDialogUtils.createLoadingDialog(StockingInfoActivity.this,getString(R.string.caozuo_ing));
+        new Thread(new Runnable() {
             @Override
-            public void onResponse(Response<FinishInventory> response, Retrofit retrofit) {
-                if (response==null){
-                    showToast(getResources().getString(R.string.get_data_fail));
-                    return;
+            public void run() {
+                try {
+                    request= UploadUserInformationByPostService.givebackReceiveGiveback(new MyToken(StockingInfoActivity.this).getToken()+"", InventoryId);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                if (response.body().getStatus()==0){
-                    showToast("操作成功");
-                }else{
-                    showToast(""+response.body().getMes());
+                if (request.contains("成功")) { // 请求成功
+                    Message message=new Message();
+                    message.what=111;
+                    handler.sendMessage(message);
+                } else { // 请求失败
+                    Message message=new Message();
+                    message.what=222;
+                    handler.sendMessage(message);
                 }
             }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-
-            }
-        });
+        }).start();
+//        Call<FinishInventory> call=RetrofitService.getInstance().finishInventory(new MyToken(StockingInfoActivity.this).getToken(), InventoryId);
+//        call.enqueue(new Callback<FinishInventory>() {
+//            @Override
+//            public void onResponse(Response<FinishInventory> response, Retrofit retrofit) {
+//                if (response==null){
+//                    showToast(getResources().getString(R.string.get_data_fail));
+//                    return;
+//                }
+//                if (response.body().getStatus()==0){
+//                    showToast("操作成功");
+//                }else{
+//                    showToast(""+response.body().getMes());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//
+//            }
+//        });
     }
 
     @Override

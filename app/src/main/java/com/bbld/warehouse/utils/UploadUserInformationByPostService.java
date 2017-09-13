@@ -24,6 +24,16 @@ public class UploadUserInformationByPostService {
         Log.i("save", "save="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
+    public static String saveNew(String token, String invoiceid, String codejson, String unique) throws Exception{
+        String path = Constants.BASE_URL + "Order/OrderSendNew";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("invoiceid", invoiceid);
+        params.put("codejson", codejson);
+        params.put("unique", unique);
+        Log.i("saveNew", "saveNew="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
     public static String saveStorage(String token, String type, String typeId, String number, String linkName, String linkPhone, String remark, String codejson) throws Exception{
 //        String path = Constants.BASE_URL + "Storage/CommitStorage?token="+token+
 //                "&type="+type+
@@ -84,6 +94,17 @@ public class UploadUserInformationByPostService {
         Log.i("orderReceipt", "orderReceipt="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
+    /**订单扫码收货*/
+    public static String orderScanCodeDelivery(String token,String invoiceid, String codejson, String unique) throws Exception{
+        String path = Constants.BASE_URL + "Order/OrderScanCodeDelivery";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("invoiceid", invoiceid);
+        params.put("codejson", codejson);
+        params.put("unique", unique);
+        Log.i("OrderScanCodeDelivery", "OrderScanCodeDelivery="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
     /**其他出库*/
     public static String commitOutStorage(String token,String storageId, String codejson) throws Exception{
 //        String path = Constants.BASE_URL + "Storage/CommitOutStorage?token="+token+
@@ -142,6 +163,65 @@ public class UploadUserInformationByPostService {
         params.put("RefundId", RefundId);
         params.put("codejson", codejson);
         Log.i("commitRefund", "commitRefund="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    /**人工收货*/
+    public static String orderManualDelivery(String token, String invoiceid) throws Exception{
+        String path = Constants.BASE_URL + "Order/OrderManualDelivery";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("invoiceid", invoiceid);
+        Log.i("orderManualDelivery", "orderManualDelivery="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    /**退货单*/
+    public static String refundCommitRefund(String token, String refundcode, String unique, String remark, String codejson) throws Exception{
+        String path = Constants.BASE_URL + "Refund/CommitRefund";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("refundcode", refundcode);
+        params.put("unique", unique);
+        params.put("remark", remark);
+        params.put("codejson", codejson);
+        Log.i("refundCommitRefund", "refundCommitRefund="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    /**退货入库*/
+    public static String refundReceiveRefund(String token, String refundId) throws Exception{
+        String path = Constants.BASE_URL + "Refund/ReceiveRefund";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("refundId", refundId);
+        Log.i("refundReceiveRefund", "refundReceiveRefund="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    /**还货出库*/
+    public static String givebackCommitGiveback(String token, String id,String unique,String codejson) throws Exception{
+        String path = Constants.BASE_URL + "Giveback/CommitGiveback";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("id", id);
+        params.put("unique", unique);
+        params.put("codejson", codejson);
+        Log.i("givebackCommitGiveback", "givebackCommitGiveback="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    /**还货入库提交*/
+    public static String givebackReceiveGiveback(String token, String id) throws Exception{
+        String path = Constants.BASE_URL + "Giveback/ReceiveGiveback";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("id", id);
+        Log.i("givebackReceiveGiveback", "givebackReceiveGiveback="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    /**库存盘点详情*/
+    public static String storageFinishInventory(String token, String inventoryId) throws Exception{
+        String path = Constants.BASE_URL + "Storage/FinishInventory";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("inventoryId", inventoryId);
+        Log.i("storageFinishInventory", "storageFinishInventory="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
 

@@ -34,6 +34,14 @@
         <activity android:name=".scancodenew_thd.scan.CaptureActivity"
             android:screenOrientation="portrait">
         </activity>
+        <!--还货出库-扫码-->
+        <activity android:name=".scancodenew_hhck.scan.CaptureActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--还货入库-扫码-->
+        <activity android:name=".scancodenew_hhrk.scan.CaptureActivity"
+            android:screenOrientation="portrait">
+        </activity>
         <!--登录-->
         <activity android:name=".activity.LoginActivity"
             android:screenOrientation="portrait">
@@ -192,6 +200,11 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
+        <!--退货入库-扫码-->
+        <activity android:name=".scancodenew_thrk.scan.CaptureActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
         <!--待收货-人工收货-->
         <activity android:name=".activity.OrderDeliveryPeoActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
@@ -225,6 +238,66 @@
         </activity>
         <!--退货单-退货-->
         <activity android:name=".activity.THDSureActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--退货单-添加退货单-->
+        <activity android:name=".activity.AddTHDActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--退货申请-详情-->
+        <activity android:name=".activity.THSQInfoActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--退货申请-详情-明细-->
+        <activity android:name=".activity.THSQInfoMxActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--退货入库-->
+        <activity android:name=".activity.THRKActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--退货入库-入库-->
+        <activity android:name=".activity.THRKRKActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--退货入库-扫码idata-->
+        <activity android:name=".activity.IDataScanTHRKActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--还货出库-->
+        <activity android:name=".activity.HHCKActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--还货出库-详情-->
+        <activity android:name=".activity.HHCKInfoActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--还货出库-出库-->
+        <activity android:name=".activity.HHCKCKActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--还货入库-入库-->
+        <activity android:name=".activity.HHRKRKActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--还货出库-详情-明细-->
+        <activity android:name=".activity.HHCKInfoMxActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--还货入库-->
+        <activity android:name=".activity.HHRKActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>

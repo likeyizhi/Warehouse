@@ -3,6 +3,7 @@ package com.bbld.warehouse.network;
 import com.bbld.warehouse.base.Constants;
 import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
 import com.bbld.warehouse.bean.CancelInventory;
+import com.bbld.warehouse.bean.ClearScanCode;
 import com.bbld.warehouse.bean.CusInvoiceConfirm;
 import com.bbld.warehouse.bean.CusInvoiceInfo;
 import com.bbld.warehouse.bean.CusInvoiceReceiptList;
@@ -14,6 +15,10 @@ import com.bbld.warehouse.bean.GetNewNumber;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
 import com.bbld.warehouse.bean.GetSearchTypeList;
 import com.bbld.warehouse.bean.GetTypeList;
+import com.bbld.warehouse.bean.GivebackGetGivebackDetail;
+import com.bbld.warehouse.bean.GivebackGetGivebackForInList;
+import com.bbld.warehouse.bean.GivebackGetGivebackForOutList;
+import com.bbld.warehouse.bean.GivebackReciveScanCode;
 import com.bbld.warehouse.bean.HandOverSacnFinish;
 import com.bbld.warehouse.bean.HandoverEdit;
 import com.bbld.warehouse.bean.HandoverInfo;
@@ -25,14 +30,22 @@ import com.bbld.warehouse.bean.InventoryList;
 import com.bbld.warehouse.bean.Login;
 import com.bbld.warehouse.bean.OrderDetails;
 import com.bbld.warehouse.bean.OrderList;
+import com.bbld.warehouse.bean.OrderManualDelivery;
 import com.bbld.warehouse.bean.OrderSend;
 import com.bbld.warehouse.bean.PendingOutStorageList;
 import com.bbld.warehouse.bean.ProductCountDetails;
 import com.bbld.warehouse.bean.ProductCountList;
 import com.bbld.warehouse.bean.ProductList;
 import com.bbld.warehouse.bean.QTInStorageList;
+import com.bbld.warehouse.bean.ReciveScanCode;
 import com.bbld.warehouse.bean.RefundDetail;
+import com.bbld.warehouse.bean.RefundGetHQRefundList;
+import com.bbld.warehouse.bean.RefundGetRefundDetail;
+import com.bbld.warehouse.bean.RefundGetRefundList;
+import com.bbld.warehouse.bean.RefundGetRefundProductScanCode;
 import com.bbld.warehouse.bean.RefundList;
+import com.bbld.warehouse.bean.RemoveCommitScanCode;
+import com.bbld.warehouse.bean.RemoveScanCode;
 import com.bbld.warehouse.bean.SaleScanCode;
 import com.bbld.warehouse.bean.SaleStatistics;
 import com.bbld.warehouse.bean.ScanCode;
@@ -41,6 +54,9 @@ import com.bbld.warehouse.bean.StorageCodeList;
 import com.bbld.warehouse.bean.StorageDetails;
 import com.bbld.warehouse.bean.StorageList;
 import com.bbld.warehouse.bean.VersionAndroid;
+import com.squareup.okhttp.OkHttpClient;
+
+import java.util.concurrent.TimeUnit;
 
 import retrofit.Call;
 import retrofit.GsonConverterFactory;
@@ -108,6 +124,12 @@ public class RetrofitService {
      */
     public Call<ScanCode> scanCode(String token, int invoiceid, int productId, String  code, int type){
         return retrofitInterface.scanCode(token, invoiceid, productId, code, type);
+    }
+    /**
+     * 扫码查询接口(new)
+     */
+    public Call<ScanCode> scanCodeNew(String token, int invoiceid, int productId, String  code, int type, String unique){
+        return retrofitInterface.scanCodeNew(token, invoiceid, productId, code, type, unique);
     }
     /**
      * 订单出库接口
@@ -321,4 +343,107 @@ public class RetrofitService {
     public Call<RefundDetail> getRefundDetail(String token, String id){
         return retrofitInterface.getRefundDetail(token,id);
     }
+    /**
+     * 删除条码
+     */
+    public Call<RemoveScanCode> removeScanCode(String token, String type, String invoiceId, String productId, String code, String unique){
+        return retrofitInterface.removeScanCode(token,type,invoiceId,productId,code,unique);
+    }
+    /**
+     * 删除条码(退货)
+     */
+    public Call<RemoveScanCode> removeScanCodeRefund(String token, String code, String unique){
+        return retrofitInterface.removeScanCodeRefund(token,code,unique);
+    }
+    /**
+     * 清空已扫条码
+     */
+    public Call<ClearScanCode> clearScanCode(String token, String type, String invoiceId, String unique){
+        return retrofitInterface.clearScanCode(token,type,invoiceId,unique);
+    }
+    /**
+     * 清空已扫条码-退货
+     */
+    public Call<ClearScanCode> clearScanCodeRefund(String token, String unique){
+        return retrofitInterface.clearScanCodeRefund(token,unique);
+    }
+    /**
+     * 人工收货
+     */
+    public Call<OrderManualDelivery> orderManualDelivery(String token, String invoiceId){
+        return retrofitInterface.orderManualDelivery(token,invoiceId);
+    }
+    /**
+     * 重置网络数据
+     */
+    public Call<RemoveCommitScanCode> removeCommitScanCode(String token, String unique){
+        return retrofitInterface.removeCommitScanCode(token,unique);
+    }
+    /**
+     * 退货扫码
+     */
+    public Call<ScanCode> refundScanCode(String token, String unique, String productId, String code){
+        return retrofitInterface.refundScanCode(token,unique,productId,code);
+    }
+    /**
+     * 退货申请列表
+     */
+    public Call<RefundGetRefundList> refundGetRefundList(String token, int page, int pagesize){
+        return retrofitInterface.refundGetRefundList(token,page,pagesize);
+    }
+    /**
+     * 退货申请-详情
+     */
+    public Call<RefundGetRefundDetail> refundGetRefundDetail(String token, String id){
+        return retrofitInterface.refundGetRefundDetail(token,id);
+    }
+    /**
+     * 退货申请-详情-明细
+     */
+    public Call<RefundGetRefundProductScanCode> refundGetRefundProductScanCode(String token, String id, String productId){
+        return retrofitInterface.refundGetRefundProductScanCode(token,id,productId);
+    }
+    /**
+     * 退货申请-详情-明细
+     */
+    public Call<RefundGetRefundProductScanCode> givebackGetGivebackScanCode(String token, String id, String productId){
+        return retrofitInterface.givebackGetGivebackScanCode(token,id,productId);
+    }
+    /**
+     * 退货入库列表
+     */
+    public Call<RefundGetHQRefundList> refundGetHQRefundList(String token, int page, int pagesize){
+        return retrofitInterface.refundGetHQRefundList(token,page,pagesize);
+    }
+    /**
+     * 退货入库列表
+     */
+    public Call<GivebackGetGivebackForInList> givebackGetGivebackForInList(String token, int page, int pagesize){
+        return retrofitInterface.givebackGetGivebackForInList(token,page,pagesize);
+    }
+    /**
+     * 退货入库-扫码
+     */
+    public Call<ReciveScanCode> reciveScanCode(String token, String refundId, String productId, String code){
+        return retrofitInterface.reciveScanCode(token, refundId, productId, code);
+    }
+    /**
+     * 还货出库
+     */
+    public Call<GivebackGetGivebackForOutList> givebackGetGivebackForOutList(String token, int page, int size){
+        return retrofitInterface.givebackGetGivebackForOutList(token, page, size);
+    }
+    /**
+     * 还货出库-详情
+     */
+    public Call<GivebackGetGivebackDetail> givebackGetGivebackDetail(String token, String id){
+        return retrofitInterface.givebackGetGivebackDetail(token,id);
+    }
+    /**
+     * 还货出库-详情
+     */
+    public Call<GivebackReciveScanCode> givebackReciveScanCode(String token, String id, String productId,String code){
+        return retrofitInterface.givebackReciveScanCode(token, id, productId, code);
+    }
+
 }

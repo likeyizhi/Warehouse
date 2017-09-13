@@ -43,6 +43,7 @@ import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import retrofit.Call;
@@ -115,9 +116,11 @@ public class CommitOutStorageActivity extends BaseActivity{
             }
         }
     };
+    private String uuid;
 
     @Override
     protected void initViewsAndEvents() {
+        uuid= UUID.randomUUID().toString();
         mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(CommitOutStorageActivity.this);
         mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
         setTitle();
@@ -319,6 +322,7 @@ public class CommitOutStorageActivity extends BaseActivity{
                         bundle.putString("needCount", product.getProductCount()+"");
                         bundle.putString("storage", "yes");
                         bundle.putString("other", "yes");
+                        bundle.putString("uuid", uuid);
                         readyGo(IDataScanActivity.class, bundle);
                     }else{
                         toScan(product.getProductID(),product.getProductName(),product.getProductCount(),type+"");
@@ -339,6 +343,8 @@ public class CommitOutStorageActivity extends BaseActivity{
                             bundle.putString("needCount", productCount+"");
                             bundle.putString("storage", "yes");
                             bundle.putString("other", "yes");
+                            bundle.putString("uuid", uuid);
+                            bundle.putInt("doNet", 0);
                             readyGo(CaptureActivity.class, bundle);
                         }
                     }else{
@@ -349,6 +355,8 @@ public class CommitOutStorageActivity extends BaseActivity{
                         bundle.putString("needCount", productCount+"");
                         bundle.putString("storage", "yes");
                         bundle.putString("other", "yes");
+                        bundle.putString("uuid", uuid);
+                        bundle.putInt("doNet", 0);
                         readyGo(CaptureActivity.class, bundle);
                     }
                 }

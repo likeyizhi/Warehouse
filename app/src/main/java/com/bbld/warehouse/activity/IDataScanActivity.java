@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.bbld.warehouse.R;
 import com.bbld.warehouse.base.BaseActivity;
 import com.bbld.warehouse.bean.CartSQLBean;
+import com.bbld.warehouse.bean.RemoveScanCode;
 import com.bbld.warehouse.bean.ScanCode;
 import com.bbld.warehouse.db.UserDataBaseOperate;
 import com.bbld.warehouse.db.UserSQLiteOpenHelper;
@@ -68,6 +69,7 @@ public class IDataScanActivity extends BaseActivity{
     private TextView tvInput;
     private EditText etScan;
     private ImageButton ibBack;
+    private String uuid;
 
     @Override
     protected void initViewsAndEvents() {
@@ -85,6 +87,7 @@ public class IDataScanActivity extends BaseActivity{
 
         tvBatchNumber=(TextView)findViewById(R.id.tvBatchNumber);
         Intent intent=getIntent();
+        uuid=intent.getExtras().getString("uuid");
         isNeedBatch=intent.getExtras().getInt("NeedBatch", 0);
         if (isNeedBatch==1){
             showBatchDialog();
@@ -278,21 +281,25 @@ public class IDataScanActivity extends BaseActivity{
     }
 
     private void showDelDialog(final String code) {
+
         AlertDialog.Builder builder=new AlertDialog.Builder(IDataScanActivity.this);
         builder.setMessage("删除("+code+")?");
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //连续扫码
-                mUserDataBaseOperate.deleteUserByCode(code);
-                List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
-                Collections.reverse(products);
-                lvScan.setAdapter(new ScanAdapter(products));
-                scanCount=0;
-                for (int a=0;a<products.size();a++){
-                    scanCount=scanCount+products.get(a).getProCount();
+                if (type.equals("1") || type.equals("2")){
+                    delToNet(code);
+                }else{
+                    mUserDataBaseOperate.deleteUserByCode(code);
+                    List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
+                    Collections.reverse(products);
+                    lvScan.setAdapter(new ScanAdapter(products));
+                    scanCount=0;
+                    for (int a=0;a<products.size();a++){
+                        scanCount=scanCount+products.get(a).getProCount();
+                    }
+                    tv_scanCount.setText(scanCount+"(盒)");
                 }
-                tv_scanCount.setText(scanCount+"(盒)");
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -304,6 +311,37 @@ public class IDataScanActivity extends BaseActivity{
         });
         builder.create().show();
     }
+
+    private void delToNet(final String code) {
+        Call<RemoveScanCode> removeCall=RetrofitService.getInstance().removeScanCode(new MyToken(IDataScanActivity.this).getToken(),type+"",invoiceid+"",productId+"",code,uuid);
+        removeCall.enqueue(new Callback<RemoveScanCode>() {
+            @Override
+            public void onResponse(Response<RemoveScanCode> response, Retrofit retrofit) {
+                if (response==null){
+                    return;
+                }
+                if (response.body().getStatus()==0){
+                    mUserDataBaseOperate.deleteUserByCode(code);
+                    List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
+                    Collections.reverse(products);
+                    lvScan.setAdapter(new ScanAdapter(products));
+                    scanCount=0;
+                    for (int a=0;a<products.size();a++){
+                        scanCount=scanCount+products.get(a).getProCount();
+                    }
+                    tv_scanCount.setText(scanCount+"(盒)");
+                }else{
+                    Toast.makeText(IDataScanActivity.this,"操作失败,请重试",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
+    }
+
     private void showSerialNumberDialog(final String productCode, final String serialNumber) {
         final EditText et = new EditText(this);
         et.setBackgroundResource(R.drawable.bg_batch);
@@ -449,53 +487,70 @@ public class IDataScanActivity extends BaseActivity{
         builder.create().show();
     }
     private void getScanCode(final String code) {
-//        Toast.makeText(CaptureActivity.this,""+code,Toast.LENGTH_SHORT).show();
-        if (storage.equals("no")){
-            call= RetrofitService.getInstance().scanCode(new MyToken(IDataScanActivity.this).getToken()+"",
-                    Integer.parseInt(invoiceid),Integer.parseInt(productId),code,Integer.parseInt(type));
-        }else{
-            call=RetrofitService.getInstance().storageScanCode(new MyToken(IDataScanActivity.this).getToken()+"",
-                    Integer.parseInt(type),Integer.parseInt(productId),code);
-        }
-        call.enqueue(new Callback<ScanCode>() {
-            @Override
-            public void onResponse(Response<ScanCode> response, Retrofit retrofit) {
-                if (response.body()==null){
-                    Toast.makeText(IDataScanActivity.this,"服务器错误",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (response.body().getStatus()==0){
+        List<CartSQLBean> sqlCodeFirst =mUserDataBaseOperate.findUserByName(code+"");
+        if (sqlCodeFirst.isEmpty()||sqlCodeFirst.size()==0){
+            if (storage.equals("no")){
+//            call= RetrofitService.getInstance().scanCode(new MyToken(IDataScanActivity.this).getToken()+"",
+//                    Integer.parseInt(invoiceid),Integer.parseInt(productId),code,Integer.parseInt(type));
+                call= RetrofitService.getInstance().scanCodeNew(new MyToken(IDataScanActivity.this).getToken()+"",
+                        Integer.parseInt(invoiceid),Integer.parseInt(productId),code,Integer.parseInt(type), uuid);
+            }else{
+                call=RetrofitService.getInstance().storageScanCode(new MyToken(IDataScanActivity.this).getToken()+"",
+                        Integer.parseInt(type),Integer.parseInt(productId),code);
+            }
+            call.enqueue(new Callback<ScanCode>() {
+                @Override
+                public void onResponse(Response<ScanCode> response, Retrofit retrofit) {
+                    if (response.body()==null){
+                        Toast.makeText(IDataScanActivity.this,"服务器错误",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (response.body().getStatus()==0){
 //                    Toast.makeText(CaptureActivity.this,invoiceid+","+productId+","+code+","+type,Toast.LENGTH_SHORT).show();
-                    if (response.body().getInfo().getIsRight()==1){
-                        //IsRight--条码是否正确，优先进行判断，如果是 0，则代表条码不存在，
-                        //如果是 1，则代表条码存在
-                        //成功，添加到数据库（productId,code,type,count）type=1=箱码;type=2=盒码
-                        List<CartSQLBean> sqlCode =mUserDataBaseOperate.findUserByName(code+"");
-                        if (sqlCode.isEmpty()){
-                            CartSQLBean sqlBean=new CartSQLBean();
-                            sqlBean.setProductId(productId+"");
-                            sqlBean.setProductCode(code+"");
-                            sqlBean.setProductType(response.body().getInfo().getType()+"");
-                            sqlBean.setSerialNumber(response.body().getInfo().getSerialNumber()+"");
-                            sqlBean.setBatchNumber(batchNumber+"");
-                            sqlBean.setProCount(response.body().getInfo().getCount());
-                            mUserDataBaseOperate.insertToUser(sqlBean);
-                            List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
-                            Collections.reverse(products);
-                            lvScan.setAdapter(new ScanAdapter(products));
-                            scanCount=0;
-                            for (int i=0;i<products.size();i++){
-                                scanCount=scanCount+products.get(i).getProCount();
-                            }
-                            tv_scanCount.setText(scanCount+"(盒)");
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                        if (response.body().getInfo().getIsRight()==1){
+                            //IsRight--条码是否正确，优先进行判断，如果是 0，则代表条码不存在，
+                            //如果是 1，则代表条码存在
+                            //成功，添加到数据库（productId,code,type,count）type=1=箱码;type=2=盒码
+                            List<CartSQLBean> sqlCode =mUserDataBaseOperate.findUserByName(code+"");
+                            if (sqlCode.isEmpty()){
+                                CartSQLBean sqlBean=new CartSQLBean();
+                                sqlBean.setProductId(productId+"");
+                                sqlBean.setProductCode(code+"");
+                                sqlBean.setProductType(response.body().getInfo().getType()+"");
+                                sqlBean.setSerialNumber(response.body().getInfo().getSerialNumber()+"");
+                                if (batchNumber.equals("") || batchNumber==null){
+                                    sqlBean.setBatchNumber(response.body().getInfo().getBatchNumber()+"");
+                                }else{
+                                    sqlBean.setBatchNumber(batchNumber+"");
+                                }
+                                sqlBean.setProCount(response.body().getInfo().getCount());
+                                mUserDataBaseOperate.insertToUser(sqlBean);
+                                List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");
+                                Collections.reverse(products);
+                                lvScan.setAdapter(new ScanAdapter(products));
+                                scanCount=0;
+                                for (int i=0;i<products.size();i++){
+                                    scanCount=scanCount+products.get(i).getProCount();
+                                }
+                                tv_scanCount.setText(scanCount+"(盒)");
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }else{
+//                            Toast.makeText(CaptureActivity.this,"该商品码已经扫过",Toast.LENGTH_SHORT).show();
+                                showFailDialog("该商品码已经扫过");
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }else{
-//                            Toast.makeText(CaptureActivity.this,"该商品码已经扫过",Toast.LENGTH_SHORT).show();
-                            showFailDialog("该商品码已经扫过");
+                            //失败
+//                        Toast.makeText(CaptureActivity.this,"不存在该商品,请重试",Toast.LENGTH_SHORT).show();
+                            showFailDialog("不存在该商品,请重试");
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
@@ -503,31 +558,24 @@ public class IDataScanActivity extends BaseActivity{
                             }
                         }
                     }else{
-                        //失败
-//                        Toast.makeText(CaptureActivity.this,"不存在该商品,请重试",Toast.LENGTH_SHORT).show();
-                        showFailDialog("不存在该商品,请重试");
+//                    Toast.makeText(CaptureActivity.this,""+response.body().getMes(),Toast.LENGTH_SHORT).show();
+                        showFailDialog(""+response.body().getMes());
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-                }else{
-//                    Toast.makeText(CaptureActivity.this,""+response.body().getMes(),Toast.LENGTH_SHORT).show();
-                    showFailDialog(""+response.body().getMes());
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Throwable throwable) {
-                Toast.makeText(IDataScanActivity.this,""+throwable,Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Throwable throwable) {
+                    Toast.makeText(IDataScanActivity.this,""+throwable,Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            showFailDialog("该商品码已经扫过");
+        }
     }
     //在dialog.show()之后调用
     public void setDialogWindowAttr(Dialog dlg){

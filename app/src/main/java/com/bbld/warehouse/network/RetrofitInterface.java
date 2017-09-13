@@ -2,6 +2,7 @@ package com.bbld.warehouse.network;
 
 import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
 import com.bbld.warehouse.bean.CancelInventory;
+import com.bbld.warehouse.bean.ClearScanCode;
 import com.bbld.warehouse.bean.CusInvoiceConfirm;
 import com.bbld.warehouse.bean.CusInvoiceInfo;
 import com.bbld.warehouse.bean.CusInvoiceReceiptList;
@@ -13,6 +14,10 @@ import com.bbld.warehouse.bean.GetNewNumber;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
 import com.bbld.warehouse.bean.GetSearchTypeList;
 import com.bbld.warehouse.bean.GetTypeList;
+import com.bbld.warehouse.bean.GivebackGetGivebackDetail;
+import com.bbld.warehouse.bean.GivebackGetGivebackForInList;
+import com.bbld.warehouse.bean.GivebackGetGivebackForOutList;
+import com.bbld.warehouse.bean.GivebackReciveScanCode;
 import com.bbld.warehouse.bean.HandOverSacnFinish;
 import com.bbld.warehouse.bean.HandoverEdit;
 import com.bbld.warehouse.bean.HandoverInfo;
@@ -24,14 +29,22 @@ import com.bbld.warehouse.bean.InventoryList;
 import com.bbld.warehouse.bean.Login;
 import com.bbld.warehouse.bean.OrderDetails;
 import com.bbld.warehouse.bean.OrderList;
+import com.bbld.warehouse.bean.OrderManualDelivery;
 import com.bbld.warehouse.bean.OrderSend;
 import com.bbld.warehouse.bean.PendingOutStorageList;
 import com.bbld.warehouse.bean.ProductCountDetails;
 import com.bbld.warehouse.bean.ProductCountList;
 import com.bbld.warehouse.bean.ProductList;
 import com.bbld.warehouse.bean.QTInStorageList;
+import com.bbld.warehouse.bean.ReciveScanCode;
 import com.bbld.warehouse.bean.RefundDetail;
+import com.bbld.warehouse.bean.RefundGetHQRefundList;
+import com.bbld.warehouse.bean.RefundGetRefundDetail;
+import com.bbld.warehouse.bean.RefundGetRefundList;
+import com.bbld.warehouse.bean.RefundGetRefundProductScanCode;
 import com.bbld.warehouse.bean.RefundList;
+import com.bbld.warehouse.bean.RemoveCommitScanCode;
+import com.bbld.warehouse.bean.RemoveScanCode;
 import com.bbld.warehouse.bean.SaleScanCode;
 import com.bbld.warehouse.bean.SaleStatistics;
 import com.bbld.warehouse.bean.ScanCode;
@@ -98,6 +111,14 @@ public interface RetrofitInterface {
 //    Call<ScanCode> scanCode(@Field("token") String token, @Field("invoiceid") int invoiceid, @Field("productId") int productId, @Field("code") String code);
     @GET("Order/ScanCode")
     Call<ScanCode> scanCode(@Query("token") String token, @Query("invoiceid") int invoiceid, @Query("productId") int productId, @Query("code") String code, @Query("type") int type);
+    /**
+     * 扫码查询接口(new)
+     */
+//    @FormUrlEncoded
+//    @POST("Order/ScanCode")
+//    Call<ScanCode> scanCode(@Field("token") String token, @Field("invoiceid") int invoiceid, @Field("productId") int productId, @Field("code") String code);
+    @GET("Order/ScanCodeNew")
+    Call<ScanCode> scanCodeNew(@Query("token") String token, @Query("invoiceid") int invoiceid, @Query("productId") int productId, @Query("code") String code, @Query("type") int type, @Query("unique") String unique);
     /**
      * 订单出库接口
      */
@@ -290,4 +311,89 @@ public interface RetrofitInterface {
      */
     @GET("Storage/GetRefundDetail")
     Call<RefundDetail> getRefundDetail(@Query("token") String token, @Query("id") String id);
+    /**
+     * 删除条码
+     */
+    @GET("Order/RemoveScanCode")
+    Call<RemoveScanCode> removeScanCode(@Query("token") String token, @Query("type") String type, @Query("invoiceId") String invoiceId, @Query("productId") String productId, @Query("code") String code, @Query("unique") String unique);
+    /**
+     * 删除条码(退货)
+     */
+    @GET("Refund/RemoveScanCode")
+    Call<RemoveScanCode> removeScanCodeRefund(@Query("token") String token, @Query("code") String code, @Query("unique") String unique);
+    /**
+     * 清空已扫条码
+     */
+    @GET("Order/ClearScanCode")
+    Call<ClearScanCode> clearScanCode(@Query("token") String token, @Query("type") String type, @Query("invoiceId") String invoiceId, @Query("unique") String unique);
+    /**
+     * 清空已扫条码-退货
+     */
+    @GET("Refund/ClearScanCode")
+    Call<ClearScanCode> clearScanCodeRefund(@Query("token") String token, @Query("unique") String unique);
+    /**
+     * 人工收货
+     */
+    @GET("Order/OrderManualDelivery")
+    Call<OrderManualDelivery> orderManualDelivery(@Query("token") String token, @Query("invoiceId") String invoiceId);
+    /**
+     * 重置网络数据
+     */
+    @GET("Order/RemoveCommitScanCode")
+    Call<RemoveCommitScanCode> removeCommitScanCode(@Query("token") String token, @Query("unique") String unique);
+    /**
+     * 退货扫码
+     */
+    @GET("Refund/ScanCode")
+    Call<ScanCode> refundScanCode(@Query("token") String token, @Query("unique") String unique, @Query("productId") String productId, @Query("code") String code);
+    /**
+     * 退货申请列表
+     */
+    @GET("Refund/GetRefundList")
+    Call<RefundGetRefundList> refundGetRefundList(@Query("token") String token, @Query("page") int page, @Query("pagesize") int pagesize);
+    /**
+     * 退货申请-详情
+     */
+    @GET("Refund/GetRefundDetail")
+    Call<RefundGetRefundDetail> refundGetRefundDetail(@Query("token") String token, @Query("id") String id);
+    /**
+     * 退货申请-详情-明细
+     */
+    @GET("Refund/GetRefundProductScanCode")
+    Call<RefundGetRefundProductScanCode> refundGetRefundProductScanCode(@Query("token") String token, @Query("id") String id, @Query("productId") String productId);
+    /**
+     * 还货出库-详情-明细
+     */
+    @GET("Giveback/GetGivebackScanCode")
+    Call<RefundGetRefundProductScanCode> givebackGetGivebackScanCode(@Query("token") String token, @Query("id") String id, @Query("productId") String productId);
+    /**
+     * 退货入库列表
+     */
+    @GET("Refund/GetHQRefundList")
+    Call<RefundGetHQRefundList> refundGetHQRefundList(@Query("token") String token, @Query("page") int page, @Query("pagesize") int pagesize);
+    /**
+     * 退货入库列表
+     */
+    @GET("Giveback/GetGivebackForInList")
+    Call<GivebackGetGivebackForInList> givebackGetGivebackForInList(@Query("token") String token, @Query("page") int page, @Query("pagesize") int pagesize);
+    /**
+     * 退货入库-扫码
+     */
+    @GET("Refund/ReciveScanCode")
+    Call<ReciveScanCode> reciveScanCode(@Query("token") String token, @Query("refundId") String refundId, @Query("productId") String productId, @Query("code") String code);
+    /**
+     * 还货出库
+     */
+    @GET("Giveback/GetGivebackForOutList")
+    Call<GivebackGetGivebackForOutList> givebackGetGivebackForOutList(@Query("token") String token, @Query("page") int page, @Query("size") int size);
+    /**
+     * 还货出库-详情
+     */
+    @GET("Giveback/GetGivebackDetail")
+    Call<GivebackGetGivebackDetail> givebackGetGivebackDetail(@Query("token") String token, @Query("id") String id);
+    /**
+     * 还货出库-扫码
+     */
+    @GET("Giveback/ReciveScanCode")
+    Call<GivebackReciveScanCode> givebackReciveScanCode(@Query("token") String token, @Query("id") String id, @Query("productId") String productId, @Query("code") String code);
 }

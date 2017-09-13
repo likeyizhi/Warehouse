@@ -44,6 +44,7 @@ import com.wuxiaolong.androidutils.library.ActivityManagerUtil;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import retrofit.Call;
@@ -111,9 +112,11 @@ public class ZDPSOutActivity extends BaseActivity{
             }
         }
     };
+    private String uuid;
 
     @Override
     protected void initViewsAndEvents() {
+        uuid= UUID.randomUUID().toString();
         mUserSQLiteOpenHelper = UserSQLiteOpenHelper.getInstance(this);
         mUserDataBaseOperate = new UserDataBaseOperate(mUserSQLiteOpenHelper.getWritableDatabase());
         token=new MyToken(this).getToken();
@@ -294,6 +297,7 @@ public class ZDPSOutActivity extends BaseActivity{
                         bundle.putString("other", "yes");
                         bundle.putString("type", 1+"");
                         bundle.putInt("NeedBatch", 2);
+                        bundle.putString("uuid", uuid);
                         readyGo(IDataScanActivity.class, bundle);
                     }else{
                         toScan(product.getProductID(), product.getProductName(), cusInfo.getStorageID(), product.getProductCount(), "1");
@@ -315,6 +319,7 @@ public class ZDPSOutActivity extends BaseActivity{
                             bundle.putString("storage", "yes");
                             bundle.putString("other", "yes");
                             bundle.putString("type", type+"");
+                            bundle.putString("uuid", uuid);
                             bundle.putInt("NeedBatch", 2);
                             readyGo(CaptureActivity.class, bundle);
                         }
@@ -328,6 +333,7 @@ public class ZDPSOutActivity extends BaseActivity{
                         bundle.putString("other", "yes");
                         bundle.putString("type", type+"");
                         bundle.putInt("NeedBatch", 2);
+                        bundle.putString("uuid", uuid);
                         readyGo(CaptureActivity.class, bundle);
                     }
                 }
