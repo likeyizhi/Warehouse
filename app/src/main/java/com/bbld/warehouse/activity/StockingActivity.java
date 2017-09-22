@@ -84,10 +84,10 @@ public class StockingActivity extends BaseActivity{
         srlStocking.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                loadData(false);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        loadData(false);
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {

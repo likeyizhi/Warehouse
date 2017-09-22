@@ -613,12 +613,11 @@ public final class CaptureActivity extends Activity implements
 								sqlBean.setProductCode(code+"");
 								sqlBean.setProductType(response.body().getInfo().getType()+"");
 								sqlBean.setSerialNumber(response.body().getInfo().getSerialNumber()+"");
-								if (batchNumber.equals("") || batchNumber==null){
-									sqlBean.setBatchNumber(response.body().getInfo().getBatchNumber()+"");
-								}else{
+								if (response.body().getInfo().getBatchNumber().equals("")){
 									sqlBean.setBatchNumber(batchNumber+"");
+								}else{
+									sqlBean.setBatchNumber(response.body().getInfo().getBatchNumber()+"");
 								}
-//							Toast.makeText(CaptureActivity.this,""+response.body().getInfo().getSerialNumber()+","+response.body().getInfo().getBatchNumber(),Toast.LENGTH_SHORT).show();
 								sqlBean.setProCount(response.body().getInfo().getCount());
 								mUserDataBaseOperate.insertToUser(sqlBean);
 								List<CartSQLBean> products=mUserDataBaseOperate.findUserById(productId+"");

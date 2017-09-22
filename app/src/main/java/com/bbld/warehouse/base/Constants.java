@@ -7,8 +7,8 @@ import android.os.Environment;
  */
 
 public class Constants {
-//    public final static String BASE_URL = "http://mapi.xiuzheng.cc/Api/";//正式
-    public final static String BASE_URL = "http://61.164.140.174:83/Api/";//测试
+    public final static String BASE_URL = "http://mapi.xiuzheng.cc/Api/";//正式
+//    public final static String BASE_URL = "http://61.164.140.174:83/Api/";//测试
 
     public final static int STATUS_0 = 0;
     public final static int STATUS_1 = 1;

@@ -392,6 +392,7 @@ public class AddStockingActivity extends BaseActivity{
                         bundle.putString("storage", "yes");
                         bundle.putString("other", "no");
                         bundle.putString("uuid", uuid);
+                        bundle.putInt("NeedBatch", 1);
                         readyGo(IDataScanStockActivity.class, bundle);
                     }else{
                         toScan(product.getId(),product.getName(),3,100000);
@@ -413,6 +414,7 @@ public class AddStockingActivity extends BaseActivity{
                             bundle.putString("storage", "yes");
                             bundle.putString("other", "no");
                             bundle.putString("uuid", uuid);
+                            bundle.putInt("NeedBatch", 1);
                             readyGo(CaptureActivity.class, bundle);
                         }
                     }else{
@@ -424,6 +426,7 @@ public class AddStockingActivity extends BaseActivity{
                         bundle.putString("storage", "yes");
                         bundle.putString("other", "no");
                         bundle.putString("uuid", uuid);
+                        bundle.putInt("NeedBatch", 1);
                         readyGo(CaptureActivity.class, bundle);
                     }
                 }
