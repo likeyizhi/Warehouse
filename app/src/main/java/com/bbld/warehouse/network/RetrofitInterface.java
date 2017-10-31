@@ -72,6 +72,7 @@ public interface RetrofitInterface {
     @GET("Admin/GetVersionAndroid")
     Call<VersionAndroid> getVersionAndroid();
     /**
+     * 库管登录
      * 登录
      */
 //    @FormUrlEncoded
@@ -79,6 +80,12 @@ public interface RetrofitInterface {
 //    Call<Login> login(@Field("acc") String acc, @Field("pwd") String pwd);
     @GET("Admin/Login")
     Call<Login> login(@Query("acc") String acc, @Query("pwd") String pwd);
+    /**
+     * 经销商登录
+     * 登录
+     */
+    @GET("DealerAdmin/Login")
+    Call<Login> dealerLogin(@Query("acc") String acc, @Query("pwd") String pwd);
     /**
      * 首页接口
      */

@@ -38,6 +38,23 @@ public class MyToken {
         editor.commit();
     }
     /**
+     * SharedPreferences保存loginType
+     * */
+    public int getLoginType(){
+        SharedPreferences shared=mContext.getSharedPreferences("MyToken",mContext.MODE_PRIVATE);
+        int faceurl = shared.getInt("loginType", 0);
+        return faceurl;
+    }
+    /**
+     * 删除保存的loginType
+     * */
+    public void delLoginType(){
+        SharedPreferences shared=mContext.getSharedPreferences("MyToken",mContext.MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
+        editor.remove("loginType");
+        editor.commit();
+    }
+    /**
      * 删除保存的帐号密码
      * */
     public void delAP(){

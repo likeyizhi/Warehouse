@@ -23,4 +23,7 @@
     <color name="seek_bar_text">#fff6f6f6</color>
 
     <color name="my_transparent">#98000000</color>
+
+    <color name="login_text">#00A3D9</color>
+
 </resources>

@@ -96,10 +96,18 @@ public class RetrofitService {
         return retrofitInterface.getVersionAndroid();
     }
     /**
+     * 库管登录
      * 登录
      */
     public Call<Login> login(String acc, String pwd){
         return retrofitInterface.login(acc, pwd);
+    }
+    /**
+     * 经销商登录
+     * 登录
+     */
+    public Call<Login> dealerLogin(String acc, String pwd){
+        return retrofitInterface.dealerLogin(acc, pwd);
     }
     /**
      * 首页接口
