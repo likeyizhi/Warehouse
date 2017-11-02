@@ -4,6 +4,7 @@ import com.bbld.warehouse.base.Constants;
 import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
 import com.bbld.warehouse.bean.CancelInventory;
 import com.bbld.warehouse.bean.ClearScanCode;
+import com.bbld.warehouse.bean.CloseOrder;
 import com.bbld.warehouse.bean.CusInvoiceConfirm;
 import com.bbld.warehouse.bean.CusInvoiceInfo;
 import com.bbld.warehouse.bean.CusInvoiceReceiptList;
@@ -13,6 +14,7 @@ import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
 import com.bbld.warehouse.bean.GetNewNumber;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
+import com.bbld.warehouse.bean.GetOrderTbList;
 import com.bbld.warehouse.bean.GetSearchTypeList;
 import com.bbld.warehouse.bean.GetTypeList;
 import com.bbld.warehouse.bean.GivebackGetGivebackDetail;
@@ -53,6 +55,7 @@ import com.bbld.warehouse.bean.ScanCodeRefund;
 import com.bbld.warehouse.bean.StorageCodeList;
 import com.bbld.warehouse.bean.StorageDetails;
 import com.bbld.warehouse.bean.StorageList;
+import com.bbld.warehouse.bean.TbGetOrderInfo;
 import com.bbld.warehouse.bean.VersionAndroid;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -458,6 +461,24 @@ public class RetrofitService {
      */
     public Call<ScanCode> storageInventoryScanCode(String token, String productId,String code, String unique){
         return retrofitInterface.storageInventoryScanCode(token, productId, code, unique);
+    }
+    /**
+     * 订单提报列表
+     */
+    public Call<GetOrderTbList> getOrderTbList(String token, int page, int size){
+        return retrofitInterface.getOrderTbList(token, page, size);
+    }
+    /**
+     * 关闭订单
+     */
+    public Call<CloseOrder> closeOrder(String token, String id, String remark){
+        return retrofitInterface.closeOrder(token, id, remark);
+    }
+    /**
+     * 获取订单详情
+     */
+    public Call<TbGetOrderInfo> tbGetOrderInfo(String token, String id){
+        return retrofitInterface.tbGetOrderInfo(token, id);
     }
 
 }

@@ -140,7 +140,7 @@ public class LoginActivity extends BaseActivity{
                             bundle.putInt("type", response.body().getType());
                             bundle.putInt("ishandover", response.body().getIshandover());
                             WeiboDialogUtils.closeDialog(loadDialog);
-                            readyGo(MenuActivity.class, bundle);
+                            readyGo(MenuDealerActivity.class, bundle);
 //                    Bundle bundle=new Bundle();
 //                    bundle.putString("productId", "1000");
 //                    bundle.putString("productName","测试");

@@ -305,6 +305,26 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
+        <!--经销商登录主页-->
+        <activity android:name=".activity.MenuDealerActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--订单提报-->
+        <activity android:name=".activity.DDTBActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--订单提报-编辑、添加-->
+        <activity android:name=".activity.DDTBAddActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--订单提报-商品列表-->
+        <activity android:name=".activity.DDTBProsActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
         <!--更新相关-->
         <service android:name=".update.UpdateService" >
             <intent-filter>

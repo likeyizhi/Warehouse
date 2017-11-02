@@ -3,6 +3,7 @@ package com.bbld.warehouse.network;
 import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
 import com.bbld.warehouse.bean.CancelInventory;
 import com.bbld.warehouse.bean.ClearScanCode;
+import com.bbld.warehouse.bean.CloseOrder;
 import com.bbld.warehouse.bean.CusInvoiceConfirm;
 import com.bbld.warehouse.bean.CusInvoiceInfo;
 import com.bbld.warehouse.bean.CusInvoiceReceiptList;
@@ -12,6 +13,7 @@ import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
 import com.bbld.warehouse.bean.GetNewNumber;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
+import com.bbld.warehouse.bean.GetOrderTbList;
 import com.bbld.warehouse.bean.GetSearchTypeList;
 import com.bbld.warehouse.bean.GetTypeList;
 import com.bbld.warehouse.bean.GivebackGetGivebackDetail;
@@ -52,6 +54,7 @@ import com.bbld.warehouse.bean.ScanCodeRefund;
 import com.bbld.warehouse.bean.StorageCodeList;
 import com.bbld.warehouse.bean.StorageDetails;
 import com.bbld.warehouse.bean.StorageList;
+import com.bbld.warehouse.bean.TbGetOrderInfo;
 import com.bbld.warehouse.bean.VersionAndroid;
 
 import retrofit.Call;
@@ -408,4 +411,19 @@ public interface RetrofitInterface {
      */
     @GET("Storage/InventoryScanCode")
     Call<ScanCode> storageInventoryScanCode(@Query("token") String token, @Query("productId") String productId, @Query("code") String code, @Query("unique") String unique);
+    /**
+     * 订单提报列表
+     */
+    @GET("DealerOrderTb/GetOrderTbList")
+    Call<GetOrderTbList> getOrderTbList(@Query("token") String token, @Query("page") int page, @Query("size") int size);
+    /**
+     * 关闭订单
+     */
+    @GET("DealerOrderTb/CloseOrder")
+    Call<CloseOrder> closeOrder(@Query("token") String token, @Query("id") String id, @Query("remark") String remark);
+    /**
+     * 获取订单详情
+     */
+    @GET("DealerOrderTb/GetOrderInfo")
+    Call<TbGetOrderInfo> tbGetOrderInfo(@Query("token") String token, @Query("id") String id);
 }
