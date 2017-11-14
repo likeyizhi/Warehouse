@@ -9,12 +9,20 @@ import com.bbld.warehouse.bean.CusInvoiceConfirm;
 import com.bbld.warehouse.bean.CusInvoiceInfo;
 import com.bbld.warehouse.bean.CusInvoiceReceiptList;
 import com.bbld.warehouse.bean.CusInvoiceSendList;
+import com.bbld.warehouse.bean.DCGetChildOrderList;
+import com.bbld.warehouse.bean.DealerChildOrderInitOrderClose;
+import com.bbld.warehouse.bean.DealerChildOrderInitOrderPass;
+import com.bbld.warehouse.bean.FHDGetAddCurrentProviceFHDInfo;
+import com.bbld.warehouse.bean.FHDGetAddOtherProviceFHDInfo;
+import com.bbld.warehouse.bean.FHDGetDealerDeliveryList;
+import com.bbld.warehouse.bean.FHDGetOrderProductList;
 import com.bbld.warehouse.bean.FinishInventory;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
 import com.bbld.warehouse.bean.GetNewNumber;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
 import com.bbld.warehouse.bean.GetOrderTbList;
+import com.bbld.warehouse.bean.GetProductNeedList;
 import com.bbld.warehouse.bean.GetSearchTypeList;
 import com.bbld.warehouse.bean.GetTypeList;
 import com.bbld.warehouse.bean.GivebackGetGivebackDetail;
@@ -55,7 +63,10 @@ import com.bbld.warehouse.bean.ScanCodeRefund;
 import com.bbld.warehouse.bean.StorageCodeList;
 import com.bbld.warehouse.bean.StorageDetails;
 import com.bbld.warehouse.bean.StorageList;
+import com.bbld.warehouse.bean.TbGetDealerDeliveryList;
 import com.bbld.warehouse.bean.TbGetOrderInfo;
+import com.bbld.warehouse.bean.TbGetProductInfo;
+import com.bbld.warehouse.bean.TbGetProductList;
 import com.bbld.warehouse.bean.VersionAndroid;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -479,6 +490,72 @@ public class RetrofitService {
      */
     public Call<TbGetOrderInfo> tbGetOrderInfo(String token, String id){
         return retrofitInterface.tbGetOrderInfo(token, id);
+    }
+    /**
+     * 订单提报-商品列表
+     */
+    public Call<TbGetProductList> tbGetProductList(String token){
+        return retrofitInterface.tbGetProductList(token);
+    }
+    /**
+     * 订单提报-商品详情
+     */
+    public Call<TbGetProductInfo> tbGetProductInfo(String token, String id){
+        return retrofitInterface.tbGetProductInfo(token, id);
+    }
+    /**
+     * 获取经销商配送地址列表
+     */
+    public Call<TbGetDealerDeliveryList> tbGetDealerDeliveryList(String token){
+        return retrofitInterface.tbGetDealerDeliveryList(token);
+    }
+    /**
+     * 根据月份获取货需数据
+     */
+    public Call<GetProductNeedList> getProductNeedList(String token, String month){
+        return retrofitInterface.getProductNeedList(token, month);
+    }
+    /**
+     * 下级提报订单
+     */
+    public Call<DCGetChildOrderList> dcGetChildOrderList(String token, int page, int pagesize){
+        return retrofitInterface.dcGetChildOrderList(token, page, pagesize);
+    }
+    /**
+     * 点击添加本省发货单
+     */
+    public Call<FHDGetAddCurrentProviceFHDInfo> fhdGetAddCurrentProviceFHDInfo(String token, int order){
+        return retrofitInterface.fhdGetAddCurrentProviceFHDInfo(token, order);
+    }
+    /**
+     * 获取订单商品
+     */
+    public Call<FHDGetOrderProductList> fhdGetOrderProductList(String token, int order){
+        return retrofitInterface.fhdGetOrderProductList(token, order);
+    }
+    /**
+     * 点击添加外省发货单
+     */
+    public Call<FHDGetAddOtherProviceFHDInfo> fhdGetAddOtherProviceFHDInfo(String token, int order){
+        return retrofitInterface.fhdGetAddOtherProviceFHDInfo(token, order);
+    }
+    /**
+     * 获取经销商配送地址
+     */
+    public Call<FHDGetDealerDeliveryList> fhdGetDealerDeliveryList(String token, int id){
+        return retrofitInterface.fhdGetDealerDeliveryList(token, id);
+    }
+    /**
+     * 订单审核通过
+     */
+    public Call<DealerChildOrderInitOrderPass> dealerChildOrderInitOrderPass(String token, int id, String remark){
+        return retrofitInterface.dealerChildOrderInitOrderPass(token, id, remark);
+    }
+    /**
+     * 订单关闭
+     */
+    public Call<DealerChildOrderInitOrderClose> dealerChildOrderInitOrderClose(String token, int id, String remark){
+        return retrofitInterface.dealerChildOrderInitOrderClose(token, id, remark);
     }
 
 }

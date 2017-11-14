@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="17sp"
-            android:text="订单提报新增产品"
+            android:text="生成发货单列表"
             android:id="@+id/tv_title" />
     </RelativeLayout>
     <TextView
@@ -31,10 +31,10 @@
         android:layout_height="1dp"
         android:background="#eeeeee" />
     <ListView
-        android:id="@+id/lvPros"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/lvSCFHD"
         android:divider="@null"
-        android:dividerHeight="0dp">
+        android:dividerHeight="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     </ListView>
 </LinearLayout>

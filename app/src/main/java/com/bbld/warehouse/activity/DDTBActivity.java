@@ -18,6 +18,7 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -47,6 +48,10 @@ public class DDTBActivity extends BaseActivity{
     SwipeRefreshLayout srlOrder;
     @BindView(R.id.lvOrder)
     ListView lvOrder;
+    @BindView(R.id.btnAdd)
+    Button btnAdd;
+    @BindView(R.id.ib_back)
+    ImageButton ibBack;
 
     private Dialog loading;
     private String token;
@@ -119,6 +124,20 @@ public class DDTBActivity extends BaseActivity{
                         mHandler.sendEmptyMessage(1);
                     }
                 }).start();
+            }
+        });
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle=new Bundle();
+                bundle.putString("orderId", 0+"");
+                readyGo(DDTBAddActivity.class,bundle);
+            }
+        });
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
@@ -206,20 +225,37 @@ public class DDTBActivity extends BaseActivity{
             holder.tv_product.setText(item.getProductCategoryCount()+"");
             holder.tv_productCount.setText("类"+item.getProductTotal()+"盒");
             holder.tv_date.setText(item.getAddDate()+"");
-            holder.btn_close.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showCloseDialog(item.getOrderId()+"");
-                }
-            });
-            holder.btn_edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Bundle bundle=new Bundle();
-                    bundle.putString("orderId", item.getOrderId()+"");
-                    readyGo(DDTBAddActivity.class,bundle);
-                }
-            });
+            if (item.getOrderStatus()==1){
+                holder.btn_close.setVisibility(View.VISIBLE);
+                holder.btn_edit.setVisibility(View.VISIBLE);
+                holder.btn_edit.setText("编辑");
+                holder.btn_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showCloseDialog(item.getOrderId()+"");
+                    }
+                });
+                holder.btn_edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle=new Bundle();
+                        bundle.putString("orderId", item.getOrderId()+"");
+                        readyGo(DDTBAddActivity.class,bundle);
+                    }
+                });
+            }else{
+                holder.btn_close.setVisibility(View.GONE);
+                holder.btn_edit.setVisibility(View.VISIBLE);
+                holder.btn_edit.setText("详情");
+                holder.btn_edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle=new Bundle();
+                        bundle.putString("orderId", item.getOrderId()+"");
+                        readyGo(DDTBAddActivity.class,bundle);
+                    }
+                });
+            }
             return view;
         }
 
@@ -292,6 +328,13 @@ public class DDTBActivity extends BaseActivity{
                 }
             });
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        page=1;
+        loadData(false);
     }
 
     @Override

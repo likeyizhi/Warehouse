@@ -155,6 +155,28 @@ public class TbGetOrderInfo {
         private int DeliveryCount;
         private int DeliveryGiveCount;
         private String  Remark;
+        private String  Logo;
+
+        public TbGetOrderInfoProductList(int id, int productId, String name, String proSpecifications, int productAmount, int giveAmount, int deliveryCount, int deliveryGiveCount, String remark, String logo) {
+            Id = id;
+            ProductId = productId;
+            Name = name;
+            ProSpecifications = proSpecifications;
+            ProductAmount = productAmount;
+            GiveAmount = giveAmount;
+            DeliveryCount = deliveryCount;
+            DeliveryGiveCount = deliveryGiveCount;
+            Remark = remark;
+            Logo = logo;
+        }
+
+        public String getLogo() {
+            return Logo;
+        }
+
+        public void setLogo(String logo) {
+            Logo = logo;
+        }
 
         public int getId() {
             return Id;

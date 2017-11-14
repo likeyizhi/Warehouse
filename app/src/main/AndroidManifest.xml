@@ -325,6 +325,46 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
+        <!--订单提报-商品详情-->
+        <activity android:name=".activity.DDTBProInfoActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--货需上报-->
+        <activity android:name=".activity.HXSBActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--货需上报-上报页-->
+        <activity android:name=".activity.HXSBSBActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--货需上报-上报页-->
+        <activity android:name=".activity.HXSBSBAddActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--生成发货单-->
+        <activity android:name=".activity.SCFHDActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--生成发货单-省内-->
+        <activity android:name=".activity.SCFHD_SNActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--生成发货单-省外-->
+        <activity android:name=".activity.SCFHD_SWActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--生成发货单-新订单处理-->
+        <activity android:name=".activity.SCFHD_newActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
         <!--更新相关-->
         <service android:name=".update.UpdateService" >
             <intent-filter>

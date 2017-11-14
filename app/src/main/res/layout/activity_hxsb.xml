@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/rl_head"
+        android:layout_width="match_parent"
+        android:background="#ffffff"
+        android:layout_height="50dp"
+        >
+        <ImageButton
+            android:id="@+id/ib_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:padding="10dp"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="17sp"
+            android:text="货需上报列表"
+            android:id="@+id/tv_title" />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eeeeee" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tvYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_margin="3dp"
+            android:padding="10dp"
+            android:background="@drawable/bg_need"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvNeedMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            >
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="top"
+        android:padding="5dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="备注："/>
+        <TextView
+            android:id="@+id/tvBz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tvEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="编辑"
+            android:gravity="center"
+            android:background="#00A3D9"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="#FFFFFF"
+            />
+    </LinearLayout>
+    <ListView
+        android:id="@+id/lvHXSB"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="0dp"
+        android:divider="@null"
+        android:layout_weight="1">
+    </ListView>
+    <Button
+        android:id="@+id/btnSB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00A3D9"
+        android:textColor="#ffffff"
+        android:text="上报"/>
+</LinearLayout>

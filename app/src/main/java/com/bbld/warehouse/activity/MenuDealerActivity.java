@@ -68,14 +68,14 @@ public class MenuDealerActivity extends BaseActivity{
         llToSCFHD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                readyGo(SCFHDActivity.class);
             }
         });
         //跳转--货需上报
         llToHXSB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                readyGo(HXSBActivity.class);
             }
         });
     }

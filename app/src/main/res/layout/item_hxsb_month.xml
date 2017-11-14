@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tvNeedMonth"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="1月"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:layout_margin="3dp"
+        android:padding="10dp"
+        android:textColor="#ffffff"
+        android:background="@drawable/bg_need02"/>
+</RelativeLayout>

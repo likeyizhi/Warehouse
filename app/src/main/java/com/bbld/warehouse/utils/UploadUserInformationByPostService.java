@@ -225,6 +225,42 @@ public class UploadUserInformationByPostService {
         Log.i("storageFinishInventory", "storageFinishInventory="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
+    /**提报--创建OR编辑订单*/
+    public static String tbCreateOrder(String token, String orderJson) throws Exception{
+        String path = Constants.BASE_URL + "DealerOrderTb/CreateOrder";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("orderJson", orderJson);
+        Log.i("tbCreateOrder", "tbCreateOrder="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    /**提报货需*/
+    public static String pnCreateProductNeed(String token, String productNeedJson) throws Exception{
+        String path = Constants.BASE_URL + "ProductNeed/CreateProductNeed";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("productNeedJson", productNeedJson);
+        Log.i("pnCreateProductNeed", "pnCreateProductNeed="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    /**创建OR编辑发货单*/
+    public static String createFHD(String token, String fhdJson) throws Exception{
+        String path = Constants.BASE_URL + "FHD/CreateFHD";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("fhdJson", fhdJson);
+        Log.i("fhdJson", "fhdJson="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    /**生成发货单-新订单处理-订单编辑*/
+    public static String dealerChildOrderModifyOrder(String token, String orderJson) throws Exception{
+        String path = Constants.BASE_URL + "DealerChildOrder/ModifyOrder";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("orderJson", orderJson);
+        Log.i("orderJson", "orderJson="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
 
     /**
      * 发送POST请求

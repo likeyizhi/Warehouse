@@ -44,9 +44,18 @@ public class TbGetProductList {
          "Logo": "http://manager.xiuzheng.cc//UploadFile/43591cd0be39429f917654df472a8ee0.jpg",
          "ProSpecifications": "0.55g/粒*10粒/板*3板/盒*48盒/件"*/
         private int Id;
-        private String Nameprivate;
+        private String Name;
         private String Logo;
         private String ProSpecifications;
+        private int PackSpecifications;
+
+        public int getPackSpecifications() {
+            return PackSpecifications;
+        }
+
+        public void setPackSpecifications(int packSpecifications) {
+            PackSpecifications = packSpecifications;
+        }
 
         public int getId() {
             return Id;
@@ -56,12 +65,12 @@ public class TbGetProductList {
             Id = id;
         }
 
-        public String getNameprivate() {
-            return Nameprivate;
+        public String getName() {
+            return Name;
         }
 
-        public void setNameprivate(String nameprivate) {
-            Nameprivate = nameprivate;
+        public void setName(String name) {
+            Name = name;
         }
 
         public String getLogo() {

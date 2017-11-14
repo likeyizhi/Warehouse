@@ -8,12 +8,20 @@ import com.bbld.warehouse.bean.CusInvoiceConfirm;
 import com.bbld.warehouse.bean.CusInvoiceInfo;
 import com.bbld.warehouse.bean.CusInvoiceReceiptList;
 import com.bbld.warehouse.bean.CusInvoiceSendList;
+import com.bbld.warehouse.bean.DCGetChildOrderList;
+import com.bbld.warehouse.bean.DealerChildOrderInitOrderClose;
+import com.bbld.warehouse.bean.DealerChildOrderInitOrderPass;
+import com.bbld.warehouse.bean.FHDGetAddCurrentProviceFHDInfo;
+import com.bbld.warehouse.bean.FHDGetAddOtherProviceFHDInfo;
+import com.bbld.warehouse.bean.FHDGetDealerDeliveryList;
+import com.bbld.warehouse.bean.FHDGetOrderProductList;
 import com.bbld.warehouse.bean.FinishInventory;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
 import com.bbld.warehouse.bean.GetNewNumber;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
 import com.bbld.warehouse.bean.GetOrderTbList;
+import com.bbld.warehouse.bean.GetProductNeedList;
 import com.bbld.warehouse.bean.GetSearchTypeList;
 import com.bbld.warehouse.bean.GetTypeList;
 import com.bbld.warehouse.bean.GivebackGetGivebackDetail;
@@ -54,7 +62,10 @@ import com.bbld.warehouse.bean.ScanCodeRefund;
 import com.bbld.warehouse.bean.StorageCodeList;
 import com.bbld.warehouse.bean.StorageDetails;
 import com.bbld.warehouse.bean.StorageList;
+import com.bbld.warehouse.bean.TbGetDealerDeliveryList;
 import com.bbld.warehouse.bean.TbGetOrderInfo;
+import com.bbld.warehouse.bean.TbGetProductInfo;
+import com.bbld.warehouse.bean.TbGetProductList;
 import com.bbld.warehouse.bean.VersionAndroid;
 
 import retrofit.Call;
@@ -426,4 +437,59 @@ public interface RetrofitInterface {
      */
     @GET("DealerOrderTb/GetOrderInfo")
     Call<TbGetOrderInfo> tbGetOrderInfo(@Query("token") String token, @Query("id") String id);
+    /**
+     * 订单提报-商品列表
+     */
+    @GET("DealerOrderTb/GetProductList")
+    Call<TbGetProductList> tbGetProductList(@Query("token") String token);
+    /**
+     * 订单提报-商品详情
+     */
+    @GET("DealerOrderTb/GetProductInfo")
+    Call<TbGetProductInfo> tbGetProductInfo(@Query("token") String token, @Query("id") String id);
+    /**
+     * 获取经销商配送地址列表
+     */
+    @GET("DealerOrderTb/GetDealerDeliveryList")
+    Call<TbGetDealerDeliveryList> tbGetDealerDeliveryList(@Query("token") String token);
+    /**
+     * 根据月份获取货需数据
+     */
+    @GET("ProductNeed/GetProductNeedList")
+    Call<GetProductNeedList> getProductNeedList(@Query("token") String token, @Query("month") String month);
+    /**
+     * 下级提报订单
+     */
+    @GET("DealerChildOrder/GetChildOrderList")
+    Call<DCGetChildOrderList> dcGetChildOrderList(@Query("token") String token, @Query("page") int page, @Query("pagesize") int pagesize);
+    /**
+     * 点击添加本省发货单
+     */
+    @GET("FHD/GetAddCurrentProviceFHDInfo")
+    Call<FHDGetAddCurrentProviceFHDInfo> fhdGetAddCurrentProviceFHDInfo(@Query("token") String token, @Query("order") int order);
+    /**
+     * 获取订单商品
+     */
+    @GET("FHD/GetOrderProductList")
+    Call<FHDGetOrderProductList> fhdGetOrderProductList(@Query("token") String token, @Query("order") int order);
+    /**
+     * 点击添加外省发货单
+     */
+    @GET("FHD/GetAddOtherProviceFHDInfo")
+    Call<FHDGetAddOtherProviceFHDInfo> fhdGetAddOtherProviceFHDInfo(@Query("token") String token, @Query("order") int order);
+    /**
+     * 获取经销商配送地址
+     */
+    @GET("FHD/GetDealerDeliveryList")
+    Call<FHDGetDealerDeliveryList> fhdGetDealerDeliveryList(@Query("token") String token, @Query("id") int id);
+    /**
+     * 订单审核通过
+     */
+    @GET("DealerChildOrder/InitOrderPass")
+    Call<DealerChildOrderInitOrderPass> dealerChildOrderInitOrderPass(@Query("token") String token, @Query("id") int id, @Query("remark") String remark);
+    /**
+     * 订单关闭
+     */
+    @GET("DealerChildOrder/InitOrderClose")
+    Call<DealerChildOrderInitOrderClose> dealerChildOrderInitOrderClose(@Query("token") String token, @Query("id") int id, @Query("remark") String remark);
 }
