@@ -70,6 +70,8 @@ public class SCFHD_SNActivity extends BaseActivity{
     EditText etRemark;
     @BindView(R.id.ib_back)
     ImageButton ibBack;
+    @BindView(R.id.tvOrderNumber)
+    TextView tvOrderNumber;
 
     private int orderId;
     private String token;
@@ -91,6 +93,8 @@ public class SCFHD_SNActivity extends BaseActivity{
                 case 111:
                     WeiboDialogUtils.closeDialog(upLoading);
                     showToast(""+request);
+                    SCFHDActivity.scfhdActivity.finish();
+                    readyGo(FHDActivity.class);
                     finish();
                     break;
                 case 222:
@@ -125,7 +129,9 @@ public class SCFHD_SNActivity extends BaseActivity{
                     bottomList=response.body().getList();
                     dcdgcs=new ArrayList<DCandDGC>();
                     for (int i=0;i<bottomList.size();i++){
-                        DCandDGC dcdgc = new DCandDGC(bottomList.get(i).getProductId(),0,0);
+                        DCandDGC dcdgc = new DCandDGC(bottomList.get(i).getProductId(),
+                                bottomList.get(i).getProductAmount()-bottomList.get(i).getDeliveryCount(),
+                                bottomList.get(i).getGiveAmount()-bottomList.get(i).getDeliveryGiveCount());
                         dcdgcs.add(dcdgc);
                     }
                     setBottomAdapter();
@@ -184,8 +190,8 @@ public class SCFHD_SNActivity extends BaseActivity{
             Glide.with(getApplicationContext()).load(item.getLogo()).error(R.mipmap.xiuzhneg).into(holder.img);
             holder.tvName.setText(item.getName()+"");
             holder.tvSpec.setText("规格："+item.getProSpecifications()+"");
-            holder.tvProductAmount.setText(Html.fromHtml("订货数："+"<font color=\"#FF9900\">"+item.getProductAmount()+"（未发订货数："+(item.getProductAmount()-item.getDeliveryCount())+"）"+"</font>"));
-            holder.tvGiveAmount.setText(Html.fromHtml("配赠数："+"<font color=\"#00CC66\">"+item.getGiveAmount()+"（未发配赠数："+(item.getGiveAmount()-item.getDeliveryGiveCount())+"）"+"</font>"));
+            holder.tvProductAmount.setText(Html.fromHtml("订货数："+"<font color=\"#FF9900\">"+item.getProductAmount()+"（未发："+(item.getProductAmount()-item.getDeliveryCount())+"）"+"</font>"));
+            holder.tvGiveAmount.setText(Html.fromHtml("配赠数："+"<font color=\"#00CC66\">"+item.getGiveAmount()+"（未发："+(item.getGiveAmount()-item.getDeliveryGiveCount())+"）"+"</font>"));
             holder.tvCurrentProductAmount.setText(dcdgcs.get(i).getDeliveryCount()+"");
             holder.tvCurrentGiveAmount.setText(dcdgcs.get(i).getDeliverGiveCount()+"");
             holder.tvCurrentProductAmount.setOnClickListener(new View.OnClickListener() {
@@ -288,7 +294,7 @@ public class SCFHD_SNActivity extends BaseActivity{
         et.setMaxLines(1);
         et.setGravity(Gravity.CENTER_HORIZONTAL);
         et.setSingleLine(true);
-        AlertDialog serialDialog = new AlertDialog.Builder(this).setTitle("关闭此单？")
+        AlertDialog serialDialog = new AlertDialog.Builder(this).setTitle("请输入数量")
                 .setView(et)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -318,20 +324,6 @@ public class SCFHD_SNActivity extends BaseActivity{
                 })
                 .setCancelable(false)
                 .show();
-        setDialogWindowAttr(serialDialog);
-    }
-    //在dialog.show()之后调用
-    public void setDialogWindowAttr(Dialog dlg){
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int height = dm.heightPixels;
-        int width = dm.widthPixels;
-        Window window = dlg.getWindow();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.gravity = Gravity.CENTER;
-        lp.width = 4*(width/5);//宽高可设置具体大小
-        lp.height = 2*(height/7);
-        dlg.getWindow().setAttributes(lp);
     }
 
     private void loadData() {

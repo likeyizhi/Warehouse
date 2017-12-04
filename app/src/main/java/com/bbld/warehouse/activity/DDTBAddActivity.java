@@ -117,6 +117,7 @@ public class DDTBAddActivity extends BaseActivity{
             loadData();
         }else{
             tvClose.setVisibility(View.GONE);
+            tvNumber.setText("自动生成");
         }
         setListeners();
     }
@@ -287,7 +288,11 @@ public class DDTBAddActivity extends BaseActivity{
     }
 
     private void setData() {
-        tvNumber.setText(res.getOrderCode()+"");
+        if (orderId.equals("0")){
+            tvNumber.setText("自动生成");
+        }else{
+            tvNumber.setText(res.getOrderCode()+"");
+        }
         tvPerson.setText(res.getName()+"");
         tvPhone.setText(res.getPhone()+"");
         tvAddr.setText(res.getAreas()+res.getAddress());
@@ -336,16 +341,33 @@ public class DDTBAddActivity extends BaseActivity{
                 holder.tvProRemark=(TextView) view.findViewById(R.id.tvProRemark);
                 view.setTag(holder);
             }
+
             holder= (DDTBAddHolder) view.getTag();
             final TbGetOrderInfo.TbGetOrderInfoProductList item = getItem(i);
             Glide.with(getApplicationContext()).load(item.getLogo()).error(R.mipmap.xiuzhneg).into(holder.img);
-            holder.tvDele.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    pros.remove(i);
-                    adapter.notifyDataSetChanged();
+            if (orderId.equals("0")){
+                holder.tvDele.setVisibility(View.VISIBLE);
+                holder.tvDele.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        pros.remove(i);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }else{
+                if (res.getOrderStatus()!=1){
+                    holder.tvDele.setVisibility(View.GONE);
+                }else {
+                    holder.tvDele.setVisibility(View.VISIBLE);
+                    holder.tvDele.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            pros.remove(i);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                 }
-            });
+            }
             holder.tvProName.setText(item.getName()+"");
             holder.tvProSpec.setText("规格："+item.getProSpecifications());
 //            holder.tvProUnit.setText("单位：");

@@ -224,7 +224,11 @@ public class DDTBActivity extends BaseActivity{
             holder.tvPerson.setText(item.getPhone()+"");
             holder.tv_product.setText(item.getProductCategoryCount()+"");
             holder.tv_productCount.setText("类"+item.getProductTotal()+"盒");
-            holder.tv_date.setText(item.getAddDate()+"");
+            if (item.getAddDate().contains("T")){
+                holder.tv_date.setText(item.getAddDate().substring(0,item.getAddDate().indexOf("T"))+"");
+            }else{
+                holder.tv_date.setText(item.getAddDate()+"");
+            }
             if (item.getOrderStatus()==1){
                 holder.btn_close.setVisibility(View.VISIBLE);
                 holder.btn_edit.setVisibility(View.VISIBLE);

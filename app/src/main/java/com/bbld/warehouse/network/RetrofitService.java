@@ -2,20 +2,36 @@ package com.bbld.warehouse.network;
 
 import com.bbld.warehouse.base.Constants;
 import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
+import com.bbld.warehouse.bean.BarcodeConnectScan;
+import com.bbld.warehouse.bean.BarcodeConnectWatchHM;
+import com.bbld.warehouse.bean.BarcodeConnectWatchXM;
 import com.bbld.warehouse.bean.CancelInventory;
 import com.bbld.warehouse.bean.ClearScanCode;
 import com.bbld.warehouse.bean.CloseOrder;
 import com.bbld.warehouse.bean.CusInvoiceConfirm;
+import com.bbld.warehouse.bean.CusInvoiceGetCusInvoiceList;
+import com.bbld.warehouse.bean.CusInvoiceGetInfo;
 import com.bbld.warehouse.bean.CusInvoiceInfo;
+import com.bbld.warehouse.bean.CusInvoiceInitAddGetInfo;
 import com.bbld.warehouse.bean.CusInvoiceReceiptList;
 import com.bbld.warehouse.bean.CusInvoiceSendList;
 import com.bbld.warehouse.bean.DCGetChildOrderList;
+import com.bbld.warehouse.bean.DCOGetEndCustomerList;
+import com.bbld.warehouse.bean.DCOGetProductCirculationStatistics;
 import com.bbld.warehouse.bean.DealerChildOrderInitOrderClose;
 import com.bbld.warehouse.bean.DealerChildOrderInitOrderPass;
+import com.bbld.warehouse.bean.FHDDeleteLogistics;
 import com.bbld.warehouse.bean.FHDGetAddCurrentProviceFHDInfo;
 import com.bbld.warehouse.bean.FHDGetAddOtherProviceFHDInfo;
+import com.bbld.warehouse.bean.FHDGetCboLogistics;
+import com.bbld.warehouse.bean.FHDGetCurrentProviceFHDInfo;
 import com.bbld.warehouse.bean.FHDGetDealerDeliveryList;
+import com.bbld.warehouse.bean.FHDGetFHDList;
+import com.bbld.warehouse.bean.FHDGetInvoiceLogisticsList;
+import com.bbld.warehouse.bean.FHDGetLogisticsInfo;
+import com.bbld.warehouse.bean.FHDGetLogisticsList;
 import com.bbld.warehouse.bean.FHDGetOrderProductList;
+import com.bbld.warehouse.bean.FHDGetOtherProviceFHDInfo;
 import com.bbld.warehouse.bean.FinishInventory;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
@@ -62,6 +78,7 @@ import com.bbld.warehouse.bean.ScanCode;
 import com.bbld.warehouse.bean.ScanCodeRefund;
 import com.bbld.warehouse.bean.StorageCodeList;
 import com.bbld.warehouse.bean.StorageDetails;
+import com.bbld.warehouse.bean.StorageGetSaleList;
 import com.bbld.warehouse.bean.StorageList;
 import com.bbld.warehouse.bean.TbGetDealerDeliveryList;
 import com.bbld.warehouse.bean.TbGetOrderInfo;
@@ -122,6 +139,13 @@ public class RetrofitService {
      */
     public Call<Login> dealerLogin(String acc, String pwd){
         return retrofitInterface.dealerLogin(acc, pwd);
+    }
+    /**
+     * 工厂登录
+     * 登录
+     */
+    public Call<Login> plantLogin(String acc, String pwd){
+        return retrofitInterface.plantLogin(acc, pwd);
     }
     /**
      * 首页接口
@@ -556,6 +580,120 @@ public class RetrofitService {
      */
     public Call<DealerChildOrderInitOrderClose> dealerChildOrderInitOrderClose(String token, int id, String remark){
         return retrofitInterface.dealerChildOrderInitOrderClose(token, id, remark);
+    }
+    /**
+     * 关联扫码
+     */
+    public Call<BarcodeConnectScan> barcodeConnectScan(String token, String code){
+        return retrofitInterface.barcodeConnectScan(token, code);
+    }
+    /**
+     * 箱码关联列表
+     */
+    public Call<BarcodeConnectWatchXM> barcodeConnectWatchXM(String token, String code, String start, String end, int page, int pagesize){
+        return retrofitInterface.barcodeConnectWatchXM(token, code, start, end, page, pagesize);
+    }
+    /**
+     * 关联盒码明细
+     */
+    public Call<BarcodeConnectWatchHM> barcodeConnectWatchHM(String token, int boxId){
+        return retrofitInterface.barcodeConnectWatchHM(token, boxId);
+    }
+    /**
+     * 获取发货单列表
+     */
+    public Call<FHDGetFHDList> fhdGetFHDList(String token, int page, int pagesize){
+        return retrofitInterface.fhdGetFHDList(token, page, pagesize);
+    }
+    /**
+     * 获取本省发货单详情
+     */
+    public Call<FHDGetCurrentProviceFHDInfo> fhdGetCurrentProviceFHDInfo(String token, int id){
+        return retrofitInterface.fhdGetCurrentProviceFHDInfo(token, id);
+    }
+    /**
+     * 获取外省发货单详情
+     */
+    public Call<FHDGetOtherProviceFHDInfo> fhdGetOtherProviceFHDInfo(String token, int id){
+        return retrofitInterface.fhdGetOtherProviceFHDInfo(token, id);
+    }
+    /**
+     * 终端客户
+     */
+    public Call<DCOGetEndCustomerList> dcoGetEndCustomerList(String token, int page, int pagesize){
+        return retrofitInterface.dcoGetEndCustomerList(token, page, pagesize);
+    }
+    /**
+     * 销售查询
+     */
+    public Call<StorageGetSaleList> storageGetSaleList(String token, String key, String barcode, int page, int pagesize){
+        return retrofitInterface.storageGetSaleList(token, key, barcode, page, pagesize);
+    }
+    /**
+     * 条码流转
+     */
+    public Call<DCOGetProductCirculationStatistics> dcoGetProductCirculationStatistics(String token, String key, int page, int pagesize){
+        return retrofitInterface.dcoGetProductCirculationStatistics(token, key, page, pagesize);
+    }
+    /**
+     * 获取经销商物流公司
+     */
+    public Call<FHDGetLogisticsList> fhdGetLogisticsList(String token){
+        return retrofitInterface.fhdGetLogisticsList(token);
+    }
+    /**
+     * 删除物流公司
+     */
+    public Call<FHDDeleteLogistics> fhdDeleteLogistics(String token, int id){
+        return retrofitInterface.fhdDeleteLogistics(token, id);
+    }
+    /**
+     * 删除物流公司
+     */
+    public Call<FHDDeleteLogistics> fhdAddLogistics(String token, String name, String remark){
+        return retrofitInterface.fhdAddLogistics(token, name, remark);
+    }
+    /**
+     * 发货单物流信息列表
+     */
+    public Call<FHDGetInvoiceLogisticsList> fhdGetInvoiceLogisticsList(String token, int invoiceId){
+        return retrofitInterface.fhdGetInvoiceLogisticsList(token, invoiceId);
+    }
+    /**
+     * 查询快递接口
+     */
+    public Call<FHDGetLogisticsInfo> fhdGetLogisticsInfo(String token, int id){
+        return retrofitInterface.fhdGetLogisticsInfo(token, id);
+    }
+    /**
+     * 获取经销商物流公司(下拉使用)
+     */
+    public Call<FHDGetCboLogistics> fhdGetCboLogistics(String token){
+        return retrofitInterface.fhdGetCboLogistics(token);
+    }
+    /**
+     * 发货单添加物流单号
+     */
+    public Call<FHDDeleteLogistics> fhdAddInvoiceLogisticsInfo(String token, int invoiceId, int logisticsId, String number, String remark){
+        return retrofitInterface.fhdAddInvoiceLogisticsInfo(token, invoiceId, logisticsId, number, remark);
+    }
+    /**
+     * 获取终端发货单
+     */
+    public Call<CusInvoiceGetCusInvoiceList> cusInvoiceGetCusInvoiceList(String token, int page, int pagesize){
+        return retrofitInterface.cusInvoiceGetCusInvoiceList(token, page, pagesize);
+    }
+    /**
+     * 点击添加终端发货单
+     */
+    public Call<CusInvoiceInitAddGetInfo> cusInvoiceInitAddGetInfo(String token){
+        return retrofitInterface.cusInvoiceInitAddGetInfo(token);
+    }
+    /**
+     * 点击编辑终端发货单
+     */
+    public Call<CusInvoiceGetInfo> cusInvoiceGetInfo(String token,int id){
+        return retrofitInterface.cusInvoiceGetInfo(token,id);
     }
 
 }

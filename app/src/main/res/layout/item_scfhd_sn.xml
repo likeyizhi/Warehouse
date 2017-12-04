@@ -71,7 +71,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="本次发货数："
+            android:text="发货数："
             android:textColor="#333333"
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
@@ -92,7 +92,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="本次发配赠数："
+            android:text="配赠数："
             android:textColor="#333333"
             android:paddingTop="7dp"
             android:paddingBottom="7dp"

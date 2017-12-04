@@ -286,20 +286,6 @@ public class HXSBSBActivity extends BaseActivity{
                 })
                 .setCancelable(false)
                 .show();
-        setDialogWindowAttr(serialDialog);
-    }
-    //在dialog.show()之后调用
-    public void setDialogWindowAttr(Dialog dlg){
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int height = dm.heightPixels;
-        int width = dm.widthPixels;
-        Window window = dlg.getWindow();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.gravity = Gravity.CENTER;
-        lp.width = 4*(width/5);//宽高可设置具体大小
-        lp.height = 2*(height/7);
-        dlg.getWindow().setAttributes(lp);
     }
 
     @Override

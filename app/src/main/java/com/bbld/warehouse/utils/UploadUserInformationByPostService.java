@@ -261,6 +261,33 @@ public class UploadUserInformationByPostService {
         Log.i("orderJson", "orderJson="+params);
         return sendPOSTRequest(path, params, "UTF-8");
     }
+    /**生成发货单-新订单处理-审核通过*/
+    public static String dealerChildOrderInitOrderPass(String token, String orderJson) throws Exception{
+        String path = Constants.BASE_URL + "DealerChildOrder/InitOrderPass";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("orderJson", orderJson);
+        Log.i("orderJson", "orderJson="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    /**保存关联*/
+    public static String saveBarCodeConnect(String token, String codejson) throws Exception{
+        String path = Constants.BASE_URL + "BarCodeConnect/SaveBarCodeConnect";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("codejson", codejson);
+        Log.i("codejson", "codejson="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
+    /**创建编辑终端发货单*/
+    public static String cusInvoiceAdd(String token, String cusInvoiceJson) throws Exception{
+        String path = Constants.BASE_URL + "CusInvoice/Add";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("token", token);
+        params.put("cusInvoiceJson", cusInvoiceJson);
+        Log.i("cusInvoiceJson", "cusInvoiceJson="+params);
+        return sendPOSTRequest(path, params, "UTF-8");
+    }
 
     /**
      * 发送POST请求

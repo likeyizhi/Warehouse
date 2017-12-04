@@ -1,20 +1,36 @@
 package com.bbld.warehouse.network;
 
 import com.bbld.warehouse.bean.AddOrderLogisticsInfo;
+import com.bbld.warehouse.bean.BarcodeConnectScan;
+import com.bbld.warehouse.bean.BarcodeConnectWatchHM;
+import com.bbld.warehouse.bean.BarcodeConnectWatchXM;
 import com.bbld.warehouse.bean.CancelInventory;
 import com.bbld.warehouse.bean.ClearScanCode;
 import com.bbld.warehouse.bean.CloseOrder;
 import com.bbld.warehouse.bean.CusInvoiceConfirm;
+import com.bbld.warehouse.bean.CusInvoiceGetCusInvoiceList;
+import com.bbld.warehouse.bean.CusInvoiceGetInfo;
 import com.bbld.warehouse.bean.CusInvoiceInfo;
+import com.bbld.warehouse.bean.CusInvoiceInitAddGetInfo;
 import com.bbld.warehouse.bean.CusInvoiceReceiptList;
 import com.bbld.warehouse.bean.CusInvoiceSendList;
 import com.bbld.warehouse.bean.DCGetChildOrderList;
+import com.bbld.warehouse.bean.DCOGetEndCustomerList;
+import com.bbld.warehouse.bean.DCOGetProductCirculationStatistics;
 import com.bbld.warehouse.bean.DealerChildOrderInitOrderClose;
 import com.bbld.warehouse.bean.DealerChildOrderInitOrderPass;
+import com.bbld.warehouse.bean.FHDDeleteLogistics;
 import com.bbld.warehouse.bean.FHDGetAddCurrentProviceFHDInfo;
 import com.bbld.warehouse.bean.FHDGetAddOtherProviceFHDInfo;
+import com.bbld.warehouse.bean.FHDGetCboLogistics;
+import com.bbld.warehouse.bean.FHDGetCurrentProviceFHDInfo;
 import com.bbld.warehouse.bean.FHDGetDealerDeliveryList;
+import com.bbld.warehouse.bean.FHDGetFHDList;
+import com.bbld.warehouse.bean.FHDGetInvoiceLogisticsList;
+import com.bbld.warehouse.bean.FHDGetLogisticsInfo;
+import com.bbld.warehouse.bean.FHDGetLogisticsList;
 import com.bbld.warehouse.bean.FHDGetOrderProductList;
+import com.bbld.warehouse.bean.FHDGetOtherProviceFHDInfo;
 import com.bbld.warehouse.bean.FinishInventory;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
@@ -61,6 +77,7 @@ import com.bbld.warehouse.bean.ScanCode;
 import com.bbld.warehouse.bean.ScanCodeRefund;
 import com.bbld.warehouse.bean.StorageCodeList;
 import com.bbld.warehouse.bean.StorageDetails;
+import com.bbld.warehouse.bean.StorageGetSaleList;
 import com.bbld.warehouse.bean.StorageList;
 import com.bbld.warehouse.bean.TbGetDealerDeliveryList;
 import com.bbld.warehouse.bean.TbGetOrderInfo;
@@ -100,6 +117,12 @@ public interface RetrofitInterface {
      */
     @GET("DealerAdmin/Login")
     Call<Login> dealerLogin(@Query("acc") String acc, @Query("pwd") String pwd);
+    /**
+     * 工厂登录
+     * 登录
+     */
+    @GET("Plant/login")
+    Call<Login> plantLogin(@Query("acc") String acc, @Query("pwd") String pwd);
     /**
      * 首页接口
      */
@@ -492,4 +515,100 @@ public interface RetrofitInterface {
      */
     @GET("DealerChildOrder/InitOrderClose")
     Call<DealerChildOrderInitOrderClose> dealerChildOrderInitOrderClose(@Query("token") String token, @Query("id") int id, @Query("remark") String remark);
+    /**
+     * 关联扫码
+     */
+    @GET("BarCodeConnect/ScanCode")
+    Call<BarcodeConnectScan> barcodeConnectScan(@Query("token") String token, @Query("code") String code);
+    /**
+     * 箱码关联列表
+     */
+    @GET("BarCodeConnect/GetConnectBoxCodeList")
+    Call<BarcodeConnectWatchXM> barcodeConnectWatchXM(@Query("token") String token, @Query("code") String code, @Query("start") String start, @Query("end") String end, @Query("page") int page, @Query("pagesize") int pagesize);
+    /**
+     * 关联盒码明细
+     */
+    @GET("BarCodeConnect/GetConnectBarCodeList")
+    Call<BarcodeConnectWatchHM> barcodeConnectWatchHM(@Query("token") String token, @Query("boxId") int boxId);
+    /**
+     * 获取发货单列表
+     */
+    @GET("FHD/GetFHDList")
+    Call<FHDGetFHDList> fhdGetFHDList(@Query("token") String token, @Query("page") int page, @Query("pagesize") int pagesize);
+    /**
+     * 获取本省发货单详情
+     */
+    @GET("FHD/GetCurrentProviceFHDInfo")
+    Call<FHDGetCurrentProviceFHDInfo> fhdGetCurrentProviceFHDInfo(@Query("token") String token, @Query("id") int id);
+    /**
+     * 获取外省发货单详情
+     */
+    @GET("FHD/GetOtherProviceFHDInfo")
+    Call<FHDGetOtherProviceFHDInfo> fhdGetOtherProviceFHDInfo(@Query("token") String token, @Query("id") int id);
+    /**
+     * 终端客户
+     */
+    @GET("dealerChildOrder/GetEndCustomerList")
+    Call<DCOGetEndCustomerList> dcoGetEndCustomerList(@Query("token") String token, @Query("page") int page, @Query("pagesize") int pagesize);
+    /**
+     * 销售查询
+     */
+    @GET("Storage/GetSaleList")
+    Call<StorageGetSaleList> storageGetSaleList(@Query("token") String token, @Query("key") String key, @Query("barcode") String barcode, @Query("page") int page, @Query("pagesize") int pagesize);
+    /**
+     * 条码流转
+     */
+    @GET("DealerChildOrder/GetProductCirculationStatistics")
+    Call<DCOGetProductCirculationStatistics> dcoGetProductCirculationStatistics(@Query("token") String token, @Query("key") String key, @Query("page") int page, @Query("pagesize") int pagesize);
+    /**
+     * 获取经销商物流公司
+     */
+    @GET("FHD/GetLogisticsList")
+    Call<FHDGetLogisticsList> fhdGetLogisticsList(@Query("token") String token);
+    /**
+     * 删除物流公司
+     */
+    @GET("FHD/DeleteLogistics")
+    Call<FHDDeleteLogistics> fhdDeleteLogistics(@Query("token") String token, @Query("id") int id);
+    /**
+     * 添加物流公司
+     */
+    @GET("FHD/AddLogistics")
+    Call<FHDDeleteLogistics> fhdAddLogistics(@Query("token") String token, @Query("name") String name, @Query("remark") String remark);
+    /**
+     * 发货单物流信息列表
+     */
+    @GET("FHD/GetInvoiceLogisticsList")
+    Call<FHDGetInvoiceLogisticsList> fhdGetInvoiceLogisticsList(@Query("token") String token, @Query("invoiceId") int invoiceId);
+    /**
+     * 查询快递接口
+     */
+    @GET("FHD/GetLogisticsInfo")
+    Call<FHDGetLogisticsInfo> fhdGetLogisticsInfo(@Query("token") String token, @Query("id") int id);
+    /**
+     * 获取经销商物流公司(下拉使用)
+     */
+    @GET("FHD/GetCboLogistics")
+    Call<FHDGetCboLogistics> fhdGetCboLogistics(@Query("token") String token);
+    /**
+     * 发货单添加物流单号
+     */
+    @GET("FHD/AddInvoiceLogisticsInfo")
+    Call<FHDDeleteLogistics> fhdAddInvoiceLogisticsInfo(@Query("token") String token, @Query("invoiceId") int invoiceId, @Query("logisticsId") int logisticsId, @Query("number") String number, @Query("remark") String remark);
+    /**
+     * 获取终端发货单
+     */
+    @GET("CusInvoice/GetCusInvoiceList")
+    Call<CusInvoiceGetCusInvoiceList> cusInvoiceGetCusInvoiceList(@Query("token") String token, @Query("page") int page, @Query("pagesize") int pagesize);
+    /**
+     * 点击添加终端发货单
+     */
+    @GET("CusInvoice/InitAddGetInfo")
+    Call<CusInvoiceInitAddGetInfo> cusInvoiceInitAddGetInfo(@Query("token") String token);
+    /**
+     * 点击编辑终端发货单
+     */
+    @GET("CusInvoice/GetInfo")
+    Call<CusInvoiceGetInfo> cusInvoiceGetInfo(@Query("token") String token, @Query("id") int id);
+
 }

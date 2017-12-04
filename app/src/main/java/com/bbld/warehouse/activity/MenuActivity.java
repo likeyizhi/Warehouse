@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -111,6 +112,8 @@ public class MenuActivity extends BaseActivity{
     LinearLayout ll_05;
     @BindView(R.id.ll_06)
     LinearLayout ll_06;
+    @BindView(R.id.ll_08)
+    LinearLayout ll_08;
     @BindView(R.id.ll_toDHQR)
     LinearLayout ll_toDHQR;
     @BindView(R.id.ll_toXSCK)
@@ -141,6 +144,12 @@ public class MenuActivity extends BaseActivity{
     LinearLayout llToHHCK;
     @BindView(R.id.llToHHRK)
     LinearLayout llToHHRK;
+    @BindView(R.id.ll_toGL)
+    LinearLayout llToGL;
+    @BindView(R.id.ll_toCKGL)
+    LinearLayout llToCKGL;
+    @BindView(R.id.ll_toXSCX)
+    LinearLayout llToXSCX;
 
 //    private Handler mHandler=new Handler(){
 //        @Override
@@ -231,6 +240,7 @@ public class MenuActivity extends BaseActivity{
             ll_07.setVisibility(View.VISIBLE);
             ll_05.setVisibility(View.GONE);
             ll_06.setVisibility(View.GONE);
+            ll_08.setVisibility(View.GONE);
         }else if (type==3){
             ll_01.setVisibility(View.GONE);
             ll_02.setVisibility(View.GONE);
@@ -239,6 +249,7 @@ public class MenuActivity extends BaseActivity{
             ll_07.setVisibility(View.GONE);
             ll_05.setVisibility(View.VISIBLE);
             ll_06.setVisibility(View.VISIBLE);
+            ll_08.setVisibility(View.VISIBLE);
         }else{
             ll_01.setVisibility(View.GONE);
             ll_02.setVisibility(View.GONE);
@@ -442,6 +453,27 @@ public class MenuActivity extends BaseActivity{
                 showWindow(tvName);
             }
         });
+        //跳转--关联
+        llToGL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(BarcodeConnectActivity.class);
+            }
+        });
+        //跳转--查看关联
+        llToCKGL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(BarcodeConnectWatcheActivity.class);
+            }
+        });
+        //跳转--销售查询
+        llToXSCX.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readyGo(XSCXActivity.class);
+            }
+        });
     }
 
     private void showWindow(View parent) {
@@ -523,6 +555,10 @@ public class MenuActivity extends BaseActivity{
                 editorAP.putString("WHACC","");
                 editorAP.putString("WHPWD","");
                 editorAP.commit();
+                SharedPreferences shared = getSharedPreferences("MyToken", MODE_PRIVATE);
+                SharedPreferences.Editor editor = shared.edit();
+                editor.putInt("loginType", 0);
+                editor.commit();
                 ActivityManagerUtil.getInstance().finishActivity(MenuActivity.this);
                 readyGo(LoginActivity.class);
 //                ActivityManagerUtil.getInstance().appExit();

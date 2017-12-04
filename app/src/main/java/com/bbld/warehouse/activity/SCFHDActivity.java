@@ -46,9 +46,11 @@ public class SCFHDActivity extends BaseActivity{
     private List<DCGetChildOrderList.DCGetChildOrderListlist> list;
     private SCFHDAdapter adapter;
     private String[] items={"省内","省外"};
+    public static SCFHDActivity scfhdActivity=null;
 
     @Override
     protected void initViewsAndEvents() {
+        scfhdActivity=this;
         token=new MyToken(this).getToken();
         page=1;
         pagesize=10;
@@ -137,7 +139,11 @@ public class SCFHDActivity extends BaseActivity{
             holder.tvPerson.setText(item.getPhone()+"");
             holder.tv_product.setText(item.getProductCategoryCount()+"");
             holder.tv_productCount.setText("类"+item.getProductTotal()+"盒");
-            holder.tv_date.setText(item.getAddDate()+"");
+            if (item.getAddDate().contains("T")){
+                holder.tv_date.setText(item.getAddDate().substring(0,item.getAddDate().indexOf("T"))+"");
+            }else{
+                holder.tv_date.setText(item.getAddDate()+"");
+            }
             if (item.getOrderStatus()==1){
                 holder.btn_edit.setText("新订单处理");
                 holder.btn_edit.setOnClickListener(new View.OnClickListener() {
@@ -202,6 +208,14 @@ public class SCFHDActivity extends BaseActivity{
         });
         builder.create().show();
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        page=1;
+        loadData(false);
+    }
+
     @Override
     protected void getBundleExtras(Bundle extras) {
 

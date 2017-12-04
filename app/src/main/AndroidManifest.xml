@@ -365,6 +365,96 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
+        <!--关联-->
+        <activity android:name=".activity.BarcodeConnectActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--查看关联-->
+        <activity android:name=".activity.BarcodeConnectWatcheActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--查看关联-详情-->
+        <activity android:name=".activity.BarcodeConnectInfoActivity"
+        android:windowSoftInputMode="stateHidden|adjustPan"
+        android:screenOrientation="portrait">
+        </activity>
+        <!--发货单-->
+        <activity android:name=".activity.FHDActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--发货单-省外-->
+        <activity android:name=".activity.FHD_SWActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--发货单-省内-->
+        <activity android:name=".activity.FHD_SNActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--工厂登录菜单页-->
+        <activity android:name=".activity.MenuPlantActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--终端客户-->
+        <activity android:name=".activity.ZDKHActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--销售查询-->
+        <activity android:name=".activity.XSCXActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--条码流转-->
+        <activity android:name=".activity.TMLZActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--物流公司-->
+        <activity android:name=".activity.WLGSActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--发货单-物流设置-->
+        <activity android:name=".activity.FHD_WLActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--发货单-物流设置-物流详情-->
+        <activity android:name=".activity.FHD_WL_InfoActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--发货单-物流设置-物流详情-->
+        <activity android:name=".activity.IDataScanTHDActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--终端发货-->
+        <activity android:name=".activity.ZDFHActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--终端发货-添加-->
+        <activity android:name=".activity.ZDFHAddActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--终端发货-添加-添加商品-->
+        <activity android:name=".activity.ZDFHProsActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--终端发货-编辑/详情-->
+        <activity android:name=".activity.ZDFHEditActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
         <!--更新相关-->
         <service android:name=".update.UpdateService" >
             <intent-filter>

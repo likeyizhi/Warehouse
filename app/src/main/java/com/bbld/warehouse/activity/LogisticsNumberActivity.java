@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -109,6 +110,10 @@ public class LogisticsNumberActivity extends BaseActivity {
                         if (appInfos.get(i).getAppName().equals("com.android.auto.iscan")) {
                             is_iData=true;
                         }
+                    }
+                    String model = Build.MODEL;
+                    if (model.contains("NLS-")){
+                        is_iData=true;
                     }
                     WeiboDialogUtils.closeDialog(loading);
                     break;

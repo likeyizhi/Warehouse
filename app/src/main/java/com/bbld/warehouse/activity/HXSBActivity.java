@@ -85,7 +85,7 @@ public class HXSBActivity extends BaseActivity{
     protected void initViewsAndEvents() {
         token=new MyToken(this).getToken();
         Calendar c = Calendar.getInstance();//首先要获取日历对象
-        mYear = c.get(Calendar.YEAR); // 获取当前年份
+        mYear = c.get(Calendar.YEAR); // 获取当前年份+1
         mMonth = c.get(Calendar.MONTH);// 获取当前月份
         monthPosition=mMonth;
         loadYear();
@@ -168,7 +168,12 @@ public class HXSBActivity extends BaseActivity{
             holder.tvSpec.setText("规格："+item.getProSpecifications());
             holder.tvCount.setText("盒数："+item.getNeedTotal());
             holder.tvUnitCount.setText("件数："+item.getNeedJTotal());
-            holder.tvCreatTime.setText("创建时间："+item.getAddDate());
+//            holder.tvCreatTime.setText("创建时间："+item.getAddDate());
+            if (item.getAddDate().contains("T")){
+                holder.tvCreatTime.setText("创建时间："+item.getAddDate().substring(0,item.getAddDate().indexOf("T"))+"");
+            }else{
+                holder.tvCreatTime.setText("创建时间："+item.getAddDate()+"");
+            }
             return view;
         }
 
@@ -180,10 +185,10 @@ public class HXSBActivity extends BaseActivity{
 
     private void loadYear() {
         tvYear.setText(mYear+"");
-        int showSize = mYear - 1990;
+        int showSize = (mYear+1) - 1990;
         items=new String[showSize];
         for (int i=0;i<items.length;i++){
-            items[i]=(mYear-i)+"";
+            items[i]=(mYear+1-i)+"";
         }
     }
 

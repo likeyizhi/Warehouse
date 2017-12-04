@@ -107,6 +107,10 @@ public class ZDPSOutActivity extends BaseActivity{
                             is_iData=true;
                         }
                     }
+                    String model = Build.MODEL;
+                    if (model.contains("NLS-")){
+                        is_iData=true;
+                    }
                     WeiboDialogUtils.closeDialog(loading);
                     break;
             }

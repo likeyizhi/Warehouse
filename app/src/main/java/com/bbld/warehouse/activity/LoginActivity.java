@@ -48,6 +48,8 @@ public class LoginActivity extends BaseActivity{
     RadioButton rbJXS;
     @BindView(R.id.rbKG)
     RadioButton rbKG;
+    @BindView(R.id.rbGC)
+    RadioButton rbGC;
 
     private static final String TOKEN=null;
     private String acc="";
@@ -95,8 +97,11 @@ public class LoginActivity extends BaseActivity{
                         LoginType=1;//Admin/Login
                         showToast("您已选择库管登录");
                         break;
+                    case R.id.rbGC://工厂登录
+                        LoginType=2;//Plant/login
+                        showToast("您已选择工厂登录");
+                        break;
                 }
-                //保存Token
                 SharedPreferences shared = getSharedPreferences("MyToken", MODE_PRIVATE);
                 SharedPreferences.Editor editor = shared.edit();
                 editor.putInt("loginType", LoginType);
@@ -204,6 +209,51 @@ public class LoginActivity extends BaseActivity{
 //                    bundle.putString("type", "1");
 //                    bundle.putInt("NeedBatch", 1);
 //                    readyGo(IDataScanActivity.class, bundle);
+                            ActivityManagerUtil.getInstance().finishActivity(LoginActivity.this);
+                        }else{
+                            showToast(response.body().getMes()+"");
+                            WeiboDialogUtils.closeDialog(loadDialog);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        WeiboDialogUtils.closeDialog(loadDialog);
+                    }
+                });
+                break;
+            case 2:
+                rbGC.setChecked(true);
+                Call<Login> call2= RetrofitService.getInstance().plantLogin(/*"xz","123456"*/acc,pwd);
+                call2.enqueue(new Callback<Login>() {
+                    @Override
+                    public void onResponse(Response<Login> response, Retrofit retrofit) {
+                        if (response==null){
+                            showToast("服务器错误");
+                            WeiboDialogUtils.closeDialog(loadDialog);
+                            return;
+                        }
+                        if (response.body().getStatus()==0){
+                            //保存Token
+                            SharedPreferences shared=getSharedPreferences("MyToken",MODE_PRIVATE);
+                            SharedPreferences.Editor editor=shared.edit();
+                            editor.putString(TOKEN,response.body().getToken());
+                            editor.commit();
+                            //保存帐号密码
+                            editorAP.putString("WHACC",acc);
+                            editorAP.putString("WHPWD",pwd);
+                            editorAP.commit();
+                            //提示登录成功
+                            showToast(response.body().getMes()+"");
+                            //跳转到主页，并释放LoginActivity.class
+                            Bundle bundle=new Bundle();
+                            bundle.putString("name", response.body().getName());
+                            bundle.putString("dealerName", response.body().getDealerName());
+                            bundle.putString("warehouseName", response.body().getWarehouseName());
+                            bundle.putInt("type", response.body().getType());
+                            bundle.putInt("ishandover", response.body().getIshandover());
+                            WeiboDialogUtils.closeDialog(loadDialog);
+                            readyGo(MenuPlantActivity.class, bundle);
                             ActivityManagerUtil.getInstance().finishActivity(LoginActivity.this);
                         }else{
                             showToast(response.body().getMes()+"");

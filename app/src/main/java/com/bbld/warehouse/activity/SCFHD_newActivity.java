@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.InputType;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -178,31 +179,67 @@ public class SCFHD_newActivity extends BaseActivity{
     }
 
     private void pass() {
-        final Dialog passLoading = WeiboDialogUtils.createLoadingDialog(this, "上传中...");
-        Call<DealerChildOrderInitOrderPass> call=RetrofitService.getInstance().dealerChildOrderInitOrderPass(token,orderId,etHeadRemark.getText()+"");
-        call.enqueue(new Callback<DealerChildOrderInitOrderPass>() {
+        upLoading=WeiboDialogUtils.createLoadingDialog(this,"上传中...");
+        DCOModifyOrder dcoMO = new DCOModifyOrder();
+        dcoMO.setOrderId(orderId);
+        dcoMO.setHeadRemark(etHeadRemark.getText()+"");
+        List<DCOModifyOrder.DCOModifyOrderproductList> dcoList=new ArrayList<DCOModifyOrder.DCOModifyOrderproductList>();
+        for (int i=0;i<pros.size();i++){
+            DCOModifyOrder.DCOModifyOrderproductList dco = new DCOModifyOrder.DCOModifyOrderproductList(pros.get(i).getProductId()
+                    ,pros.get(i).getProductAmount(),pros.get(i).getRemark(),pros.get(i).getGiveAmount());
+            dcoList.add(dco);
+        }
+        dcoMO.setProductList(dcoList);
+        Gson gson=new Gson();
+        final String orderJson = gson.toJson(dcoMO);
+        Log.i("0.0","0.0="+orderJson);
+        new Thread(new Runnable() {
             @Override
-            public void onResponse(Response<DealerChildOrderInitOrderPass> response, Retrofit retrofit) {
-                if (response==null){
-                    WeiboDialogUtils.closeDialog(passLoading);
-                    showToast("请重试");
-                    return;
+            public void run() {
+                try {
+                    request= UploadUserInformationByPostService.dealerChildOrderInitOrderPass(token,
+                            orderJson);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                if (response.body().getStatus()==0){
-                    WeiboDialogUtils.closeDialog(passLoading);
-                    finish();
-                }else {
-                    showToast("请重试");
-                    WeiboDialogUtils.closeDialog(passLoading);
+                if (request.contains("成功")) { // 请求成功
+                    Message message=new Message();
+                    message.what=111;
+                    handler.sendMessage(message);
+                } else { // 请求失败
+                    Message message=new Message();
+                    message.what=222;
+                    handler.sendMessage(message);
                 }
             }
+        }).start();
 
-            @Override
-            public void onFailure(Throwable throwable) {
-                showToast("请重试");
-                WeiboDialogUtils.closeDialog(passLoading);
-            }
-        });
+
+//        final Dialog passLoading = WeiboDialogUtils.createLoadingDialog(this, "上传中...");
+//        Call<DealerChildOrderInitOrderPass> call=RetrofitService.getInstance().dealerChildOrderInitOrderPass(token,orderId,etHeadRemark.getText()+"");
+//        call.enqueue(new Callback<DealerChildOrderInitOrderPass>() {
+//            @Override
+//            public void onResponse(Response<DealerChildOrderInitOrderPass> response, Retrofit retrofit) {
+//                if (response==null){
+//                    WeiboDialogUtils.closeDialog(passLoading);
+//                    showToast("请重试");
+//                    return;
+//                }
+//                if (response.body().getStatus()==0){
+//                    WeiboDialogUtils.closeDialog(passLoading);
+//                    finish();
+//                }else {
+//                    showToast("请重试");
+//                    WeiboDialogUtils.closeDialog(passLoading);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                showToast("请重试");
+//                WeiboDialogUtils.closeDialog(passLoading);
+//            }
+//        });
     }
 
     private void save() {
@@ -258,6 +295,7 @@ public class SCFHD_newActivity extends BaseActivity{
                     setAdapter();
                     WeiboDialogUtils.closeDialog(loading);
                 }else{
+                    showToast(response.body().getMes()+"");
                     WeiboDialogUtils.closeDialog(loading);
                 }
             }
@@ -399,7 +437,6 @@ public class SCFHD_newActivity extends BaseActivity{
                 })
                 .setCancelable(false)
                 .show();
-        setDialogWindowAttr(serialDialog);
     }
     //配赠数Dialog
     private void showActualDialog(final int i) {
@@ -431,13 +468,11 @@ public class SCFHD_newActivity extends BaseActivity{
                 })
                 .setCancelable(false)
                 .show();
-        setDialogWindowAttr(serialDialog);
     }
     //产品备注Dialog
     private void showRemarkDialog(final int i) {
         final EditText et = new EditText(this);
         et.setBackgroundResource(R.drawable.bg_batch);
-        et.setInputType(InputType.TYPE_CLASS_NUMBER);
         et.setHint("输入该商品备注");
         et.setMaxLines(1);
         et.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -463,26 +498,11 @@ public class SCFHD_newActivity extends BaseActivity{
                 })
                 .setCancelable(false)
                 .show();
-        setDialogWindowAttr(serialDialog);
-    }
-    //在dialog.show()之后调用
-    public void setDialogWindowAttr(Dialog dlg){
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int height = dm.heightPixels;
-        int width = dm.widthPixels;
-        Window window = dlg.getWindow();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.gravity = Gravity.CENTER;
-        lp.width = 4*(width/5);//宽高可设置具体大小
-        lp.height = 2*(height/7);
-        dlg.getWindow().setAttributes(lp);
     }
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-//        orderId=extras.getString("orderId");
-        orderId=150;
+        orderId=extras.getInt("orderId");
         isShow=extras.getInt("isShow",0);
     }
 

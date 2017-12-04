@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="17sp"
-            android:text="生成发货单列表"
+            android:text="下级订单"
             android:id="@+id/tv_title" />
     </RelativeLayout>
     <TextView
