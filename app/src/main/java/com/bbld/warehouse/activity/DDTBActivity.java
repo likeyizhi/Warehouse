@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bbld.warehouse.R;
@@ -52,12 +54,23 @@ public class DDTBActivity extends BaseActivity{
     Button btnAdd;
     @BindView(R.id.ib_back)
     ImageButton ibBack;
+    @BindView(R.id.rgSelect)
+    RadioGroup rgSelect;
+    @BindView(R.id.rbXDD)
+    RadioButton rbXDD;
+    @BindView(R.id.rbDFH)
+    RadioButton rbDFH;
+    @BindView(R.id.rbDDWC)
+    RadioButton rbDDWC;
+    @BindView(R.id.rbYGB)
+    RadioButton rbYGB;
 
     private Dialog loading;
     private String token;
     private int page;
     private List<GetOrderTbList.GetOrderTbListlist> tbList;
     private DDTBAdapter adapter;
+    private int status=1;
     private Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -76,6 +89,7 @@ public class DDTBActivity extends BaseActivity{
     protected void initViewsAndEvents() {
         token=new MyToken(this).getToken();
         page=1;
+        status=1;
         loadData(false);
         setListeners();
     }
@@ -140,11 +154,36 @@ public class DDTBActivity extends BaseActivity{
                 finish();
             }
         });
+        rgSelect.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.rbXDD:
+                        status=1;
+                        rbXDD.setChecked(true);
+                        break;
+                    case R.id.rbDFH:
+                        status=2;
+                        rbDFH.setChecked(true);
+                        break;
+                    case R.id.rbDDWC:
+                        status=4;
+                        rbDDWC.setChecked(true);
+                        break;
+                    case R.id.rbYGB:
+                        status=3;
+                        rbYGB.setChecked(true);
+                        break;
+                }
+                page=1;
+                loadData(false);
+            }
+        });
     }
 
     private void loadData(final boolean isLoadMore) {
         loading= WeiboDialogUtils.createLoadingDialog(DDTBActivity.this,"加载中...");
-        Call<GetOrderTbList> call= RetrofitService.getInstance().getOrderTbList(token,page,10);
+        Call<GetOrderTbList> call= RetrofitService.getInstance().getOrderTbList(token,status,page,10);
         call.enqueue(new Callback<GetOrderTbList>() {
             @Override
             public void onResponse(Response<GetOrderTbList> response, Retrofit retrofit) {

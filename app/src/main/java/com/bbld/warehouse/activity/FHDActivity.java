@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bbld.warehouse.R;
@@ -37,6 +39,14 @@ public class FHDActivity extends BaseActivity{
     ListView lvFHD;
     @BindView(R.id.ib_back)
     ImageButton ibBack;
+    @BindView(R.id.rgSelect)
+    RadioGroup rgSelect;
+    @BindView(R.id.rbDCK)
+    RadioButton rbDCK;
+    @BindView(R.id.rbYCK)
+    RadioButton rbYCK;
+    @BindView(R.id.rbYSH)
+    RadioButton rbYSH;
 
     private String token;
     private int page=1;
@@ -44,12 +54,15 @@ public class FHDActivity extends BaseActivity{
     private Dialog loading;
     private List<FHDGetFHDList.FHDList> fhdList;
     private FHDAdapter adapter;
+    private int ishq;
+    private int status=1;
 
     @Override
     protected void initViewsAndEvents() {
         token=new MyToken(this).getToken();
         page=1;
         pagesize=10;
+        status=1;
         loadData(false);
         setListeners();
     }
@@ -61,11 +74,32 @@ public class FHDActivity extends BaseActivity{
                 finish();
             }
         });
+        rgSelect.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.rbDCK:
+                        status=1;
+                        rbDCK.setChecked(true);
+                        break;
+                    case R.id.rbYCK:
+                        status=2;
+                        rbYCK.setChecked(true);
+                        break;
+                    case R.id.rbYSH:
+                        status=4;
+                        rbYSH.setChecked(true);
+                        break;
+                }
+                page=1;
+                loadData(false);
+            }
+        });
     }
 
     private void loadData(boolean isLoadMore) {
         loading = WeiboDialogUtils.createLoadingDialog(this,"加载中...");
-        Call<FHDGetFHDList> call= RetrofitService.getInstance().fhdGetFHDList(token,page,pagesize);
+        Call<FHDGetFHDList> call= RetrofitService.getInstance().fhdGetFHDList(token,status,page,pagesize);
         call.enqueue(new Callback<FHDGetFHDList>() {
             @Override
             public void onResponse(Response<FHDGetFHDList> response, Retrofit retrofit) {
@@ -74,6 +108,7 @@ public class FHDActivity extends BaseActivity{
                     return;
                 }
                 if (response.body().getStatus()==0){
+                    ishq=response.body().getIshq();
                     fhdList=response.body().getFhdlist();
                     setAdapter();
                     WeiboDialogUtils.closeDialog(loading);
@@ -126,6 +161,7 @@ public class FHDActivity extends BaseActivity{
                 holder.tv_date=(TextView)view.findViewById(R.id.tv_date);
                 holder.btn_edit=(Button) view.findViewById(R.id.btn_edit);
                 holder.btn_logistics=(Button) view.findViewById(R.id.btn_logistics);
+                holder.btn_ck=(Button) view.findViewById(R.id.btn_ck);
                 view.setTag(holder);
             }
             holder= (FHDHolder) view.getTag();
@@ -141,64 +177,123 @@ public class FHDActivity extends BaseActivity{
             }else{
                 holder.tv_date.setText(item.getAddDate()+"");
             }
-            if (item.getStatus()==1){
-                holder.btn_edit.setText("编辑");
-                holder.btn_edit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (item.getIsProvice()==0){//0=本省，1=外省
-                            Bundle bundleSN=new Bundle();
-                            bundleSN.putInt("fhdId", item.getId());
-                            bundleSN.putInt("isEdit",1);
-                            readyGo(FHD_SNActivity.class,bundleSN);
-                        }else{
-                            Bundle bundleSW=new Bundle();
-                            bundleSW.putInt("fhdId", item.getId());
-                            bundleSW.putInt("isEdit",1);
-                            readyGo(FHD_SWActivity.class,bundleSW);
+            if (ishq==1){
+                if (item.getStatus()==1){
+                    holder.btn_logistics.setVisibility(View.GONE);
+                    holder.btn_edit.setText("详情");
+                    holder.btn_ck.setVisibility(View.VISIBLE);
+                    holder.btn_edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Bundle bundle=new Bundle();
+                            bundle.putString("OrderID",item.getId()+"");
+                            bundle.putString("orderCount","");
+                            readyGo(BackOrderInfoActivity.class,bundle);
                         }
-                    }
-                });
+                    });
+                    holder.btn_ck.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Bundle bundle=new Bundle();
+                            bundle.putString("OrderID",item.getId()+"");
+                            bundle.putString("OrderCount",getCount()+"");
+                            bundle.putString("doType","out");
+                            readyGo(OrderDeliveryActivity.class,bundle);
+                        }
+                    });
+                }else {
+                    holder.btn_logistics.setVisibility(View.GONE);
+                    holder.btn_ck.setVisibility(View.GONE);
+                    holder.btn_edit.setText("详情");
+                    holder.btn_edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Bundle bundle=new Bundle();
+                            bundle.putString("OrderID",item.getId()+"");
+                            bundle.putString("orderCount","");
+                            readyGo(BackOrderInfoActivity.class,bundle);
+                        }
+                    });
+                }
             }else{
-                holder.btn_edit.setText("详情");
-                holder.btn_edit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (item.getIsProvice()==0){//0=本省，1=外省
-                            Bundle bundleSN=new Bundle();
-                            bundleSN.putInt("fhdId", item.getId());
-                            bundleSN.putInt("isEdit",0);
-                            readyGo(FHD_SNActivity.class,bundleSN);
-                        }else{
-                            Bundle bundleSW=new Bundle();
-                            bundleSW.putInt("fhdId", item.getId());
-                            bundleSW.putInt("isEdit",0);
-                            readyGo(FHD_SWActivity.class,bundleSW);
+                if (item.getStatus()==1){
+                    holder.btn_edit.setText("编辑");
+                    holder.btn_ck.setVisibility(View.VISIBLE);
+                    holder.btn_edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (item.getIsProvice()==0){//0=本省，1=外省
+                                Bundle bundleSN=new Bundle();
+                                bundleSN.putInt("fhdId", item.getId());
+                                bundleSN.putInt("isEdit",1);
+                                readyGo(FHD_SNActivity.class,bundleSN);
+                            }else{
+                                Bundle bundleSW=new Bundle();
+                                bundleSW.putInt("fhdId", item.getId());
+                                bundleSW.putInt("isEdit",1);
+                                readyGo(FHD_SWActivity.class,bundleSW);
+                            }
                         }
-                    }
-                });
-            }
-            if (item.getStatus()==2 || item .getStatus()==3){
-                holder.btn_logistics.setVisibility(View.VISIBLE);
-                holder.btn_logistics.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Bundle bundle=new Bundle();
-                        bundle.putInt("invoiceId", item.getId());
-                        readyGo(FHD_WLActivity.class,bundle);
-                    }
-                });
+                    });
+                    holder.btn_ck.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Bundle bundle=new Bundle();
+                            bundle.putString("OrderID",item.getId()+"");
+                            bundle.putString("OrderCount",getCount()+"");
+                            bundle.putString("doType","out");
+                            readyGo(OrderDeliveryActivity.class,bundle);
+                        }
+                    });
+                }else{
+                    holder.btn_edit.setText("详情");
+                    holder.btn_ck.setVisibility(View.GONE);
+                    holder.btn_edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (item.getIsProvice()==0){//0=本省，1=外省
+                                Bundle bundleSN=new Bundle();
+                                bundleSN.putInt("fhdId", item.getId());
+                                bundleSN.putInt("isEdit",0);
+                                readyGo(FHD_SNActivity.class,bundleSN);
+                            }else{
+                                Bundle bundleSW=new Bundle();
+                                bundleSW.putInt("fhdId", item.getId());
+                                bundleSW.putInt("isEdit",0);
+                                readyGo(FHD_SWActivity.class,bundleSW);
+                            }
+                        }
+                    });
+                }
+                if (item.getStatus()==2 || item .getStatus()==3){
+                    holder.btn_logistics.setVisibility(View.VISIBLE);
+                    holder.btn_logistics.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Bundle bundle=new Bundle();
+                            bundle.putInt("invoiceId", item.getId());
+                            readyGo(FHD_WLActivity.class,bundle);
+                        }
+                    });
 
-            }else{
-                holder.btn_logistics.setVisibility(View.GONE);
+                }else{
+                    holder.btn_logistics.setVisibility(View.GONE);
+                }
             }
             return view;
         }
 
         class FHDHolder{
             TextView tvTitle,tvState,tvName,tvPerson,tv_product,tv_productCount,tv_date;
-            Button btn_edit,btn_logistics;
+            Button btn_edit,btn_logistics,btn_ck;
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        page=1;
+        loadData(false);
     }
 
     @Override

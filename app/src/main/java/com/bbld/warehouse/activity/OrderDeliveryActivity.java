@@ -139,6 +139,10 @@ public class OrderDeliveryActivity extends BaseActivity{
     ListView lvNoPP;
     @BindView(R.id.tvWrongCount)
     TextView tvWrongCount;
+    @BindView(R.id.tvDealerRemark)
+    TextView tvDealerRemark;
+    @BindView(R.id.tvHeadRemark)
+    TextView tvHeadRemark;
 
     private String invoiceid;
     private String orderCount;
@@ -175,13 +179,14 @@ public class OrderDeliveryActivity extends BaseActivity{
                     showToast(""+request);
                     //出库成功清空数据库，释放当前acticity
                     mUserDataBaseOperate.deleteAll();
-                    ActivityManagerUtil.getInstance().finishActivity(OrderDeliveryActivity.this);
-                    if (doType.equals("out")){
-                        BackOrderActivity.boActivity.finish();
-                        Bundle bundle=new Bundle();
-                        bundle.putInt("status", 2);
-                        readyGo(BackOrderActivity.class, bundle);
-                    }
+                    finish();
+//                    ActivityManagerUtil.getInstance().finishActivity(OrderDeliveryActivity.this);
+//                    if (doType.equals("out")){
+//                        BackOrderActivity.boActivity.finish();
+//                        Bundle bundle=new Bundle();
+//                        bundle.putInt("status", 2);
+//                        readyGo(BackOrderActivity.class, bundle);
+//                    }
                     break;
                 case 222:
                     cleanNetData();
@@ -416,7 +421,9 @@ public class OrderDeliveryActivity extends BaseActivity{
         tvDealerName.setText(info.getDealerName()+"");
         tvNamePhone.setText(info.getDeliveryName()+"("+info.getDeliveryPhone()+")");
         tvAddress.setText(info.getDeliveryAddress()+"");
-        tvRemark.setText(info.getRemark()+"");
+        tvDealerRemark.setText("经销商备注："+info.getDealerRemark()+"");
+        tvHeadRemark.setText("上级备注："+info.getHeadRemark()+"");
+        tvRemark.setText("发货单备注："+info.getRemark()+"");
         btnOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -542,73 +549,73 @@ public class OrderDeliveryActivity extends BaseActivity{
 //                showToast("请上传异常条码产品");
 //                WeiboDialogUtils.closeDialog(loadDialog);
 //            }else{
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
 //                            request= UploadUserInformationByPostService.orderReceipt(new MyToken(OrderDeliveryActivity.this).getToken()+""
 //                                    ,invoiceid+"",codejson);
-                            request= UploadUserInformationByPostService.orderScanCodeDelivery(new MyToken(OrderDeliveryActivity.this).getToken()+""
-                                    ,invoiceid+"",codejson,uuid);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        if (request.contains("成功")) { // 请求成功
-                            Message message=new Message();
-                            message.what=111;
-                            handler.sendMessage(message);
-                        } else { // 请求失败
-                            Message message=new Message();
-                            message.what=222;
-                            handler.sendMessage(message);
-                        }
+                        request= UploadUserInformationByPostService.orderScanCodeDelivery(new MyToken(OrderDeliveryActivity.this).getToken()+""
+                                ,invoiceid+"",codejson,uuid);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }).start();
+                    if (request.contains("成功")) { // 请求成功
+                        Message message=new Message();
+                        message.what=111;
+                        handler.sendMessage(message);
+                    } else { // 请求失败
+                        Message message=new Message();
+                        message.what=222;
+                        handler.sendMessage(message);
+                    }
+                }
+            }).start();
 
-                final Map<String, String> params = new HashMap<String, String>();
-                params.put("token", new MyToken(OrderDeliveryActivity.this).getToken());
+            final Map<String, String> params = new HashMap<String, String>();
+            params.put("token", new MyToken(OrderDeliveryActivity.this).getToken());
 //                params.put("invoiceid", invoiceid);
 //                params.put("codejson", codejson);
-                final Map<String, File> files = new TreeMap<String, File>();
-                if (!file_imgPath01.equals("")){
-                    files.put("image01",new File(file_imgPath01));
-                }
-                if (!file_imgPath02.equals("")){
-                    files.put("image02",new File(file_imgPath02));
-                }
-                if (!file_imgPath03.equals("")){
-                    files.put("image03",new File(file_imgPath03));
-                }
-                if (!file_imgPath04.equals("")){
-                    files.put("image04",new File(file_imgPath04));
-                }
-                if (!file_imgPath05.equals("")){
-                    files.put("image05",new File(file_imgPath05));
-                }
-                if (!file_imgPath06.equals("")){
-                    files.put("image06",new File(file_imgPath06));
-                }
-                if (!file_imgPath07.equals("")){
-                    files.put("image07",new File(file_imgPath07));
-                }
-                if (!file_imgPath08.equals("")){
-                    files.put("image08",new File(file_imgPath08));
-                }
-                if (!file_imgPath09.equals("")){
-                    files.put("image09",new File(file_imgPath09));
-                }
-                Log.i("params", "params="+params);
-                Log.i("files", "files="+files);
-                final String requestURL = Constants.BASE_URL + "Order/OrderCommitError";
-                Log.i("requestURL", "requestURL="+requestURL);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            requestImg = UploadUtil.post(requestURL, params, files);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+            final Map<String, File> files = new TreeMap<String, File>();
+            if (!file_imgPath01.equals("")){
+                files.put("image01",new File(file_imgPath01));
+            }
+            if (!file_imgPath02.equals("")){
+                files.put("image02",new File(file_imgPath02));
+            }
+            if (!file_imgPath03.equals("")){
+                files.put("image03",new File(file_imgPath03));
+            }
+            if (!file_imgPath04.equals("")){
+                files.put("image04",new File(file_imgPath04));
+            }
+            if (!file_imgPath05.equals("")){
+                files.put("image05",new File(file_imgPath05));
+            }
+            if (!file_imgPath06.equals("")){
+                files.put("image06",new File(file_imgPath06));
+            }
+            if (!file_imgPath07.equals("")){
+                files.put("image07",new File(file_imgPath07));
+            }
+            if (!file_imgPath08.equals("")){
+                files.put("image08",new File(file_imgPath08));
+            }
+            if (!file_imgPath09.equals("")){
+                files.put("image09",new File(file_imgPath09));
+            }
+            Log.i("params", "params="+params);
+            Log.i("files", "files="+files);
+            final String requestURL = Constants.BASE_URL + "Order/OrderCommitError";
+            Log.i("requestURL", "requestURL="+requestURL);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        requestImg = UploadUtil.post(requestURL, params, files);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 //                        if ((request+"").contains("成功")) { // 请求成功
 //                            Message message=new Message();
 //                            message.what=111;
@@ -618,8 +625,8 @@ public class OrderDeliveryActivity extends BaseActivity{
 //                            message.what=222;
 //                            handler.sendMessage(message);
 //                        }
-                    }
-                }).start();
+                }
+            }).start();
 //            }
         }
     }
@@ -692,9 +699,7 @@ public class OrderDeliveryActivity extends BaseActivity{
                     bundle.putString("productId", product.getProductID()+"");
                     bundle.putString("productName",product.getProductName()+"");
                     bundle.putString("needCount", product.getProductCount()+"");
-                    if (doType.equals("sure")){
-                        bundle.putString("showBS", "yes");
-                    }
+                    bundle.putString("showBS", "yes");
                     readyGo(CaptureFinishActivity.class, bundle);
                 }
             });
@@ -966,55 +971,55 @@ public class OrderDeliveryActivity extends BaseActivity{
             }
             switch (checkedPosition){
                 case "01":
-                    SettingImage settingImage01 = new SettingImage(photo, "wearhouse"+getTime());
+                    SettingImage settingImage01 = new SettingImage(photo, invoiceid+"_"+getTime());
                     file_imgPath01=settingImage01.imagePath();
                     Glide.with(getApplicationContext()).load(file_imgPath01).error(R.mipmap.xiuzhneg).into(iv01);
                     iv02.setVisibility(View.VISIBLE);
                     break;
                 case "02":
-                    SettingImage settingImage02 = new SettingImage(photo, "wearhouse"+getTime());
+                    SettingImage settingImage02 = new SettingImage(photo, invoiceid+"_"+getTime());
                     file_imgPath02=settingImage02.imagePath();
                     Glide.with(getApplicationContext()).load(file_imgPath02).error(R.mipmap.xiuzhneg).into(iv02);
                     iv03.setVisibility(View.VISIBLE);
                     break;
                 case "03":
-                    SettingImage settingImage03 = new SettingImage(photo, "wearhouse"+getTime());
+                    SettingImage settingImage03 = new SettingImage(photo, invoiceid+"_"+getTime());
                     file_imgPath03=settingImage03.imagePath();
                     Glide.with(getApplicationContext()).load(file_imgPath03).error(R.mipmap.xiuzhneg).into(iv03);
                     iv04.setVisibility(View.VISIBLE);
                     break;
                 case "04":
-                    SettingImage settingImage04 = new SettingImage(photo, "wearhouse"+getTime());
+                    SettingImage settingImage04 = new SettingImage(photo, invoiceid+"_"+getTime());
                     file_imgPath04=settingImage04.imagePath();
                     Glide.with(getApplicationContext()).load(file_imgPath04).error(R.mipmap.xiuzhneg).into(iv04);
                     iv05.setVisibility(View.VISIBLE);
                     break;
                 case "05":
-                    SettingImage settingImage05 = new SettingImage(photo, "wearhouse"+getTime());
+                    SettingImage settingImage05 = new SettingImage(photo, invoiceid+"_"+getTime());
                     file_imgPath05=settingImage05.imagePath();
                     Glide.with(getApplicationContext()).load(file_imgPath05).error(R.mipmap.xiuzhneg).into(iv05);
                     iv06.setVisibility(View.VISIBLE);
                     break;
                 case "06":
-                    SettingImage settingImage06 = new SettingImage(photo, "wearhouse"+getTime());
+                    SettingImage settingImage06 = new SettingImage(photo, invoiceid+"_"+getTime());
                     file_imgPath06=settingImage06.imagePath();
                     Glide.with(getApplicationContext()).load(file_imgPath06).error(R.mipmap.xiuzhneg).into(iv06);
                     iv07.setVisibility(View.VISIBLE);
                     break;
                 case "07":
-                    SettingImage settingImage07 = new SettingImage(photo, "wearhouse"+getTime());
+                    SettingImage settingImage07 = new SettingImage(photo, invoiceid+"_"+getTime());
                     file_imgPath07=settingImage07.imagePath();
                     Glide.with(getApplicationContext()).load(file_imgPath07).error(R.mipmap.xiuzhneg).into(iv07);
                     iv08.setVisibility(View.VISIBLE);
                     break;
                 case "08":
-                    SettingImage settingImage08 = new SettingImage(photo, "wearhouse"+getTime());
+                    SettingImage settingImage08 = new SettingImage(photo, invoiceid+"_"+getTime());
                     file_imgPath08=settingImage08.imagePath();
                     Glide.with(getApplicationContext()).load(file_imgPath08).error(R.mipmap.xiuzhneg).into(iv08);
                     iv09.setVisibility(View.VISIBLE);
                     break;
                 case "09":
-                    SettingImage settingImage09 = new SettingImage(photo, "wearhouse"+getTime());
+                    SettingImage settingImage09 = new SettingImage(photo, invoiceid+"_"+getTime());
                     file_imgPath09=settingImage09.imagePath();
                     Glide.with(getApplicationContext()).load(file_imgPath09).error(R.mipmap.xiuzhneg).into(iv09);
                     break;

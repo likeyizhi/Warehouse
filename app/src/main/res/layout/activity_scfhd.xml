@@ -30,6 +30,37 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#eeeeee" />
+    <RadioGroup
+        android:id="@+id/rgSelect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/rbXDD"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="新订单"/>
+        <RadioButton
+            android:id="@+id/rbDFH"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="待发货"/>
+        <RadioButton
+            android:id="@+id/rbDDWC"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="订单完成"/>
+        <RadioButton
+            android:id="@+id/rbYGB"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="已关闭"/>
+    </RadioGroup>
     <ListView
         android:id="@+id/lvSCFHD"
         android:divider="@null"

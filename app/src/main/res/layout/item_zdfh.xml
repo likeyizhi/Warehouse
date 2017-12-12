@@ -152,6 +152,15 @@
                 android:layout_weight="1"
                 android:textColor="#cccccc" />
             <Button
+                android:id="@+id/btnCK"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="65dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/bg_btn_bule"
+                android:text="出库"
+                android:textColor="#ffffff" />
+            <Button
                 android:id="@+id/btnEdit"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="65dp"

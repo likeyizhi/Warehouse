@@ -248,7 +248,7 @@ public class MenuActivity extends BaseActivity{
             ll_04.setVisibility(View.GONE);
             ll_07.setVisibility(View.GONE);
             ll_05.setVisibility(View.VISIBLE);
-            ll_06.setVisibility(View.VISIBLE);
+//            ll_06.setVisibility(View.VISIBLE);
             ll_08.setVisibility(View.VISIBLE);
         }else{
             ll_01.setVisibility(View.GONE);
@@ -257,7 +257,7 @@ public class MenuActivity extends BaseActivity{
             ll_04.setVisibility(View.GONE);
             ll_07.setVisibility(View.GONE);
             ll_05.setVisibility(View.GONE);
-            ll_06.setVisibility(View.GONE);
+//            ll_06.setVisibility(View.GONE);
             showToast("数据获取失败，请重试");
         }
     }
@@ -534,8 +534,10 @@ public class MenuActivity extends BaseActivity{
 //            tvType.setText("经销商");
 //        }
         tvType.setText(dealerName);
-        tvWarehouseName.setText(warehouseName);
-        tvName.setText(name);
+        tvWarehouseName.setText(dealerName);
+        tvName.setText(dealerName);
+//        tvWarehouseName.setText(warehouseName);
+//        tvName.setText(name);
         if (ishandover!=1){
             llToTransfer.setVisibility(View.INVISIBLE);
             llToTransfer.setClickable(false);

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">进销存系统</string>
+    <string name="app_name">CRM</string>
 
     <string name="app_picker_name">Applications</string>
     <string name="bookmark_picker_name">Bookmarks</string>

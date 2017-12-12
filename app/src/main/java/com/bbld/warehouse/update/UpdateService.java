@@ -218,7 +218,7 @@ public class UpdateService extends Service {
 			notificationManager.notify(R.layout.notification_item, notification);
 		} else {
 			builder = new NotificationCompat.Builder(this);
-			notification = builder.setTicker("进销存系统版本更新")
+			notification = builder.setTicker("CRM系统版本更新")
 					.setSmallIcon(R.mipmap.xiuzhneg).setWhen(System.currentTimeMillis()).setContentTitle(app_name + getString(R.string.is_downing)).build();
 
 			notification.flags = Notification.FLAG_ONGOING_EVENT;

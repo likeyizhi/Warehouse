@@ -42,8 +42,10 @@ public class BackOrderInfoActivity extends BaseActivity{
     TextView tvNamePhone;
     @BindView(R.id.tv_address)
     TextView tvAddress;
-    @BindView(R.id.tv_remark)
-    TextView tvRemark;
+    @BindView(R.id.tvDealerRemark)
+    TextView tvDealerRemark;
+    @BindView(R.id.tvHeadRemark)
+    TextView tvHeadRemark;
     @BindView(R.id.tv_status)
     TextView tvStatus;
     @BindView(R.id.lv_backOrderInfo)
@@ -104,7 +106,8 @@ public class BackOrderInfoActivity extends BaseActivity{
         tvDealerName.setText(info.getDealerName()+"");
         tvNamePhone.setText(info.getDeliveryName()+"("+info.getDeliveryPhone()+")");
         tvAddress.setText(info.getDeliveryAddress()+"");
-        tvRemark.setText(info.getRemark()+"");
+        tvDealerRemark.setText("经销商备注："+info.getDealerRemark()+"");
+        tvHeadRemark.setText("上级备注："+info.getHeadRemark()+"");
         tvStatus.setText(info.getStatus()+"");
         tvMore.setText("发货商品共"+orderCount+"类"+info.getProductCount()+"盒"+",查看更多");
         tvDate.setText(info.getDate()+"");

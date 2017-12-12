@@ -161,6 +161,15 @@
                 android:text="物流设置"
                 android:textColor="#ffffff" />
             <Button
+                android:id="@+id/btn_ck"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="65dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/bg_btn_bule"
+                android:text="出库"
+                android:textColor="#ffffff" />
+            <Button
                 android:id="@+id/btn_edit"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="65dp"

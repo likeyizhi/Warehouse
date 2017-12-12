@@ -167,6 +167,7 @@ public class ZDFHActivity extends BaseActivity{
                 holder.tv_date=(TextView)view.findViewById(R.id.tv_date);
                 holder.btnEdit=(Button) view.findViewById(R.id.btnEdit);
                 holder.btnInfo=(Button) view.findViewById(R.id.btnInfo);
+                holder.btnCK=(Button) view.findViewById(R.id.btnCK);
                 view.setTag(holder);
             }
             holder= (ZdfhHolder) view.getTag();
@@ -184,7 +185,8 @@ public class ZDFHActivity extends BaseActivity{
             }
             if (item.getStatus()==1){
                 holder.btnEdit.setVisibility(View.VISIBLE);
-                holder.btnInfo.setVisibility(View.VISIBLE);
+                holder.btnCK.setVisibility(View.VISIBLE);
+                holder.btnInfo.setVisibility(View.GONE);
                 holder.btnEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -195,18 +197,17 @@ public class ZDFHActivity extends BaseActivity{
                         readyGo(ZDFHEditActivity.class,bundleEdit);
                     }
                 });
-                holder.btnInfo.setOnClickListener(new View.OnClickListener() {
+                holder.btnCK.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        showToast("详情"+item.getId());
-                        Bundle bundleEdit=new Bundle();
-                        bundleEdit.putInt("id",item.getId());
-                        bundleEdit.putInt("isEdit",0);
-                        readyGo(ZDFHEditActivity.class,bundleEdit);
+                        Bundle bundle=new Bundle();
+                        bundle.putString("customerInvoiceId",item.getId()+"");
+                        readyGo(ZDPSOutActivity.class, bundle);
                     }
                 });
             }else{
                 holder.btnEdit.setVisibility(View.GONE);
+                holder.btnCK.setVisibility(View.GONE);
                 holder.btnInfo.setVisibility(View.VISIBLE);
                 holder.btnInfo.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -224,7 +225,7 @@ public class ZDFHActivity extends BaseActivity{
 
         class ZdfhHolder{
             TextView tvTitle,tvState,tvName,tvPerson,tv_product,tv_productCount,tv_date;
-            Button btnEdit,btnInfo;
+            Button btnEdit,btnInfo,btnCK;
         }
     }
 

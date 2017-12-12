@@ -32,11 +32,13 @@ import com.bbld.warehouse.bean.FHDGetLogisticsList;
 import com.bbld.warehouse.bean.FHDGetOrderProductList;
 import com.bbld.warehouse.bean.FHDGetOtherProviceFHDInfo;
 import com.bbld.warehouse.bean.FinishInventory;
+import com.bbld.warehouse.bean.GetEndCustomerInfo;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
 import com.bbld.warehouse.bean.GetNewNumber;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
 import com.bbld.warehouse.bean.GetOrderTbList;
+import com.bbld.warehouse.bean.GetParentDealerForEndCustomer;
 import com.bbld.warehouse.bean.GetProductNeedList;
 import com.bbld.warehouse.bean.GetSearchTypeList;
 import com.bbld.warehouse.bean.GetTypeList;
@@ -449,7 +451,7 @@ public interface RetrofitInterface {
      * 订单提报列表
      */
     @GET("DealerOrderTb/GetOrderTbList")
-    Call<GetOrderTbList> getOrderTbList(@Query("token") String token, @Query("page") int page, @Query("size") int size);
+    Call<GetOrderTbList> getOrderTbList(@Query("token") String token,@Query("status") int status, @Query("page") int page, @Query("size") int size);
     /**
      * 关闭订单
      */
@@ -484,7 +486,7 @@ public interface RetrofitInterface {
      * 下级提报订单
      */
     @GET("DealerChildOrder/GetChildOrderList")
-    Call<DCGetChildOrderList> dcGetChildOrderList(@Query("token") String token, @Query("page") int page, @Query("pagesize") int pagesize);
+    Call<DCGetChildOrderList> dcGetChildOrderList(@Query("token") String token,@Query("status") int status, @Query("page") int page, @Query("pagesize") int pagesize);
     /**
      * 点击添加本省发货单
      */
@@ -534,7 +536,7 @@ public interface RetrofitInterface {
      * 获取发货单列表
      */
     @GET("FHD/GetFHDList")
-    Call<FHDGetFHDList> fhdGetFHDList(@Query("token") String token, @Query("page") int page, @Query("pagesize") int pagesize);
+    Call<FHDGetFHDList> fhdGetFHDList(@Query("token") String token,@Query("status") int status, @Query("page") int page, @Query("pagesize") int pagesize);
     /**
      * 获取本省发货单详情
      */
@@ -610,5 +612,28 @@ public interface RetrofitInterface {
      */
     @GET("CusInvoice/GetInfo")
     Call<CusInvoiceGetInfo> cusInvoiceGetInfo(@Query("token") String token, @Query("id") int id);
+    /**
+     * 终端录入（终端客户）--添加/编辑
+     */
+    @GET("DealerChildOrder/GetEndCustomerInfo")
+    Call<GetEndCustomerInfo> getEndCustomerInfo(@Query("token") String token, @Query("id") int id);
+    /**
+     * 终端录入（终端客户）--添加/编辑
+     */
+    @GET("DealerChildOrder/GetParentDealerForEndCustomer")
+    Call<GetParentDealerForEndCustomer> getParentDealerForEndCustomer(@Query("token") String token);
+    /**
+     * 终端录入（终端客户）--添加/编辑-确定
+     */
+    @GET("DealerChildOrder/AddEndCustomer")
+    Call<CloseOrder> addEndCustomer(@Query("token") String token,
+                                    @Query("Id") int Id,
+                                    @Query("Name") String Name,
+                                    @Query("contacts") String contacts,
+                                    @Query("contactphone") String contactphone,
+                                    @Query("address") String address,
+                                    @Query("dealerId") int dealerId,
+                                    @Query("x") String x,
+                                    @Query("y") String y);
 
 }

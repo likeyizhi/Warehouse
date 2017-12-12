@@ -317,6 +317,7 @@ public class SCFHD_SWActivity extends BaseActivity{
                 holder.tvGiveAmount=(TextView) view.findViewById(R.id.tvGiveAmount);
                 holder.tvCurrentProductAmount=(TextView) view.findViewById(R.id.tvCurrentProductAmount);
                 holder.tvCurrentGiveAmount=(TextView) view.findViewById(R.id.tvCurrentGiveAmount);
+                holder.ivDelete=(ImageView) view.findViewById(R.id.ivDelete);
                 view.setTag(holder);
             }
             holder= (BottomHolder) view.getTag();
@@ -340,13 +341,40 @@ public class SCFHD_SWActivity extends BaseActivity{
                     showInputDialog(2,i,(item.getGiveAmount()-item.getDeliveryGiveCount()));
                 }
             });
+            holder.ivDelete.setVisibility(View.VISIBLE);
+            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showDeleteDialog(i);
+                }
+            });
             return view;
         }
 
         class BottomHolder{
             ImageView img;
             TextView tvName,tvSpec,tvProductAmount,tvGiveAmount,tvCurrentProductAmount,tvCurrentGiveAmount;
+            ImageView ivDelete;
         }
+    }
+
+    private void showDeleteDialog(final int i) {
+        AlertDialog serialDialog = new AlertDialog.Builder(this).setTitle("删除此条？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dcdgcs.remove(i);
+                        bottomList.remove(i);
+                        bottomAdapter.notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .show();
     }
 
     private void showInputDialog(final int whichC, final int i, final int maxCount) {

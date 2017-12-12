@@ -68,6 +68,8 @@ public class FHD_SNActivity extends BaseActivity{
     ImageButton ibBack;
     @BindView(R.id.tvOrderNumber)
     TextView tvOrderNumber;
+    @BindView(R.id.tvAddress)
+    TextView tvAddress;
 
     private int isEdit;
     private String token;
@@ -241,6 +243,7 @@ public class FHD_SNActivity extends BaseActivity{
         tvDealerRemark.setText(fhd.getDealerRemark()+"");
         tvHeaderRemark.setText(fhd.getHeaderRemark()+"");
         tvOrderNumber.setText(fhd.getFhdCode()+"");
+        tvAddress.setText(fhd.getAddress()+"");
         for (int i=0;i<fhd.getDealerWarehouseList().size();i++){
             if (fhd.getDealerWarehouseList().get(i).getId()==fhd.getDealerWarehouseId()){
                 warehouseName=fhd.getDealerWarehouseList().get(i).getName();

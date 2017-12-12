@@ -72,6 +72,8 @@ public class SCFHD_SNActivity extends BaseActivity{
     ImageButton ibBack;
     @BindView(R.id.tvOrderNumber)
     TextView tvOrderNumber;
+    @BindView(R.id.tvAddress)
+    TextView tvAddress;
 
     private int orderId;
     private String token;
@@ -183,6 +185,7 @@ public class SCFHD_SNActivity extends BaseActivity{
                 holder.tvGiveAmount=(TextView) view.findViewById(R.id.tvGiveAmount);
                 holder.tvCurrentProductAmount=(TextView) view.findViewById(R.id.tvCurrentProductAmount);
                 holder.tvCurrentGiveAmount=(TextView) view.findViewById(R.id.tvCurrentGiveAmount);
+                holder.ivDelete=(ImageView) view.findViewById(R.id.ivDelete);
                 view.setTag(holder);
             }
             holder= (BottomHolder) view.getTag();
@@ -206,13 +209,40 @@ public class SCFHD_SNActivity extends BaseActivity{
                     showInputDialog(2,i,(item.getGiveAmount()-item.getDeliveryGiveCount()));
                 }
             });
+            holder.ivDelete.setVisibility(View.VISIBLE);
+            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showDeleteDialog(i);
+                }
+            });
             return view;
         }
 
         class BottomHolder{
             ImageView img;
             TextView tvName,tvSpec,tvProductAmount,tvGiveAmount,tvCurrentProductAmount,tvCurrentGiveAmount;
+            ImageView ivDelete;
         }
+    }
+
+    private void showDeleteDialog(final int i) {
+        AlertDialog serialDialog = new AlertDialog.Builder(this).setTitle("删除此条？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dcdgcs.remove(i);
+                        bottomList.remove(i);
+                        bottomAdapter.notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .show();
     }
 
     private void setListeners() {
@@ -263,7 +293,7 @@ public class SCFHD_SNActivity extends BaseActivity{
         creatFHD.setFhdProductList(dcdgcs);
         Gson gson=new Gson();
         final String fhdJson=gson.toJson(creatFHD);
-//        Log.i("fhdJson","fhdJson="+fhdJson);
+        Log.i("fhdJson","fhdJson="+fhdJson);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -362,6 +392,7 @@ public class SCFHD_SNActivity extends BaseActivity{
         tvDealerName.setText(FHDInfo.getDealerName()+"");
         tvDealerRemark.setText(FHDInfo.getDealerRemark()+"");
         tvHeaderRemark.setText(FHDInfo.getHeaderRemark()+"");
+        tvAddress.setText(FHDInfo.getAddress()+"");
     }
 
     private void WarehouseDialog() {

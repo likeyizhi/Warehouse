@@ -48,6 +48,8 @@ public class OrderDetails {
          "DateTime": "2017-05-17 17:18:32",
          "ProductCount": "20",
          "Remark": "发货单录入测试",
+         DealerRemark
+         HeadRemark
          "DeliveryName": "收货人名 2",
          "DeliveryPhone": "联系电话 2",
          "DeliveryAddress": "详细地址 2",
@@ -63,12 +65,30 @@ public class OrderDetails {
         private String DateTime;
         private String ProductCount;
         private String Remark;
+        private String DealerRemark;
+        private String HeadRemark;
         private String DeliveryName;
         private String DeliveryPhone;
         private String DeliveryAddress;
         private String Status;
         private int SendNeedBatchNumber;
         private List<OrderDetailsProductList> ProductList;
+
+        public String getDealerRemark() {
+            return DealerRemark;
+        }
+
+        public void setDealerRemark(String dealerRemark) {
+            DealerRemark = dealerRemark;
+        }
+
+        public String getHeadRemark() {
+            return HeadRemark;
+        }
+
+        public void setHeadRemark(String headRemark) {
+            HeadRemark = headRemark;
+        }
 
         public int getSendNeedBatchNumber() {
             return SendNeedBatchNumber;

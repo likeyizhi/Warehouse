@@ -11,6 +11,7 @@
         android:text="退出登录"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
+        android:layout_gravity="right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center" />

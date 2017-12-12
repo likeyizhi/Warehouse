@@ -9,10 +9,20 @@ import java.util.List;
 public class FHDGetFHDList {
     /**"status": 0,
      "mes": "成功"
+     "ishq": 1,
      "fhdlist": []*/
     private int status;
     private String mes;
+    private int ishq;
     private List<FHDList> fhdlist;
+
+    public int getIshq() {
+        return ishq;
+    }
+
+    public void setIshq(int ishq) {
+        this.ishq = ishq;
+    }
 
     public int getStatus() {
         return status;

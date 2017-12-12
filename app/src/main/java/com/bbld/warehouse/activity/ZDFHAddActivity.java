@@ -299,6 +299,7 @@ public class ZDFHAddActivity extends BaseActivity{
                     }
                     WeiboDialogUtils.closeDialog(loading);
                 }else{
+                    showToast(response.body().getMes());
                     WeiboDialogUtils.closeDialog(loading);
                 }
             }

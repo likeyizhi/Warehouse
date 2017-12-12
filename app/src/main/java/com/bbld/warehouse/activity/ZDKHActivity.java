@@ -36,6 +36,8 @@ public class ZDKHActivity extends BaseActivity{
     ImageButton ibBack;
     @BindView(R.id.lvZdkh)
     ListView lvZdkh;
+    @BindView(R.id.tvAdd)
+    TextView tvAdd;
 
     private Dialog loading;
     private String token;
@@ -85,6 +87,14 @@ public class ZDKHActivity extends BaseActivity{
                 }else{
                     isBottom = false;
                 }
+            }
+        });
+        tvAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle=new Bundle();
+                bundle.putInt("id",0);
+                readyGo(ZDKHAdd_EditActivity.class,bundle);
             }
         });
     }
@@ -158,17 +168,34 @@ public class ZDKHActivity extends BaseActivity{
                 view.setTag(holder);
             }
             holder= (ZDKHHolder) view.getTag();
-            DCOGetEndCustomerList.DCOGetEndCustomerListlist item = getItem(i);
+            final DCOGetEndCustomerList.DCOGetEndCustomerListlist item = getItem(i);
             holder.tvName.setText("姓名："+item.getName());
             holder.tvContact.setText("联系方式："+item.getContacts()+"("+item.getContactPhone()+")");
             holder.tvAddress.setText("地址："+item.getAddress());
             holder.tvPName.setText("上级名称："+item.getPName());
+            if (view!=null){
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle=new Bundle();
+                        bundle.putInt("id",item.getId());
+                        readyGo(ZDKHAdd_EditActivity.class,bundle);
+                    }
+                });
+            }
             return view;
         }
 
         class ZDKHHolder{
             TextView tvName,tvContact,tvAddress,tvPName;
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        page=1;
+        loadData(false);
     }
 
     @Override

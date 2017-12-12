@@ -7,10 +7,23 @@ android {
         applicationId "com.bbld.warehouse"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 16
-        versionName "2.5"
+        versionCode 18
+        versionName "2.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
+
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'
+            jniLibs.srcDirs = ['libs']
+        }
     }
     buildTypes {
         release {
@@ -44,4 +57,11 @@ dependencies {
     implementation files('libs/core-3.3.0.jar')
     implementation 'com.android.support:recyclerview-v7:25.3.1'
     implementation 'com.github.bumptech.glide:glide:3.6.1'
+    implementation files('libs/baidumapapi_base_v4_3_1.jar')
+    implementation files('libs/baidumapapi_cloud_v4_3_1.jar')
+    implementation files('libs/baidumapapi_map_v4_3_1.jar')
+    implementation files('libs/baidumapapi_radar_v4_3_1.jar')
+    implementation files('libs/baidumapapi_search_v4_3_1.jar')
+    implementation files('libs/baidumapapi_util_v4_3_1.jar')
+    implementation files('libs/locSDK_6.13.jar')
 }

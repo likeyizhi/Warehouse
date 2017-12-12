@@ -11,6 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bbld.warehouse.R;
@@ -38,6 +40,16 @@ public class SCFHDActivity extends BaseActivity{
     ListView lvSCFHD;
     @BindView(R.id.ib_back)
     ImageButton ibBack;
+    @BindView(R.id.rgSelect)
+    RadioGroup rgSelect;
+    @BindView(R.id.rbXDD)
+    RadioButton rbXDD;
+    @BindView(R.id.rbDFH)
+    RadioButton rbDFH;
+    @BindView(R.id.rbDDWC)
+    RadioButton rbDDWC;
+    @BindView(R.id.rbYGB)
+    RadioButton rbYGB;
 
     private Dialog loading;
     private String token;
@@ -47,12 +59,14 @@ public class SCFHDActivity extends BaseActivity{
     private SCFHDAdapter adapter;
     private String[] items={"省内","省外"};
     public static SCFHDActivity scfhdActivity=null;
+    private int status=1;
 
     @Override
     protected void initViewsAndEvents() {
         scfhdActivity=this;
         token=new MyToken(this).getToken();
         page=1;
+        status=1;
         pagesize=10;
         loadData(false);
         setListeners();
@@ -65,11 +79,36 @@ public class SCFHDActivity extends BaseActivity{
                 finish();
             }
         });
+        rgSelect.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.rbXDD:
+                        status=1;
+                        rbXDD.setChecked(true);
+                        break;
+                    case R.id.rbDFH:
+                        status=2;
+                        rbDFH.setChecked(true);
+                        break;
+                    case R.id.rbDDWC:
+                        status=4;
+                        rbDDWC.setChecked(true);
+                        break;
+                    case R.id.rbYGB:
+                        status=3;
+                        rbYGB.setChecked(true);
+                        break;
+                }
+                page=1;
+                loadData(false);
+            }
+        });
     }
 
     private void loadData(boolean isLoadMore) {
         loading= WeiboDialogUtils.createLoadingDialog(this,"加载中...");
-        Call<DCGetChildOrderList> call= RetrofitService.getInstance().dcGetChildOrderList(token,page,pagesize);
+        Call<DCGetChildOrderList> call= RetrofitService.getInstance().dcGetChildOrderList(token,status,page,pagesize);
         call.enqueue(new Callback<DCGetChildOrderList>() {
             @Override
             public void onResponse(Response<DCGetChildOrderList> response, Retrofit retrofit) {

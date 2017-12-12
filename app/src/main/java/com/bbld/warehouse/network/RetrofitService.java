@@ -33,11 +33,13 @@ import com.bbld.warehouse.bean.FHDGetLogisticsList;
 import com.bbld.warehouse.bean.FHDGetOrderProductList;
 import com.bbld.warehouse.bean.FHDGetOtherProviceFHDInfo;
 import com.bbld.warehouse.bean.FinishInventory;
+import com.bbld.warehouse.bean.GetEndCustomerInfo;
 import com.bbld.warehouse.bean.GetLogisticsList;
 import com.bbld.warehouse.bean.GetLogisticsTrackInfo;
 import com.bbld.warehouse.bean.GetNewNumber;
 import com.bbld.warehouse.bean.GetOrderLogisticsInfo;
 import com.bbld.warehouse.bean.GetOrderTbList;
+import com.bbld.warehouse.bean.GetParentDealerForEndCustomer;
 import com.bbld.warehouse.bean.GetProductNeedList;
 import com.bbld.warehouse.bean.GetSearchTypeList;
 import com.bbld.warehouse.bean.GetTypeList;
@@ -500,8 +502,8 @@ public class RetrofitService {
     /**
      * 订单提报列表
      */
-    public Call<GetOrderTbList> getOrderTbList(String token, int page, int size){
-        return retrofitInterface.getOrderTbList(token, page, size);
+    public Call<GetOrderTbList> getOrderTbList(String token,int status, int page, int size){
+        return retrofitInterface.getOrderTbList(token, status, page, size);
     }
     /**
      * 关闭订单
@@ -542,8 +544,8 @@ public class RetrofitService {
     /**
      * 下级提报订单
      */
-    public Call<DCGetChildOrderList> dcGetChildOrderList(String token, int page, int pagesize){
-        return retrofitInterface.dcGetChildOrderList(token, page, pagesize);
+    public Call<DCGetChildOrderList> dcGetChildOrderList(String token,int status, int page, int pagesize){
+        return retrofitInterface.dcGetChildOrderList(token, status, page, pagesize);
     }
     /**
      * 点击添加本省发货单
@@ -602,8 +604,8 @@ public class RetrofitService {
     /**
      * 获取发货单列表
      */
-    public Call<FHDGetFHDList> fhdGetFHDList(String token, int page, int pagesize){
-        return retrofitInterface.fhdGetFHDList(token, page, pagesize);
+    public Call<FHDGetFHDList> fhdGetFHDList(String token, int status, int page, int pagesize){
+        return retrofitInterface.fhdGetFHDList(token, status, page, pagesize);
     }
     /**
      * 获取本省发货单详情
@@ -694,6 +696,32 @@ public class RetrofitService {
      */
     public Call<CusInvoiceGetInfo> cusInvoiceGetInfo(String token,int id){
         return retrofitInterface.cusInvoiceGetInfo(token,id);
+    }
+    /**
+     *  终端录入（终端客户）--添加/编辑
+     */
+    public Call<GetEndCustomerInfo> getEndCustomerInfo(String token, int id){
+        return retrofitInterface.getEndCustomerInfo(token,id);
+    }
+    /**
+     *  终端录入（终端客户）--添加/编辑
+     */
+    public Call<GetParentDealerForEndCustomer> getParentDealerForEndCustomer(String token){
+        return retrofitInterface.getParentDealerForEndCustomer(token);
+    }
+    /**
+     *  终端录入（终端客户）--添加/编辑--确定
+     */
+    public Call<CloseOrder> addEndCustomer(String token,
+                                           int Id,
+                                           String Name,
+                                           String contacts,
+                                           String contactphone,
+                                           String address,
+                                           int dealerId,
+                                           String x,
+                                           String y){
+        return retrofitInterface.addEndCustomer(token, Id, Name, contacts, contactphone, address, dealerId, x, y);
     }
 
 }

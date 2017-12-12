@@ -47,14 +47,26 @@ public class MenuPlantActivity extends BaseActivity{
     LinearLayout llToCKGL;
     @BindView(R.id.tvName)
     TextView tvName;
+    @BindView(R.id.tv_type)
+    TextView tvType;
+    @BindView(R.id.warehouseName)
+    TextView tvWarehouseName;
 
     private PopupWindow popupWindow;
     private View view;
     private ListView lv_group;
     private ArrayList<String> groups;
+    private String name;
+    private String dealerName;
+    private String warehouseName;
+    private int type;
+    private int ishandover;
 
     @Override
     protected void initViewsAndEvents() {
+        tvType.setText(dealerName);
+        tvWarehouseName.setText(dealerName);
+        tvName.setText(dealerName);
         setListeners();
     }
 
@@ -205,7 +217,11 @@ public class MenuPlantActivity extends BaseActivity{
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        name=extras.getString("name");
+        dealerName=extras.getString("dealerName");
+        warehouseName=extras.getString("warehouseName");
+        type=extras.getInt("type", 0);
+        ishandover=extras.getInt("ishandover", 0);
     }
 
     @Override

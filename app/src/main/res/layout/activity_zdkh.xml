@@ -25,6 +25,19 @@
             android:textSize="17sp"
             android:text="终端客户"
             android:id="@+id/tv_title" />
+        <TextView
+            android:id="@+id/tvAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:textSize="17sp"
+            android:background="#00A3D9"
+            android:textColor="#ffffff"
+            android:padding="5dp"
+            android:text="新增"
+            />
 
     </RelativeLayout>
     <TextView

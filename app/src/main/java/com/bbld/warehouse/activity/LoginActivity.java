@@ -42,21 +42,12 @@ public class LoginActivity extends BaseActivity{
     EditText etPwd;
     @BindView(R.id.btn_login)
     Button btnLogin;
-    @BindView(R.id.rgLogin)
-    RadioGroup rgLogin;
-    @BindView(R.id.rbJXS)
-    RadioButton rbJXS;
-    @BindView(R.id.rbKG)
-    RadioButton rbKG;
-    @BindView(R.id.rbGC)
-    RadioButton rbGC;
 
     private static final String TOKEN=null;
     private String acc="";
     private String pwd="";
     private SharedPreferences.Editor editorAP;
     private Dialog loadDialog;
-    private int LoginType=0;
 
     @Override
     protected void initViewsAndEvents() {
@@ -85,189 +76,71 @@ public class LoginActivity extends BaseActivity{
                 login();
             }
         });
-        rgLogin.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (i){
-                    case R.id.rbJXS://经销商登录
-                        LoginType=0;//DealerAdmin/Login
-                        showToast("您已选择经销商登录");
-                        break;
-                    case R.id.rbKG://库管登录
-                        LoginType=1;//Admin/Login
-                        showToast("您已选择库管登录");
-                        break;
-                    case R.id.rbGC://工厂登录
-                        LoginType=2;//Plant/login
-                        showToast("您已选择工厂登录");
-                        break;
-                }
-                SharedPreferences shared = getSharedPreferences("MyToken", MODE_PRIVATE);
-                SharedPreferences.Editor editor = shared.edit();
-                editor.putInt("loginType", LoginType);
-                editor.commit();
-            }
-        });
     }
 
     private void login() {
-        LoginType=new MyToken(LoginActivity.this).getLoginType();
         loadDialog= WeiboDialogUtils.createLoadingDialog(LoginActivity.this,getString(R.string.caozuo_ing));
-        switch (LoginType){
-            case 0:
-                rbJXS.setChecked(true);
-                Call<Login> call0= RetrofitService.getInstance().dealerLogin(/*"xz","123456"*/acc,pwd);
-                call0.enqueue(new Callback<Login>() {
-                    @Override
-                    public void onResponse(Response<Login> response, Retrofit retrofit) {
-                        if (response==null){
-                            showToast("服务器错误");
-                            WeiboDialogUtils.closeDialog(loadDialog);
-                            return;
-                        }
-                        if (response.body().getStatus()==0){
-                            //保存Token
-                            SharedPreferences shared=getSharedPreferences("MyToken",MODE_PRIVATE);
-                            SharedPreferences.Editor editor=shared.edit();
-                            editor.putString(TOKEN,response.body().getToken());
-                            editor.commit();
-                            //保存帐号密码
-                            editorAP.putString("WHACC",acc);
-                            editorAP.putString("WHPWD",pwd);
-                            editorAP.commit();
-                            //提示登录成功
-                            showToast(response.body().getMes()+"");
-                            //跳转到主页，并释放LoginActivity.class
-                            Bundle bundle=new Bundle();
-                            bundle.putString("name", response.body().getName());
-                            bundle.putString("dealerName", response.body().getDealerName());
-                            bundle.putString("warehouseName", response.body().getWarehouseName());
-                            bundle.putInt("type", response.body().getType());
-                            bundle.putInt("ishandover", response.body().getIshandover());
-                            WeiboDialogUtils.closeDialog(loadDialog);
-                            readyGo(MenuDealerActivity.class, bundle);
-//                    Bundle bundle=new Bundle();
-//                    bundle.putString("productId", "1000");
-//                    bundle.putString("productName","测试");
-//                    bundle.putString("orderId", "256452522");
-//                    bundle.putString("needCount", "1020");
-//                    bundle.putString("storage", "no");
-//                    bundle.putString("type", "1");
-//                    bundle.putInt("NeedBatch", 1);
-//                    readyGo(IDataScanActivity.class, bundle);
+        Call<Login> call= RetrofitService.getInstance().login(/*"xz","123456"*/acc,pwd);
+        call.enqueue(new Callback<Login>() {
+            @Override
+            public void onResponse(Response<Login> response, Retrofit retrofit) {
+                if (response==null){
+                    showToast("服务器错误");
+                    WeiboDialogUtils.closeDialog(loadDialog);
+                    return;
+                }
+                if (response.body().getStatus()==0){
+                    //保存Token
+                    SharedPreferences shared=getSharedPreferences("MyToken",MODE_PRIVATE);
+                    SharedPreferences.Editor editor=shared.edit();
+                    editor.putString(TOKEN,response.body().getToken());
+                    editor.commit();
+                    //保存帐号密码
+                    editorAP.putString("WHACC",acc);
+                    editorAP.putString("WHPWD",pwd);
+                    editorAP.commit();
+                    //提示登录成功
+                    showToast(response.body().getMes()+"");
+                    //跳转到主页，并释放LoginActivity.class
+                    Bundle bundle=new Bundle();
+                    bundle.putString("name", response.body().getName());
+                    bundle.putString("dealerName", response.body().getDealerName());
+                    bundle.putString("warehouseName", response.body().getWarehouseName());
+                    bundle.putInt("type", response.body().getType());
+                    bundle.putInt("ishandover", response.body().getIshandover());
+                    WeiboDialogUtils.closeDialog(loadDialog);
+                    int menuType = response.body().getType();
+                    switch (menuType){
+                        case 1://总部 1，经销商 2，终端 3，工厂 4
+                            readyGo(Menu12Activity.class, bundle);
                             ActivityManagerUtil.getInstance().finishActivity(LoginActivity.this);
-                        }else{
-                            showToast(response.body().getMes()+"");
-                            WeiboDialogUtils.closeDialog(loadDialog);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        WeiboDialogUtils.closeDialog(loadDialog);
-                    }
-                });
-                break;
-            case 1:
-                rbKG.setChecked(true);
-                Call<Login> call= RetrofitService.getInstance().login(/*"xz","123456"*/acc,pwd);
-                call.enqueue(new Callback<Login>() {
-                    @Override
-                    public void onResponse(Response<Login> response, Retrofit retrofit) {
-                        if (response==null){
-                            showToast("服务器错误");
-                            WeiboDialogUtils.closeDialog(loadDialog);
-                            return;
-                        }
-                        if (response.body().getStatus()==0){
-                            //保存Token
-                            SharedPreferences shared=getSharedPreferences("MyToken",MODE_PRIVATE);
-                            SharedPreferences.Editor editor=shared.edit();
-                            editor.putString(TOKEN,response.body().getToken());
-                            editor.commit();
-                            //保存帐号密码
-                            editorAP.putString("WHACC",acc);
-                            editorAP.putString("WHPWD",pwd);
-                            editorAP.commit();
-                            //提示登录成功
-                            showToast(response.body().getMes()+"");
-                            //跳转到主页，并释放LoginActivity.class
-                            Bundle bundle=new Bundle();
-                            bundle.putString("name", response.body().getName());
-                            bundle.putString("dealerName", response.body().getDealerName());
-                            bundle.putString("warehouseName", response.body().getWarehouseName());
-                            bundle.putInt("type", response.body().getType());
-                            bundle.putInt("ishandover", response.body().getIshandover());
-                            WeiboDialogUtils.closeDialog(loadDialog);
+                            break;
+                        case 2://总部 1，经销商 2，终端 3，工厂 4
+                            readyGo(Menu12Activity.class, bundle);
+                            ActivityManagerUtil.getInstance().finishActivity(LoginActivity.this);
+                            break;
+                        case 3://总部 1，经销商 2，终端 3，工厂 4
                             readyGo(MenuActivity.class, bundle);
-//                    Bundle bundle=new Bundle();
-//                    bundle.putString("productId", "1000");
-//                    bundle.putString("productName","测试");
-//                    bundle.putString("orderId", "256452522");
-//                    bundle.putString("needCount", "1020");
-//                    bundle.putString("storage", "no");
-//                    bundle.putString("type", "1");
-//                    bundle.putInt("NeedBatch", 1);
-//                    readyGo(IDataScanActivity.class, bundle);
                             ActivityManagerUtil.getInstance().finishActivity(LoginActivity.this);
-                        }else{
-                            showToast(response.body().getMes()+"");
-                            WeiboDialogUtils.closeDialog(loadDialog);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        WeiboDialogUtils.closeDialog(loadDialog);
-                    }
-                });
-                break;
-            case 2:
-                rbGC.setChecked(true);
-                Call<Login> call2= RetrofitService.getInstance().plantLogin(/*"xz","123456"*/acc,pwd);
-                call2.enqueue(new Callback<Login>() {
-                    @Override
-                    public void onResponse(Response<Login> response, Retrofit retrofit) {
-                        if (response==null){
-                            showToast("服务器错误");
-                            WeiboDialogUtils.closeDialog(loadDialog);
-                            return;
-                        }
-                        if (response.body().getStatus()==0){
-                            //保存Token
-                            SharedPreferences shared=getSharedPreferences("MyToken",MODE_PRIVATE);
-                            SharedPreferences.Editor editor=shared.edit();
-                            editor.putString(TOKEN,response.body().getToken());
-                            editor.commit();
-                            //保存帐号密码
-                            editorAP.putString("WHACC",acc);
-                            editorAP.putString("WHPWD",pwd);
-                            editorAP.commit();
-                            //提示登录成功
-                            showToast(response.body().getMes()+"");
-                            //跳转到主页，并释放LoginActivity.class
-                            Bundle bundle=new Bundle();
-                            bundle.putString("name", response.body().getName());
-                            bundle.putString("dealerName", response.body().getDealerName());
-                            bundle.putString("warehouseName", response.body().getWarehouseName());
-                            bundle.putInt("type", response.body().getType());
-                            bundle.putInt("ishandover", response.body().getIshandover());
-                            WeiboDialogUtils.closeDialog(loadDialog);
+                            break;
+                        case 4://总部 1，经销商 2，终端 3，工厂 4
                             readyGo(MenuPlantActivity.class, bundle);
                             ActivityManagerUtil.getInstance().finishActivity(LoginActivity.this);
-                        }else{
-                            showToast(response.body().getMes()+"");
-                            WeiboDialogUtils.closeDialog(loadDialog);
-                        }
+                            break;
+                        default:
+                            break;
                     }
+                }else{
+                    showToast(response.body().getMes()+"");
+                    WeiboDialogUtils.closeDialog(loadDialog);
+                }
+            }
 
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        WeiboDialogUtils.closeDialog(loadDialog);
-                    }
-                });
-                break;
-        }
+            @Override
+            public void onFailure(Throwable throwable) {
+                WeiboDialogUtils.closeDialog(loadDialog);
+            }
+        });
     }
 
     @Override

@@ -285,6 +285,7 @@ public class ZDPSOutActivity extends BaseActivity{
                     bundle.putString("productId", product.getProductID()+"");
                     bundle.putString("productName",product.getProductName()+"");
                     bundle.putString("needCount", product.getProductCount()+"");
+                    bundle.putString("showBS","yes");
                     readyGo(CaptureFinishActivity.class, bundle);
                 }
             });

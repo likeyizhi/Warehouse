@@ -19,6 +19,7 @@ public class IndexInfo {
      "zdsh": 1
      "qtrk": 1
      "thd": 1
+     "newocount": 1
      }*/
     private int status;
     private String mes;
@@ -32,6 +33,15 @@ public class IndexInfo {
     private int zdsh;
     private int qtrk;
     private int thd;
+    private int newocount;
+
+    public int getNewocount() {
+        return newocount;
+    }
+
+    public void setNewocount(int newocount) {
+        this.newocount = newocount;
+    }
 
     public int getThd() {
         return thd;

@@ -217,6 +217,34 @@
                         android:textColor="#666666"
                         android:textSize="14sp" />
                 </LinearLayout>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#eeeeee" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#ffffff"
+                    android:gravity="center"
+                    android:visibility="invisible"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:src="@mipmap/dsh" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="货需上报"
+                        android:textColor="#666666"
+                        android:textSize="14sp" />
+                </LinearLayout>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"

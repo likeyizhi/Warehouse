@@ -58,16 +58,24 @@ public class MenuDealerActivity extends BaseActivity{
     LinearLayout llToWLGS;
     @BindView(R.id.ll_toZDFH)
     LinearLayout llToZDFH;
+    @BindView(R.id.warehouseName)
+    TextView tvWarehouseName;
 
     private PopupWindow popupWindow;
     private View view;
     private ListView lv_group;
     private ArrayList<String> groups;
     private String name;
+    private String dealerName;
+    private String warehouseName;
+    private int type;
+    private int ishandover;
 
     @Override
     protected void initViewsAndEvents() {
-        tvName.setText(name);
+        tvName.setText(dealerName);
+        tvWarehouseName.setText(dealerName);
+        tvName.setText(dealerName);
         setListeners();
         getUpdateMsg();
     }
@@ -260,6 +268,10 @@ public class MenuDealerActivity extends BaseActivity{
     @Override
     protected void getBundleExtras(Bundle extras) {
         name=extras.getString("name");
+        dealerName=extras.getString("dealerName");
+        warehouseName=extras.getString("warehouseName");
+        type=extras.getInt("type", 0);
+        ishandover=extras.getInt("ishandover", 0);
     }
 
     @Override

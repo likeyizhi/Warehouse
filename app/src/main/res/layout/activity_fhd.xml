@@ -30,6 +30,32 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#eeeeee" />
+    <RadioGroup
+        android:id="@+id/rgSelect"
+        android:layout_below="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/rbDCK"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="待出库"/>
+        <RadioButton
+            android:id="@+id/rbYCK"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="已出库"/>
+        <RadioButton
+            android:id="@+id/rbYSH"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="已收货"/>
+    </RadioGroup>
     <ListView
         android:id="@+id/lvFHD"
         android:divider="@null"
