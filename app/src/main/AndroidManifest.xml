@@ -503,6 +503,11 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
+        <!--扫码枪扫码-->
+        <activity android:name=".activity.IDataScanStockActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
         <!--获取动态权限-->
         <activity android:name=".activity.PermissionActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"

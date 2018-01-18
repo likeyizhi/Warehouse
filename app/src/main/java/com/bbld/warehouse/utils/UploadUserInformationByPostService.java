@@ -335,8 +335,10 @@ public class UploadUserInformationByPostService {
             Log.i("status", "status="+status);
             if (status==0){
                 return "操作成功";
-            }else{
+            }else if(status==1){
                 return ress;
+            }else{
+                return "-1";
             }
         }
         Log.i("ResponseCode","ResponseCode="+conn.getResponseCode());

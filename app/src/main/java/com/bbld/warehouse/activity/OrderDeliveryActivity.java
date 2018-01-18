@@ -189,6 +189,12 @@ public class OrderDeliveryActivity extends BaseActivity{
 //                    }
                     break;
                 case 222:
+//                    cleanNetData();
+                    WeiboDialogUtils.closeDialog(loadDialog);
+                    btnOut.setClickable(true);
+                    showToast(""+request);
+                    break;
+                case 333:
                     cleanNetData();
                     WeiboDialogUtils.closeDialog(loadDialog);
                     btnOut.setClickable(true);
@@ -475,7 +481,11 @@ public class OrderDeliveryActivity extends BaseActivity{
                                 Message message=new Message();
                                 message.what=111;
                                 handler.sendMessage(message);
-                            } else { // 请求失败
+                            } else if(request.contains("-1")){ // 请求失败
+                                Message message=new Message();
+                                message.what=333;
+                                handler.sendMessage(message);
+                            }else{
                                 Message message=new Message();
                                 message.what=222;
                                 handler.sendMessage(message);
@@ -646,6 +656,7 @@ public class OrderDeliveryActivity extends BaseActivity{
 
             }
         });
+        mUserDataBaseOperate.deleteAll();
     }
 
     class OrderDelAdapter extends BaseAdapter{
